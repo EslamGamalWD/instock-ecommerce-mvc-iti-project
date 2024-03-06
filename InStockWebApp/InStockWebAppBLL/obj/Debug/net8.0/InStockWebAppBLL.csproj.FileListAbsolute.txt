@@ -1,0 +1,16 @@
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\bin\Debug\net8.0\InStockWebAppBLL.deps.json
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\bin\Debug\net8.0\InStockWebAppBLL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\bin\Debug\net8.0\InStockWebAppBLL.pdb
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\bin\Debug\net8.0\InStockWebAppDAL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\bin\Debug\net8.0\InStockWebAppDAL.pdb
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.csproj.AssemblyReference.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.AssemblyInfoInputs.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.AssemblyInfo.cs
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.csproj.CoreCompileInputs.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.sourcelink.json
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockW.2BD56741.Up2Date
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\refint\InStockWebAppBLL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\InStockWebAppBLL.pdb
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppBLL\obj\Debug\net8.0\ref\InStockWebAppBLL.dll

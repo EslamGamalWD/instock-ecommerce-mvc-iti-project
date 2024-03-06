@@ -1,0 +1,15 @@
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\bin\Debug\net8.0\InStockWebAppDAL.deps.json
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\bin\Debug\net8.0\InStockWebAppDAL.runtimeconfig.json
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\bin\Debug\net8.0\InStockWebAppDAL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\bin\Debug\net8.0\InStockWebAppDAL.pdb
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.csproj.AssemblyReference.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.AssemblyInfoInputs.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.AssemblyInfo.cs
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.csproj.CoreCompileInputs.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.sourcelink.json
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\refint\InStockWebAppDAL.dll
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.pdb
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\InStockWebAppDAL.genruntimeconfig.cache
+D:\Study Material\Projects\ITI\MVC Project\ProjectMVC\instock-ecommerce-mvc-iti-project\InStockWebApp\InStockWebAppDAL\obj\Debug\net8.0\ref\InStockWebAppDAL.dll
