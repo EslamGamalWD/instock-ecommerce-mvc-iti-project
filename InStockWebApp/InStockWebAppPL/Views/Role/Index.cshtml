@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+        
+            <a href="page-add-product.html" class="btn border add-btn shadow-none mx-2 d-none d-md-block  add-list"><i class="las la-plus mr-3"></i>Add Product</a>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="table-responsive rounded mb-3">
+            <table class="data-tables table mb-0 tbl-server-info">
+                <thead class="bg-white text-uppercase">
+                    <tr class="ligth ligth-data">
+                       
+                        <th>Name</th>
+                        
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="ligth-body">
+                    <tr>
+                       
+                       
+                        <td>CREM01</td>
+                        
+                        <td>
+                            <div class="d-flex align-items-center list-action">
+                                <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
+                                   href="#"><i class="ri-eye-line mr-0"></i></a>
+                                <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
+                                   href="#"><i class="ri-pencil-line mr-0"></i></a>
+                                <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                   href="#"><i class="ri-delete-bin-line mr-0"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                  
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
