@@ -5,9 +5,11 @@
 }
 <div class="row">
     <div class="col-lg-12">
-        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
         
-            <a asp-action="Create" asp-controller="Role" class="btn border add-btn shadow-none mx-2  d-md-block  add-list"><i class="las la-plus mr-3"></i>Add Product</a>
+            <a href="javascript:;" data-title="Add Role" data-url="/Role/Create" class="btn border add-btn shadow-none mx-2  d-md-block  js-render-modal add-list">
+                <i class="las la-plus mr-3"></i>Add Role
+                </a>
         </div>
     </div>
     <div class="col-lg-12">
@@ -48,3 +50,33 @@
         </div>
     </div>
 </div>
+@section JS{
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-render-modal', 'click', function () {
+                var btn = $(this);
+                var modal = $('#Modal');
+
+                modal.find('#ModalLabel').text(btn.data('title'));
+
+                if (btn.data('update') !== undefined) {
+                    updatedRow = btn.parents('tr');
+                    console.log(updatedRow);
+                }
+
+                $.get({
+                    url: btn.data('url'),
+                    success: function (form) {
+                        modal.find('.modal-body').html(form);
+                        $.validator.unobtrusive.parse(modal);
+                    },
+                    error: function () {
+                        showErrorMessage();
+                    }
+                });
+
+                modal.modal('show');
+            });
+        });
+    </script>
+}

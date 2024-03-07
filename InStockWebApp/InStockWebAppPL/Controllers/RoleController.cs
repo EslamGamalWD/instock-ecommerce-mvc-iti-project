@@ -33,7 +33,7 @@ namespace InStockWebAppPL.Controllers
         {
             TempData["Message"] = null;
 
-            return View();
+            return PartialView("_Create");
         }
 
         [HttpPost]
@@ -54,7 +54,7 @@ namespace InStockWebAppPL.Controllers
                         TempData["Message"] = null;
 
                         model.Message="Error : Role Is Found";
-                        return View(model);
+                        return PartialView("_Create",model);
                     }
                 }
             }
@@ -63,11 +63,11 @@ namespace InStockWebAppPL.Controllers
                 TempData["Message"] = null;
 
                 model.Message="Error : Enter Your Data Again";
-                return View(model);
+                return PartialView("_Create",model);
             }
             TempData["Message"] = null;
 
-            return View(model);
+            return PartialView("_Create", model);
         }
         #endregion
 
