@@ -10,5 +10,6 @@ namespace InStockWebAppBLL.Features.Interfaces
     public interface IRoleRepo
     {
         Task<bool> Create(CreateRoleVM roleVM);
+        Task<IEnumerable<GetAllRoleVM>> GetAll();
     }
 }

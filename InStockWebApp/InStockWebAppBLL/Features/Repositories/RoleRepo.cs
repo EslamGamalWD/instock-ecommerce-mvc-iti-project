@@ -1,6 +1,8 @@
-﻿using InStockWebAppBLL.Features.Interfaces;
+﻿using AutoMapper;
+using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppBLL.Models.RoleVM;
+
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,13 +16,15 @@ namespace InStockWebAppBLL.Features.Repositories
     {
         #region prop
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly IMapper mapper;
 
         #endregion
 
         #region Ctor
-        public RoleRepo(RoleManager<IdentityRole> roleManager)
+        public RoleRepo(RoleManager<IdentityRole> roleManager,IMapper mapper)
         {
             this.roleManager = roleManager;
+            this.mapper=mapper;
         }
 
 
@@ -31,10 +35,11 @@ namespace InStockWebAppBLL.Features.Repositories
         {
             try
             {
-                var role = await roleManager.FindByNameAsync(roleVM.Name);
-                if (role is not { })
+                var getRoleByName = await roleManager.FindByNameAsync(roleVM.Name);
+                if (getRoleByName is not { })
                 {
-                    var result = await roleManager.CreateAsync(new IdentityRole() { Name =roleVM.Name });
+                    var role = mapper.Map<IdentityRole>(roleVM);
+                    var result = await roleManager.CreateAsync(role);
                     return true;
                 }
             }
@@ -45,6 +50,13 @@ namespace InStockWebAppBLL.Features.Repositories
             }
             return false;
 
+        }
+
+        public async Task<IEnumerable<GetAllRoleVM>> GetAll()
+        {
+            var roles =  roleManager.Roles.ToList();
+            var rolesVM = mapper.Map<IEnumerable<GetAllRoleVM>>(roles);
+            return rolesVM;
         }
         #endregion
     }

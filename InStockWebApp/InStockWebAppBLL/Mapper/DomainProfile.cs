@@ -14,6 +14,8 @@ namespace InStockWebAppBLL.Mapper
         public DomainProfile()
         {
             CreateMap<CreateRoleVM, IdentityRole>();
+            CreateMap<IdentityRole, GetAllRoleVM>();
+
         }
     }
 }
