@@ -129,5 +129,16 @@ namespace InStockWebAppPL.Controllers
 
             return PartialView("_Edit", model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            var toggleDateTime = await _categoryRepository.ToggleStatus(id);
+            
+            if (toggleDateTime is { })
+                return Ok(toggleDateTime);
+            
+            return NotFound();
+        }
     }
 }

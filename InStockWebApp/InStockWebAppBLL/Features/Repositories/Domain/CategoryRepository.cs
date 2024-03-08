@@ -67,4 +67,19 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
             updatedCategory.ModifiedAt = DateTime.Now;
         }
     }
+
+    public async Task<DateTime?> ToggleStatus(int id)
+    {
+        var category = await _applicationDbContext.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
+        
+        if (category is { })
+        {
+            category.IsDeleted = !category.IsDeleted;
+            category.ModifiedAt = DateTime.Now;
+            await _applicationDbContext.SaveChangesAsync();
+            return DateTime.Now;
+        }
+
+        return null;
+    }
 }

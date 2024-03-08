@@ -35,7 +35,11 @@
                             <td>@item.CreatedAt</td>
                             <td>@item.ModifiedAt</td>
                             <td>@item.DeletedAt</td>
-                            <td>@item.IsDeleted</td>
+                            <td>
+                                <span class="badge badge-@(item.IsDeleted ? "danger" : "success") js-status">
+                                    @(item.IsDeleted ? "Deleted" : "Available")
+                                </span>
+                            </td>
                             <td>
                                 <div class="d-flex align-items-center list-action">
                                     <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
@@ -45,10 +49,8 @@
                                     <a href="javascript:" class="badge bg-success mr-2 js-render-modal" data-toggle="tooltip" data-placement="top" data-title="Edit Category" data-original-title="Edit" data-url="/Category/Edit/@item.Id">
                                         <i class="ri-pencil-line mr-0"></i>
                                     </a>
-                                    <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                    @* asp-action="Delete" *@ asp-controller="Role">
-                                        <i class="ri-delete-bin-line mr-0"></i>
-                                    </a>
+                                    <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                       href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -61,6 +63,10 @@
 
 
 @section JS {
+
+    <script src="~/lib/bootbox.js/bootbox.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('body').delegate('.js-render-modal', 'click', function () {
@@ -86,6 +92,52 @@
                 });
 
                 modal.modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-toggle-status', 'click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure that you need to toggle this item status?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.post({
+                                url: '/Category/ToggleStatus/' + btn.data('id'),
+                                success: function (lastUpdatedOn) {
+                                    var row = btn.parents('tr');
+                                    var status = row.find('.js-status');
+                                    var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                    status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                    row.find('.js-updated-on').html(lastUpdatedOn);
+                                    row.addClass('animate__animated animate__flash');
+                                    var Icon = row.find('.ic');
+                                    var IconBackGround = row.find('.js-toggle-status');
+                                    Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                    IconBackGround.toggleClass('bg-warning  bg-danger')
+
+                                    showSuccessMessage();
+                                },
+                                error: function () {
+                                    showErrorMessage();
+                                }
+                            });
+                        }
+                    }
+                });
             });
         });
     </script>
