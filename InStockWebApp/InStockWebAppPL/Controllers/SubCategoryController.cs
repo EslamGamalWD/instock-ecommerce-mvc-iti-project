@@ -24,4 +24,9 @@ public class SubCategoryController : Controller
         var subCategoryVms = _mapper.Map<IEnumerable<SubCategoryVM>>(subCategories);
         return View(subCategoryVms);
     }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
 }
