@@ -54,7 +54,6 @@ namespace InStockWebAppPL.Controllers
                     {
                         TempData["Message"] = null;
 
-                        model.Message="Error : Role Is Found";
                         return PartialView("_Create",model);
                     }
                 }
@@ -63,7 +62,6 @@ namespace InStockWebAppPL.Controllers
             {
                 TempData["Message"] = null;
 
-                model.Message="Error : Enter Your Data Again";
                 return PartialView("_Create",model);
             }
             TempData["Message"] = null;
