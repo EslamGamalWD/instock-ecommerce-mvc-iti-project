@@ -1,20 +1,12 @@
-﻿using AutoMapper;
-using InStockWebAppBLL.Features.Interfaces;
+﻿using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.UserVM;
-using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InStockWebAppBLL.Features.Repositories
+namespace InStockWebAppBLL.Features.Repositories.Domain
 {
-    public class UserRepo:IUserRepo
+    public class UserRepository:IUserRepository
     {
         #region Prop
         private readonly UserManager<User> userManager;
@@ -22,7 +14,7 @@ namespace InStockWebAppBLL.Features.Repositories
         #endregion
 
         #region Ctor
-        public UserRepo(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UserRepository(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;

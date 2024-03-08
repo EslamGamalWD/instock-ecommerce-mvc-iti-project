@@ -1,4 +1,5 @@
 ﻿using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.RoleVM;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +8,14 @@ namespace InStockWebAppPL.Controllers
     public class RoleController : Controller
     {
         #region Prop
-        private readonly IRoleRepo roleRepo;
+        private readonly IRoleRepository _roleRepository;
 
         #endregion
 
         #region ctor
-        public RoleController(IRoleRepo roleRepo)
+        public RoleController(IRoleRepository roleRepository)
         {
-            this.roleRepo=roleRepo;
+            this._roleRepository=roleRepository;
         }
         #endregion
 
@@ -25,7 +26,7 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> Index()
         {
 
-            return View(await roleRepo.GetAll());
+            return View(await _roleRepository.GetAll());
         }
 
         [HttpGet]
@@ -43,7 +44,7 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (await roleRepo.Create(model))
+                    if (await _roleRepository.Create(model))
                     {
                         TempData["Message"] = "saved Successfuly";
                         return RedirectToAction("Index", "Role");

@@ -1,15 +1,22 @@
 using InStockWebAppBLL;
-using InStockWebAppBLL.Mapper;
+using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Features.Repositories;
+using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
 
@@ -17,18 +24,18 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-    options =>
-    {
-        options.LoginPath = new PathString("/Account/Login");
-        options.AccessDeniedPath = new PathString("/Error/Error");
-    });
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        options =>
+        {
+            options.LoginPath = new PathString("/Account/Login");
+            options.AccessDeniedPath = new PathString("/Error/Error");
+        });
 
 
 builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 
 // Password and user name configuration
