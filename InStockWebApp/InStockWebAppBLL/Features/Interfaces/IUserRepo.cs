@@ -11,5 +11,6 @@ namespace InStockWebAppBLL.Features.Interfaces
     public interface IUserRepo
     {
         Task<bool> Create(CreateUserVM createUserVM);
+        Task<IEnumerable<GetAllUserVM>> getAll();
     }
 }
