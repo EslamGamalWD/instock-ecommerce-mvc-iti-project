@@ -51,8 +51,7 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : cla
         return query;
     }
 
-    public async Task Add(T entity) =>
-        await _applicationDbContext.Set<T>().AddAsync(entity);
+    public abstract Task Add(T entity);
 
     public abstract void Delete(T entity);
 

@@ -20,11 +20,14 @@ public class SubCategoryRepository : GenericRepository<SubCategory>, ISubCategor
     /// property to the current date and time of adding
     /// </summary>
     /// <param name="entity"></param>
+    public override async Task Add(SubCategory entity) =>
+        await _applicationDbContext.AddAsync(entity);
 
     public override void Delete(SubCategory entity)
     {
         throw new NotImplementedException();
     }
+
 
     public override void Update(SubCategory entity)
     {
