@@ -46,17 +46,34 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var user = mapper.Map<User>(createUserVM);
                 var result = await userManager.CreateAsync(user, createUserVM.PasswordHash);
-                string Role = AppRoles.EnumToString(user.UserType);
-                var resultrole = await userManager.AddToRoleAsync(user, Role);
-                return true;
+                if(result.Succeeded)
+                {
+                    string Role = AppRoles.EnumToString(user.UserType);
+                    var resultrole = await userManager.AddToRoleAsync(user, Role);
+                    return true;
+                }
+               
             }
             catch (Exception)
             {
 
-                return false;
+               
             }
+            return false;
 
-          
+        }
+
+        public async Task<DateTime?> ToggleStatus(string id)
+        {
+            var user =await db.Users.Where(use=>use.Id==id).FirstOrDefaultAsync();
+            if(user is  { })
+            {
+                user.IsDeleted = !user.IsDeleted;
+                user.ModifiedAt = DateTime.Now;
+                await db.SaveChangesAsync();
+                return DateTime.Now;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<GetAllUserVM>> getAll()

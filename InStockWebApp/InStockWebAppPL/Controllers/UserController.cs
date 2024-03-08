@@ -3,6 +3,7 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -72,6 +73,18 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> Select(int id)
         {
             return View("Create");
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task< IActionResult> ToggleStatus(string id)
+        {
+            var toggleDateTime = await userRepo.ToggleStatus(id);
+           if (toggleDateTime is { })
+            return Ok(toggleDateTime);
+            return NotFound();
         }
         #endregion
 

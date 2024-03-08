@@ -6,6 +6,6 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
     {
         Task<bool> Create(CreateUserVM createUserVM);
         Task<IEnumerable<GetAllUserVM>> getAll();
-
+        Task<DateTime?> ToggleStatus(string id);
     }
 }
