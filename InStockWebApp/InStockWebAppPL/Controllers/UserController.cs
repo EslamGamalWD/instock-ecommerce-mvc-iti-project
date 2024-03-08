@@ -43,6 +43,16 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (modelVM.image != null)
+                    {
+                       
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await modelVM.image.CopyToAsync(memoryStream);
+                            modelVM.Photo = memoryStream.ToArray();
+                        }
+                    }
+
                     if (await userRepo.Create(modelVM))
                     {
                         TempData["Message"] = "saved Successfuly";

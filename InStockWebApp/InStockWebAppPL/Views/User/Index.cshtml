@@ -20,6 +20,7 @@
                     <tr class="ligth ligth-data">
 
                         <th>Name</th>
+                        <th>Profile</th>
                         <th>Gender</th>
                         <th>Type</th>
                         <th>CityName</th>
@@ -39,6 +40,19 @@
 
 
                             <td>@item.FirstName  @item.LastName</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @{
+                                        string imgSrc = null;
+                                        if (item.Photo != null && item.Photo.Length > 0)
+                                        {
+                                            var base64String = Convert.ToBase64String(item.Photo);
+                                            imgSrc = $"data:image/jpeg;base64,{base64String}";
+                                        }
+                                    }
+                                    <img src="@imgSrc" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                </div>
+                            </td>
                             <td>@item.Gender</td>
                             <td>@item.UserType</td>
                             <td>@item.CityName</td>
