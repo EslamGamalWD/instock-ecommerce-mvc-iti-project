@@ -14,9 +14,15 @@ public class SubCategoryRepository : GenericRepository<SubCategory>, ISubCategor
         _applicationDbContext = applicationDbContext;
     }
 
-    public override Task Add(SubCategory entity)
+    /// <summary>
+    /// Adds a new SubCategory to the SubCategory table
+    /// in the database and initializes the CreatedAt
+    /// property to the current date and time of adding
+    /// </summary>
+    /// <param name="entity"></param>
+    public override async Task Add(SubCategory entity)
     {
-        throw new NotImplementedException();
+        await _applicationDbContext.SubCategories.AddAsync(entity);
     }
 
     public override void Delete(SubCategory entity)
