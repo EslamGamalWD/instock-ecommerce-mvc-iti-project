@@ -1,4 +1,5 @@
 ﻿@model CreateUserVM
+@inject ICountryRepository countryrepo
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
@@ -16,34 +17,22 @@
                 <div class="col-md-6 mb-3">
                     <label asp-for="FirstName">First name</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="FirstName" required>
-
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="LastName">Last name</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="LastName" required>
-
-
                 </div>
-
                 <div class="col-md-6 mb-3">
                     <label asp-for="PasswordHash">Password</label>
                     <input type="password" class="form-control" id="validationTooltip01" asp-for="PasswordHash" required>
-
-
                 </div>
-
-
                 <div class="col-md-6 mb-3">
                     <label asp-for="UserName">UserName</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="UserName" required>
-
-
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="Email">Email</label>
                     <input type="Email" class="form-control" id="validationTooltip01" asp-for="Email" required>
-
-
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="validationTooltip04">Gender</label>
@@ -51,55 +40,127 @@
                         <option selected disabled value="">Gender</option>
                         <option value="0">Male</option>
                         <option value="1">FeMale</option>
-
                     </select>
                     <div class="invalid-tooltip">
                         Please select a valid state.
                     </div>
-
-
                 </div>
-
                 <div class="col-md-6 mb-3">
                     <label for="validationTooltip04">UserType</label>
                     <select class="form-control" id="validationTooltip04" required>
                         <option selected disabled value="">User Type</option>
                         <option value="0">Customer</option>
                         <option value="1">Admin</option>
-
                     </select>
                     <div class="invalid-tooltip">
                         Please select a valid state.
                     </div>
-
-
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label asp-for="CityId">CityId</label>
-                    <input type="CityId" class="form-control" id="validationTooltip01" asp-for="CityId" required>
+                    <label asp-for="PhoneNumber">Phone Number</label>
+                    <input type="PhoneNumber" class="form-control" id="validationTooltip01" asp-for="PhoneNumber" required>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label asp-for="image">Image</label>
 
+                    <div class="input-group ">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <input asp-for="image" type="file" class="custom-file-input" id="inputGroupFile01">
+                            <label class="custom-file-label selected" for="inputGroupFile01"></label>
+                            <input type="hidden" class="ImageName" asp-for="image" />
+                        </div>
+                    </div>
+                </div>
+               
+                
+                
+               
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelectCountry">Country</label>
+                        </div>
+                        <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="custom-select" id="inputGroupSelectCountry">
+                            <option selected disabled>Choose...</option>
+                        </select>
+                    </div>
 
                 </div>
-
-                <div class="input-group mb-4">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Upload</span>
-                    </div>
-                    <div class="custom-file">
-                        <input asp-for="image" type="file" class="custom-file-input" id="inputGroupFile01">
-                        <label class="custom-file-label selected" for="inputGroupFile01"></label>
-                        <input type="hidden" class="ImageName" asp-for="image" />
+                <div class="col-4">
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelectState">State</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelectState">
+                        </select>
                     </div>
                 </div>
+
+                <div class="col-4">
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelectCity">City</label>
+                            </div>
+                            <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
+                            </select>
+                        </div>
+                  
+                </div>
+
+
             </div>
             <button class="btn btn-primary" type="submit">Submit form</button>
             <button type="reset" class="btn btn-danger">Reset</button>
-
         </form>
     </div>
 </div>
 
-
 @section JS {
-   
+    <script>
+        $(document).ready(function () {
+            $('#inputGroupSelectCountry').change(function () {
+                $("#inputGroupSelectState").empty();
+                var countryId = $(this).val();
+                $.ajax({
+                    url: '/State/GetAll/' + countryId,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log(data)
+                        var items = '<option selected disabled>-- Select State --</option>';
+                        $.each(data, function (i, state) {
+
+                            items += "<option value='" + state.id + "'>" + state.name + "</option>";
+                        });
+                        $("#inputGroupSelectState").append(items)
+                        console.log(items)
+                       
+
+                    }
+                });
+            });
+
+            $('#inputGroupSelectState').change(function () {
+                $("#inputGroupSelectCity").empty();
+
+                var stateId = $(this).val();
+                $.ajax({
+                    url: '/City/GetAll/' + stateId,
+                    type: 'GET',
+                    success: function (data) {
+                        var items = '<option selected disabled>-- Select City --</option>';
+                        $.each(data, function (i, city) {
+                            items += "<option value='" + city.id + "'>" + city.name + "</option>";
+                        });
+                        $("#inputGroupSelectCity").append(items)
+
+                    }
+                });
+            });
+        });
+    </script>
 }

@@ -28,7 +28,8 @@ namespace InStockWebAppBLL.Models.UserVM
         public string UserName { get; set; }
         [Required(ErrorMessage = "Password required")]
         public string PasswordHash { get; set; }
-     
+        [Required]
+        public string PhoneNumber { get; set; }
         public string? Email { get; set; }
         public IFormFile? image { get; set; }
         public byte[]? Photo { get; set; }
