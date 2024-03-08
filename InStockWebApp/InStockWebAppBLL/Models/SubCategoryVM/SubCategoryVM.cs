@@ -20,6 +20,6 @@ public class SubCategoryVM
     public DateTime? DeletedAt { get; set; }
     public bool IsDeleted { get; set; }
     public int CategoryId { get; set; }
-    public Category Category { get; set; } = default!;
-    public IEnumerable<Product> Products { get; set; } = default!;
+    public Category? Category { get; set; }
+    public IEnumerable<Product>? Products { get; set; }
 }
