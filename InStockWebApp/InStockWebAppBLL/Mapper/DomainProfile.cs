@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppBLL.Models.RoleVM;
+using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,10 @@ namespace InStockWebAppBLL.Mapper
             CreateMap<CreateRoleVM, IdentityRole>();
             CreateMap<IdentityRole, GetAllRoleVM>();
 
+            CreateMap<CreateCategoryVM, Category>();
+            CreateMap<Category, EditCategoryVM>();
+            CreateMap<EditCategoryVM, Category>();
+            CreateMap<Category, GetAllCategoriesVM>();
         }
     }
 }

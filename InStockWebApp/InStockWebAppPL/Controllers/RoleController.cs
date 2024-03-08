@@ -46,7 +46,7 @@ namespace InStockWebAppPL.Controllers
                 {
                     if (await _roleRepository.Create(model))
                     {
-                        TempData["Message"] = "saved Successfuly";
+                        TempData["Message"] = "saved Successfully";
                         return RedirectToAction("Index", "Role");
 
                     }
