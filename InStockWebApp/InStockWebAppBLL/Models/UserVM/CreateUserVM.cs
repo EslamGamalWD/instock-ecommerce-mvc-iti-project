@@ -1,4 +1,5 @@
 ﻿using InStockWebAppDAL.Entities.Enumerators;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +30,8 @@ namespace InStockWebAppBLL.Models.UserVM
         public string PasswordHash { get; set; }
      
         public string? Email { get; set; }
+        public IFormFile? image { get; set; }
+        public byte[]? Photo { get; set; }
         [Required]
 
         public int CityId { get; set; }

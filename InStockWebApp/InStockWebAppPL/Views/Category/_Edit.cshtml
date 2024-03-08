@@ -1,0 +1,30 @@
+﻿@model EditCategoryVM
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" asp-controller="Category" data-toggle="validator">
+                    <input type="hidden" asp-for="ID" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input asp-for="Name" class="form-control" />
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea asp-for="Description" class="form-control"></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppBLL.Models.RoleVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppBLL.Models.UserVM;
@@ -28,6 +29,7 @@ namespace InStockWebAppBLL.Mapper
 
 
             CreateMap<CreateUserVM, User>()
+
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserType))
@@ -36,6 +38,11 @@ namespace InStockWebAppBLL.Mapper
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId));
+
+            CreateMap<CreateCategoryVM, Category>();
+            CreateMap<Category, EditCategoryVM>();
+            CreateMap<EditCategoryVM, Category>();
+            CreateMap<Category, GetAllCategoriesVM>();
         }
     }
 }

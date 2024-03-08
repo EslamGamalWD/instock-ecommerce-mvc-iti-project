@@ -7,12 +7,14 @@ namespace InStockWebAppBLL.Features.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _applicationDbContext;
+    public ICategoryRepository CategoryRepository { get; }
     public ISubCategoryRepository SubCategoryRepository { get; }
 
     public UnitOfWork(ApplicationDbContext applicationDbContext,
-        ISubCategoryRepository subCategoryRepository)
+        ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository)
     {
         _applicationDbContext = applicationDbContext;
+        CategoryRepository = categoryRepository;
         SubCategoryRepository = subCategoryRepository;
     }
 
