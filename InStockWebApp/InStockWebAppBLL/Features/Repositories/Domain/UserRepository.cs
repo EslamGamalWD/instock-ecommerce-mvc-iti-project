@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Helpers.Role;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.UserVM;
-using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,10 +14,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InStockWebAppDAL.Context;
 
-namespace InStockWebAppBLL.Features.Repositories
+namespace InStockWebAppBLL.Features.Repositories.Domain
 {
-    public class UserRepo:IUserRepo
+    public class UserRepository:IUserRepository
     {
         
         #region Prop
@@ -29,9 +30,9 @@ namespace InStockWebAppBLL.Features.Repositories
         #endregion
 
         #region Ctor
-        public UserRepo(ApplicationDbContext Db,IMapper mapper,UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UserRepository(ApplicationDbContext db, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            db=Db;
+            this.db=db;
             this.mapper=mapper;
             this.userManager = userManager;
             this.roleManager = roleManager;

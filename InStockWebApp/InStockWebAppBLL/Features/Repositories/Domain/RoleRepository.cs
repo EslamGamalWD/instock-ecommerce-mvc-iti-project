@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
 using InStockWebAppBLL.Features.Interfaces;
-using InStockWebAppBLL.Helpers.Role;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.RoleVM;
-
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace InStockWebAppBLL.Features.Repositories
+namespace InStockWebAppBLL.Features.Repositories.Domain
 {
-    public class RoleRepo: IRoleRepo
+    public class RoleRepository: IRoleRepository
     {
         #region prop
         private readonly RoleManager<IdentityRole> roleManager;
@@ -21,7 +15,7 @@ namespace InStockWebAppBLL.Features.Repositories
         #endregion
 
         #region Ctor
-        public RoleRepo(RoleManager<IdentityRole> roleManager,IMapper mapper)
+        public RoleRepository(RoleManager<IdentityRole> roleManager,IMapper mapper)
         {
             this.roleManager = roleManager;
             this.mapper=mapper;
