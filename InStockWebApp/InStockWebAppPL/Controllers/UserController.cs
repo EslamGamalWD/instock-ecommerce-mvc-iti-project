@@ -1,4 +1,5 @@
 ﻿using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +10,18 @@ namespace InStockWebAppPL.Controllers
     {
 
         #region Prop
-        private readonly IUserRepo userRepo;
+        private readonly IUserRepository userRepo;
 
         #endregion
 
         #region Ctor
-        public UserController(IUserRepo userRepo)
+        public UserController(IUserRepository userRepo)
         {
             this.userRepo=userRepo;
         }
         #endregion
 
         #region Method
-
-        #endregion
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -70,9 +69,11 @@ namespace InStockWebAppPL.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult>Select(int id)
+        public async Task<IActionResult> Select(int id)
         {
             return View("Create");
         }
+        #endregion
+
     }
 }
