@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace InStockWebAppBLL.Models.UserVM
 {
    
-        public record GetUserByIdVM(string Id, string FirstName, string LastName, UserType UserType, Gender Gender, string CityName, string StateName,string Email)
+        public record GetUserByIdVM(string Id,string PhoneNumber,bool IsDeleted,DateTime? CreatedAt, string FirstName, string LastName, UserType UserType, Gender Gender, string CityName, byte[]? Photo, string StateName,string Email)
         {
-            public GetUserByIdVM() : this("", "", "", default, default, "", "","") { }
+            public GetUserByIdVM() : this("","",false,null, "", "", default, default ,"", null, "","") { }
         }
     
 }

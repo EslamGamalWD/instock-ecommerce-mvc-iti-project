@@ -78,17 +78,23 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public async Task<IEnumerable<GetAllUserVM>> getAll()
         {
-
             var users =await db.Set<User>().Include(user => user.City)
             .ThenInclude(city => city.State)
-            .ToListAsync();
-
-           
-           
+            .ToListAsync();     
             var UsersVM = mapper.Map<IEnumerable<GetAllUserVM>>(users);
-
-
             return UsersVM;
+        }
+
+
+
+
+        public async Task<GetUserByIdVM> GetUserById(string id)
+        {
+            var users = await db.Users.Where(a=>a.Id==id).Include(user => user.City)
+            .ThenInclude(city => city.State).FirstOrDefaultAsync();
+            var UsersVM = mapper.Map<GetUserByIdVM>(users);
+            return UsersVM;
+
         }
         #endregion
 

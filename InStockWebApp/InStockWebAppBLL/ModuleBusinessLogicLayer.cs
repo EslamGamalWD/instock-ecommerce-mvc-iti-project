@@ -18,6 +18,11 @@ namespace InStockWebAppBLL
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 

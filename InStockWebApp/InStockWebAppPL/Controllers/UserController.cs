@@ -80,9 +80,10 @@ namespace InStockWebAppPL.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Select(int id)
+        public async Task<IActionResult> Select(string id)
         {
-            return View("Create");
+            var user =await userRepo.GetUserById(id);
+            return View(user);
         }
 
 
