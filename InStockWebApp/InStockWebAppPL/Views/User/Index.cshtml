@@ -70,9 +70,15 @@
                                         href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
                                            data-title="Add Category" data-url="/User/Select/@item.Id"><i class="ri-eye-line mr-0"></i></a>
                                     <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
+
+                                       asp-action="" asp-controller="User"><i class="ri-pencil-line mr-0"></i></a>
+                                    <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                       asp-action="" asp-controller="User"><i class="ri-delete-bin-line mr-0"></i></a>
+
                                        asp-action="Edit" asp-controller="User"><i class="ri-pencil-line mr-0"></i></a>
                                     <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
                                        href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
+
                                 </div>
                             </td>
                         </tr>

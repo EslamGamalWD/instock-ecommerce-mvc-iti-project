@@ -5,32 +5,16 @@
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
-<form asp-controller="SubCategory" asp-action="Create" class="card">
+<div class="card">
     <div class="card-header d-flex justify-content-between">
         <div class="header-title">
             <h4 class="card-title">New Subcategory</h4>
         </div>
     </div>
     <div class="card-body">
-        <div class="input-group mb-4">
-            <div class="input-group-prepend">
-                <label asp-for="Name" class="input-group-text">Name</label>
-            </div>
-            <input type="text" asp-for="Name" class="form-control" placeholder="Subcategory name" aria-label="Username"
-                   aria-describedby="basic-addon1"/>
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        
-        <div class="input-group mb-4">
-            <div class="input-group-prepend">
-                <label asp-for="Description" class="input-group-text text-area">Description</label>
-            </div>
-            <textarea asp-for="Description" class="form-control" aria-label="With textarea"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-controller="SubCategory" asp-action="Index" class="btn bg-danger">Cancel</a>
-        </div>
+        <form asp-controller="SubCategory" asp-action="Create" asp-route-subCategoryVm="@Model">
+            <partial name="~/Views/Partials/Subcategory/CreateEdit.cshtml"/>
+            
+        </form>
     </div>
-</form>
+</div>

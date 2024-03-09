@@ -5,3 +5,58 @@
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Subcategory List</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <a asp-controller="SubCategory" asp-action="Create" class="btn btn-primary add-list mb-3"><i class="las la-plus mr-3"></i>Add Subcategory</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="datatable" class="table data-tables table-striped data-table mb-0 tbl-server-info text-center">
+                            <thead class="bg-white text-uppercase">
+                            <tr class="ligth">
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>CreatedAt</th>
+                                <th>Category</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var subcategory in Model)
+                            {
+                                <tr>
+                                    <td>@subcategory.Id</td>
+                                    <td>@subcategory.Name</td>
+                                    <td>@subcategory.CreatedAt</td>
+                                    <td>@subcategory.Category.Name</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center list-action">
+                                            <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" asp-controller="SubCategory" asp-action="Details" asp-route-id="@subcategory.Id">
+                                                <i class="ri-eye-line mr-0"></i>
+                                            </a>
+                                            <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="#">
+                                                <i class="ri-pencil-line mr-0"></i>
+                                            </a>
+                                            <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="#">
+                                                <i class="ri-delete-bin-line mr-0"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
