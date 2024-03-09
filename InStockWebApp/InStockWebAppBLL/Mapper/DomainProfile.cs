@@ -30,6 +30,7 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<CreateUserVM, User>()
 
+<<<<<<< Updated upstream
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserType))
@@ -43,6 +44,12 @@ namespace InStockWebAppBLL.Mapper
             CreateMap<Category, EditCategoryVM>();
             CreateMap<EditCategoryVM, Category>();
             CreateMap<Category, GetAllCategoriesVM>();
+=======
+            CreateMap<User, GetUserByIdVM>()
+                
+                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
+                .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
+>>>>>>> Stashed changes
         }
     }
 }
