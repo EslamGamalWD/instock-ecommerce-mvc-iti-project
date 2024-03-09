@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace InStockWebAppBLL.Models.RoleVM
 {
-    public record GetAllRoleVM(string Name,string Id)
+    public class UserInRoleVM
     {
-       
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

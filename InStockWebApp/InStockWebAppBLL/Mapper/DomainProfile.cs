@@ -13,7 +13,8 @@ namespace InStockWebAppBLL.Mapper
         public DomainProfile()
         {
             CreateMap<CreateRoleVM, IdentityRole>();
-            CreateMap<IdentityRole, GetAllRoleVM>();
+            CreateMap<IdentityRole, GetAllRoleVM>()
+                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
             CreateMap<SubCategory, SubCategoryVM>();
             CreateMap<SubCategoryVM, SubCategory>();
 
