@@ -17,26 +17,35 @@
                 <div class="col-md-6 mb-3">
                     <label asp-for="FirstName">First name</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="FirstName" required>
+                    <span asp-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="LastName">Last name</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="LastName" required>
+                    <span asp-for="LastName" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="PasswordHash">Password</label>
                     <input type="password" class="form-control" id="validationTooltip01" asp-for="PasswordHash" required>
+                    <span asp-for="PasswordHash" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="UserName">UserName</label>
                     <input type="text" class="form-control" id="validationTooltip01" asp-for="UserName" required>
+                    <span asp-for="UserName" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="Email">Email</label>
                     <input type="Email" class="form-control" id="validationTooltip01" asp-for="Email" required>
+                    <span asp-for="Email" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="validationTooltip04">Gender</label>
-                    <select class="form-control" id="validationTooltip04" required>
+                    <select asp-for="Gender" class="form-control" id="validationTooltip04" required>
                         <option selected disabled value="">Gender</option>
                         <option value="0">Male</option>
                         <option value="1">FeMale</option>
@@ -44,10 +53,12 @@
                     <div class="invalid-tooltip">
                         Please select a valid state.
                     </div>
+                    <span asp-for="Gender" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="validationTooltip04">UserType</label>
-                    <select class="form-control" id="validationTooltip04" required>
+                    <select asp-for="UserType" class="form-control" id="validationTooltip04" required>
                         <option selected disabled value="">User Type</option>
                         <option value="0">Customer</option>
                         <option value="1">Admin</option>
@@ -55,10 +66,14 @@
                     <div class="invalid-tooltip">
                         Please select a valid state.
                     </div>
+                    <span asp-for="UserType" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-6 mb-3">
                     <label asp-for="PhoneNumber">Phone Number</label>
                     <input type="PhoneNumber" class="form-control" id="validationTooltip01" asp-for="PhoneNumber" required>
+                    <span asp-for="PhoneNumber" class="text-danger"></span>
+
                 </div>
                 <div class="col-md-12 mb-3">
                     <label asp-for="image">Image</label>
@@ -73,6 +88,8 @@
                             <input type="hidden" class="ImageName" asp-for="image" />
                         </div>
                     </div>
+                    <span asp-for="image" class="text-danger"></span>
+
                 </div>
                
                 
@@ -108,6 +125,8 @@
                             </div>
                             <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
                             </select>
+                        <span asp-for="CityId" class="text-danger"></span>
+
                         </div>
                   
                 </div>
@@ -121,46 +140,6 @@
 </div>
 
 @section JS {
-    <script>
-        $(document).ready(function () {
-            $('#inputGroupSelectCountry').change(function () {
-                $("#inputGroupSelectState").empty();
-                var countryId = $(this).val();
-                $.ajax({
-                    url: '/State/GetAll/' + countryId,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log(data)
-                        var items = '<option selected disabled>-- Select State --</option>';
-                        $.each(data, function (i, state) {
+    <partial name="~/Views/Partials/User/_UserCreateJS.cshtml"  />
 
-                            items += "<option value='" + state.id + "'>" + state.name + "</option>";
-                        });
-                        $("#inputGroupSelectState").append(items)
-                        console.log(items)
-                       
-
-                    }
-                });
-            });
-
-            $('#inputGroupSelectState').change(function () {
-                $("#inputGroupSelectCity").empty();
-
-                var stateId = $(this).val();
-                $.ajax({
-                    url: '/City/GetAll/' + stateId,
-                    type: 'GET',
-                    success: function (data) {
-                        var items = '<option selected disabled>-- Select City --</option>';
-                        $.each(data, function (i, city) {
-                            items += "<option value='" + city.id + "'>" + city.name + "</option>";
-                        });
-                        $("#inputGroupSelectCity").append(items)
-
-                    }
-                });
-            });
-        });
-    </script>
 }

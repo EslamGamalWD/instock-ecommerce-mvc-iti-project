@@ -15,7 +15,7 @@ namespace InStockWebAppBLL.Models.UserVM
         [Required,MaxLength(20,ErrorMessage ="Error : Max Length 20")]
         public string FirstName { get; set; } = string.Empty;
         [Required, MaxLength(20, ErrorMessage = "Error : Max Length 20")]
-
+        [MinLength(2,ErrorMessage ="MinLength 2")]
         public string LastName { get; set; } = string.Empty;
         [Required]
 

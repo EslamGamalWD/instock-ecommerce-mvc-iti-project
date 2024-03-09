@@ -1,0 +1,57 @@
+﻿@if (TempData["Check"]!=null)
+{
+    <script>
+        $(document).ready(function () {
+            Swal.fire({
+                icon: "error",
+                title: "Try Again",
+                text: "@TempData["Check"]"
+
+            });
+        });
+    </script>
+}
+<script>
+    $(document).ready(function () {
+        $('#inputGroupSelectCountry').change(function () {
+            $("#inputGroupSelectState").empty();
+            var countryId = $(this).val();
+            $.ajax({
+                url: '/State/GetAll/' + countryId,
+                type: 'GET',
+                success: function (data) {
+                    console.log(data)
+                    var items = '<option selected disabled>-- Select State --</option>';
+                    $.each(data, function (i, state) {
+
+                        items += "<option value='" + state.id + "'>" + state.name + "</option>";
+                    });
+                    $("#inputGroupSelectState").append(items)
+                    console.log(items)
+
+
+                }
+            });
+        });
+
+        $('#inputGroupSelectState').change(function () {
+            $("#inputGroupSelectCity").empty();
+
+            var stateId = $(this).val();
+            $.ajax({
+                url: '/City/GetAll/' + stateId,
+                type: 'GET',
+                success: function (data) {
+                    var items = '<option selected disabled>-- Select City --</option>';
+                    $.each(data, function (i, city) {
+                        items += "<option value='" + city.id + "'>" + city.name + "</option>";
+                    });
+                    $("#inputGroupSelectCity").append(items)
+
+                }
+            });
+        });
+    });
+</script>
+<script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

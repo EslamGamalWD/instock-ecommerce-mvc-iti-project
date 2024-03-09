@@ -4,6 +4,7 @@ using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -62,7 +63,7 @@ namespace InStockWebAppPL.Controllers
                     else
                     {
                         TempData["Message"] = null;
-
+                        TempData["Check"]="Error There Are The same User Name Or Gmail Try Again";
                         return View("Create", modelVM);
                     }
                 }
@@ -73,6 +74,8 @@ namespace InStockWebAppPL.Controllers
 
                 return View("Create", modelVM);
             }
+          
+            TempData["Check"] = "Check You Data inputs ";
             TempData["Message"] = null;
 
             return View("Create", modelVM);
