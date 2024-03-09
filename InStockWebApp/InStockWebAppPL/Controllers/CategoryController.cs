@@ -30,22 +30,39 @@ namespace InStockWebAppPL.Controllers
             return View(categoryViewModels);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    var category = await _categoryRepository.GetById(id);
+
+        //    if (category == null)
+        //    {
+        //        TempData["Message"] = "Error: Category Not Found!";
+
+        //        return RedirectToAction("Index", "Category");
+        //    }
+
+        //    TempData["Message"] = null;
+
+        //    return View(category);
+        //}
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var category = await _categoryRepository.GetById(id);
+            var categoryDetails = await _categoryRepository.GetCategoryDetailsWithSubCategories(id);
 
-            if (category == null)
+            if (categoryDetails == null)
             {
                 TempData["Message"] = "Error: Category Not Found!";
-
                 return RedirectToAction("Index", "Category");
             }
 
             TempData["Message"] = null;
 
-            return View(category);
+            return View(categoryDetails);
         }
+
 
 
         [HttpGet]

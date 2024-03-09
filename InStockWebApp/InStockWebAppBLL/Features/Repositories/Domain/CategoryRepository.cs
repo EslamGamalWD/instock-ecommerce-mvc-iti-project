@@ -75,6 +75,7 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
         if (category is { })
         {
             category.IsDeleted = !category.IsDeleted;
+
             if (category.IsDeleted)
             {
                 category.DeletedAt = DateTime.Now;
@@ -90,5 +91,35 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
         }
 
         return null;
+    }
+
+    public async Task<CategoryDetailsVM> GetCategoryDetailsWithSubCategories(int categoryId)
+    {
+        var category = await _applicationDbContext.Categories
+            .Include(c => c.SubCategories)
+            .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+        if (category == null)
+            return null;
+
+        var categoryDetailsVM = new CategoryDetailsVM
+        {
+            Id = category.Id,
+            Name = category.Name,
+            Description = category.Description,
+            CreatedAt = category.CreatedAt,
+            ModifiedAt = category.ModifiedAt,
+            DeletedAt = category.DeletedAt,
+            IsDeleted = category.IsDeleted,
+            SubCategories = category.SubCategories.Select(subCategory => new SubCategoryListDetailsVM
+            {
+                Id = subCategory.Id,
+                Name = subCategory.Name,
+                CreatedAt = subCategory.CreatedAt,
+                IsDeleted = subCategory.IsDeleted
+            })
+        };
+
+        return categoryDetailsVM;
     }
 }
