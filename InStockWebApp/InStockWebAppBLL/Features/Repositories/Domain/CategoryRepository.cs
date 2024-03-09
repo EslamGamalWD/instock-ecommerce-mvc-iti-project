@@ -75,8 +75,17 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
         if (category is { })
         {
             category.IsDeleted = !category.IsDeleted;
-            category.ModifiedAt = DateTime.Now;
+            if (category.IsDeleted)
+            {
+                category.DeletedAt = DateTime.Now;
+            }
+            else
+            {
+                category.DeletedAt = null;
+            }
+            
             await _applicationDbContext.SaveChangesAsync();
+
             return DateTime.Now;
         }
 

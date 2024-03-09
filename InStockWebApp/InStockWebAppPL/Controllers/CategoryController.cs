@@ -31,6 +31,24 @@ namespace InStockWebAppPL.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var category = await _categoryRepository.GetById(id);
+
+            if (category == null)
+            {
+                TempData["Message"] = "Error: Category Not Found!";
+
+                return RedirectToAction("Index", "Category");
+            }
+
+            TempData["Message"] = null;
+
+            return View(category);
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             TempData["Message"] = null;
@@ -49,7 +67,7 @@ namespace InStockWebAppPL.Controllers
 
                     if (await _categoryRepository.Add(category))
                     {
-                        _unitOfWork.Save();
+                        await _unitOfWork.Save();
 
                         TempData["Message"] = "Category Added Successfully!";
 

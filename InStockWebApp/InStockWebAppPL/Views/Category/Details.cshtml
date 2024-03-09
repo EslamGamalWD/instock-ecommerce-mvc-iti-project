@@ -1,0 +1,48 @@
+﻿@model InStockWebAppDAL.Entities.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">@Model.Name Category</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Description:</h5>
+                    <p>@Model.Description</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Created At:</h5>
+                            <p>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Modified At:</h5>
+                            <p>@(Model.ModifiedAt.HasValue ? Model.ModifiedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Deleted At:</h5>
+                            <p>@(Model.DeletedAt.HasValue ? Model.DeletedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Status:</h5>
+                            <p class="badge @(Model.IsDeleted ? "bg-danger" : "bg-success")">
+                                @(Model.IsDeleted ? "Deleted" : "Available")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Index", "Category")" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
