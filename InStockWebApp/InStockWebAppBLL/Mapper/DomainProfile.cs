@@ -48,6 +48,11 @@ namespace InStockWebAppBLL.Mapper
                 
                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
+
+
+
+            CreateMap<GetUserByIdVM, EditUserVM>();
+            CreateMap<EditUserVM,User >();
         }
     }
 }

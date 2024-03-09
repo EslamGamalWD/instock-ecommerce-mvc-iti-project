@@ -1,4 +1,5 @@
-﻿using InStockWebAppBLL.Features.Interfaces;
+﻿using AutoMapper;
+using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
@@ -13,13 +14,15 @@ namespace InStockWebAppPL.Controllers
 
         #region Prop
         private readonly IUserRepository userRepo;
+        private readonly IMapper mapper;
 
         #endregion
 
         #region Ctor
-        public UserController(IUserRepository userRepo)
+        public UserController(IUserRepository userRepo,IMapper mapper)
         {
             this.userRepo=userRepo;
+            this.mapper=mapper;
         }
         #endregion
 
@@ -99,6 +102,51 @@ namespace InStockWebAppPL.Controllers
            if (toggleDateTime is { })
             return Ok(toggleDateTime);
             return NotFound();
+        }
+
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user =  mapper.Map<EditUserVM>(await userRepo.GetUserById(id));
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserVM modelVM)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                   
+
+                    if (await userRepo.Edit(modelVM))
+                    {
+                        TempData["Message"] = "Edit Successfuly";
+                        return RedirectToAction("Index", "User");
+
+                    }
+                    else
+                    {
+                        TempData["Message"] = null;
+                        TempData["Check"]="Error There Are Problem";
+                        return View("Edit", modelVM);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["Message"] = null;
+
+                return View("Edit", modelVM);
+            }
+
+            TempData["Check"] = "Check You Data inputs ";
+            TempData["Message"] = null;
+
+            return View("Edit", modelVM);
         }
         #endregion
 

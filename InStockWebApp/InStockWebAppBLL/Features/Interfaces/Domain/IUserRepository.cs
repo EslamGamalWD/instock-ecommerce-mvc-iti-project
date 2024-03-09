@@ -8,6 +8,6 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
         Task<IEnumerable<GetAllUserVM>> getAll();
         Task<DateTime?> ToggleStatus(string id);
         Task<GetUserByIdVM> GetUserById(string id);
-        
+        Task<bool> Edit(EditUserVM editUserVM);
     }
 }

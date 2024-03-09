@@ -96,6 +96,28 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             return UsersVM;
 
         }
+
+        public async Task<bool> Edit(EditUserVM editUserVM)
+        {
+            try
+            {
+                var user = await db.Users.Where(a => a.Id==editUserVM.Id).FirstOrDefaultAsync();
+                user.FirstName = editUserVM.FirstName;
+                user.LastName = editUserVM.LastName;
+                user.Email = editUserVM.Email;
+                user.Gender =editUserVM.Gender;
+                user.PhoneNumber = editUserVM.PhoneNumber;
+                user.ModifiedAt =DateTime.Now;
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+          
+        }
         #endregion
 
     }
