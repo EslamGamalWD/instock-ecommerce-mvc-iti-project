@@ -8,7 +8,7 @@
     <div class="col-lg-12">
         <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
 
-            <a asp-action="Create" asp-controller="User"   class="btn border add-btn shadow-none mx-2  d-md-block   add-list">
+            <a asp-action="Create" asp-controller="User" class="btn border add-btn shadow-none mx-2  d-md-block   add-list">
                 <i class="las la-plus mr-3"></i>Add User
             </a>
         </div>
@@ -17,81 +17,91 @@
         <div class="table-responsive rounded mb-3">
             <table class="data-tables table mb-0 tbl-server-info">
                 <thead class="bg-white text-uppercase">
-                    <tr class="ligth ligth-data">
+                <tr class="ligth ligth-data">
 
-                        <th>Name</th>
-                        <th>Profile</th>
-                        <th>Gender</th>
-                        <th>Type</th>
-                        <th>CityName</th>
-                        <th>StateName</th>
-                        <th>CreatedAt</th>
+                    <th>Name</th>
+                    <th>Profile</th>
+                    <th>Gender</th>
+                    <th>Type</th>
+                    <th>CityName</th>
+                    <th>StateName</th>
+                    <th>CreatedAt</th>
 
-                        <th>IsDeleted</th>
-                        <th>ModifiedAt</th>
+                    <th>IsDeleted</th>
+                    <th>ModifiedAt</th>
 
-                        <th>Action</th>
-                    </tr>
+                    <th>Action</th>
+                </tr>
                 </thead>
                 <tbody class="ligth-body">
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.FirstName  @item.LastName</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    @{
-                                        string imgSrc = null;
-                                        if (item.Photo != null && item.Photo.Length > 0)
-                                        {
-                                            var base64String = Convert.ToBase64String(item.Photo);
-                                            imgSrc = $"data:image/jpeg;base64,{base64String}";
-                                        }
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+
+                        <td>@item.FirstName @item.LastName</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @{
+                                    string imgSrc = null;
+                                    if (item.Photo != null && item.Photo.Length > 0)
+                                    {
+                                        var base64String = Convert.ToBase64String(item.Photo);
+                                        imgSrc = $"data:image/jpeg;base64,{base64String}";
                                     }
-                                    <img src="@imgSrc" class="img-fluid rounded avatar-50 mr-3" alt="image">
-                                </div>
-                            </td>
-                            <td>@item.Gender</td>
-                            <td>@item.UserType</td>
-                            <td>@item.CityName</td>
-                            <td>@item.StateName</td>
-                            <td>@item.CreatedAt</td>
-                            <td>
-                                <span class="badge badge-@(item.IsDeleted ? "danger" : "success") js-status">
-                                    @(item.IsDeleted ? "Deleted" : "Available")
-                                </span>
-                            </td>
-                            <td class="js-updated-on">@item.ModifiedAt</td>
-                            <td>
-                                <div class="d-flex align-items-center list-action">
-                                    <a asp-action="Select" asp-controller="User" asp-route-id="@item.Id" class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
+                                }
+                                <img src="@imgSrc" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                            </div>
+                        </td>
+                        <td>@item.Gender</td>
+                        <td>@item.UserType</td>
+                        <td>@item.CityName</td>
+                        <td>@item.StateName</td>
+                        <td>@item.CreatedAt</td>
+                        <td>
+                            <span class="badge badge-@(item.IsDeleted ? "danger" : "success") js-status">
+                                @(item.IsDeleted ? "Deleted" : "Available")
+                            </span>
+                        </td>
+                        <td class="js-updated-on">@item.ModifiedAt</td>
+                        <td>
+                            <div class="d-flex align-items-center list-action">
+                                <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
+                                   href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
+                                   data-title="Add Category" data-url="/User/Select/@item.Id">
+                                    <i class="ri-eye-line mr-0"></i>
+                                </a>
+                                <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
 
-                                        ><i class="ri-eye-line mr-0"></i></a>
-                                    <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
-                                        asp-action="Edit" asp-controller="User"><i class="ri-pencil-line mr-0"></i></a>
+                                   asp-action="" asp-controller="User">
+                                    <i class="ri-pencil-line mr-0"></i>
+                                </a>
+                                <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                   asp-action="" asp-controller="User">
+                                    <i class="ri-delete-bin-line mr-0"></i>
+                                </a>
 
-                                       @* asp-action="" asp-controller="User"><i class="ri-pencil-line mr-0"></i></a> *@
-                                    <a class="badge bg-warning mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                       asp-action="" asp-controller="User"><i class="ri-delete-bin-line mr-0"></i></a>
-
-                                       @* asp-action="Edit" asp-controller="User"><i class="ri-pencil-line mr-0"></i></a> *@
-                                    <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                       href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
-
-                                </div>
-                            </td>
-                        </tr>
-                    }
+                                <a asp-action="" asp-controller="User">
+                                    <i class="ri-pencil-line mr-0"></i>
+                                </a>
+                                <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                   href="javascript:;" data-id="@item.Id">
+                                    <i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetAndStoreTokens(Context).RequestToken" />
+<input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetAndStoreTokens(Context).RequestToken"/>
 
 @section JS {
     <script src="~/lib/bootbox.js/bootbox.js"></script>
-    <script src="~/lib/bootbox.js/bootbox.min.js"></script> 
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
     <script>
         $(document).ready(function () {
             $('body').delegate('.js-render-modal', 'click', function () {
