@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories.Domain;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using InStockWebAppBLL.Helpers.Account;
 
 namespace InStockWebAppBLL
 {
@@ -22,7 +24,8 @@ namespace InStockWebAppBLL
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
-
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 

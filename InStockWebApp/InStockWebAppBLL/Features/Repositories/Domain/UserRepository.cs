@@ -40,7 +40,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         #endregion
 
         #region Method
-        public async Task< bool> Create(CreateUserVM createUserVM)
+        public async Task< string> Create(CreateUserVM createUserVM)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 {
                     string Role = AppRoles.EnumToString(user.UserType);
                     var resultrole = await userManager.AddToRoleAsync(user, Role);
-                    return true;
+                    return user.Id;
                 }
                
             }
@@ -59,7 +59,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
                
             }
-            return false;
+            return null;
 
         }
 

@@ -2,7 +2,10 @@
 using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
+using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Models.UserVM;
+using InStockWebAppDAL.Entities.Enumerators;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -14,15 +17,20 @@ namespace InStockWebAppPL.Controllers
 
         #region Prop
         private readonly IUserRepository userRepo;
+        private readonly IUserPaymentRepository userPaymentRepository;
         private readonly IMapper mapper;
-
+        private readonly IEmailSender emailSender;
+        private readonly IWebHostEnvironment webHostEnvironmen;
         #endregion
 
         #region Ctor
-        public UserController(IUserRepository userRepo,IMapper mapper)
+        public UserController(IUserRepository userRepo,IUserPaymentRepository userPaymentRepository,IMapper mapper, IEmailSender emailSender, IWebHostEnvironment webHostEnvironmen)
         {
             this.userRepo=userRepo;
+            this.userPaymentRepository=userPaymentRepository;
             this.mapper=mapper;
+            this.emailSender=emailSender;
+            this.webHostEnvironmen = webHostEnvironmen;
         }
         #endregion
 
@@ -47,19 +55,41 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    #region Image
                     if (modelVM.image != null)
                     {
-                       
+
                         using (var memoryStream = new MemoryStream())
                         {
                             await modelVM.image.CopyToAsync(memoryStream);
                             modelVM.Photo = memoryStream.ToArray();
                         }
                     }
+                    #endregion
 
-                    if (await userRepo.Create(modelVM))
+                    var Result = await userRepo.Create(modelVM);
+                    if (Result!=null)
                     {
+                        #region UserPayment
+                        if (modelVM.UserType==UserType.Customer)
+                            await userPaymentRepository.AddListPayment(modelVM.UserPaymentVM, Result);
+
+                        #endregion
+
+                        #region send Email
                         TempData["Message"] = "saved Successfuly";
+                        var filePath = $"{webHostEnvironmen.WebRootPath}/Account/Tempelet/Email.html";
+                        StreamReader str = new StreamReader(filePath);
+                        var body = str.ReadToEnd();
+                        str.Close();
+                        body = body.Replace("[Header]", "Welcom In Instock Shopping")
+                            .Replace("[Body]", "Welcome to InStock! Start managing your inventory efficiently")
+                            .Replace("[URL]", "https://localhost:44305/")
+                            .Replace("[AncorTitle]", "Go");
+
+                        await emailSender.SendEmailAsync(modelVM.Email, "Welcome Login", body);
+                        #endregion
+
                         return RedirectToAction("Index", "User");
 
                     }

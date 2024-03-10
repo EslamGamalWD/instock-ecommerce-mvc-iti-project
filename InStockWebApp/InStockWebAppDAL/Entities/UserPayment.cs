@@ -18,6 +18,6 @@ public class UserPayment
     public bool IsDeleted { get; set; } = false;
 
     //Navigation Property
-    public string UserId { get; set; } = string.Empty;
-    public virtual User User { get; set; } = default!;
+    public string? UserId { get; set; } = string.Empty;
+    public virtual User? User { get; set; } = default!;
 }

@@ -3,11 +3,14 @@ using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Features.Repositories.Domain;
+using InStockWebAppBLL.Helpers.Account;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +56,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

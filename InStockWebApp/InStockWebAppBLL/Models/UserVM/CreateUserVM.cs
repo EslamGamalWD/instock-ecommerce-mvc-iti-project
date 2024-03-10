@@ -1,4 +1,5 @@
-﻿using InStockWebAppDAL.Entities.Enumerators;
+﻿using InStockWebAppDAL.Entities;
+using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace InStockWebAppBLL.Models.UserVM
 {
     public class CreateUserVM
     {
-
+        
         [Required,MaxLength(20,ErrorMessage ="Error : Max Length 20")]
         public string FirstName { get; set; } = string.Empty;
         [Required, MaxLength(20, ErrorMessage = "Error : Max Length 20")]
@@ -36,5 +37,6 @@ namespace InStockWebAppBLL.Models.UserVM
         [Required]
 
         public int CityId { get; set; }
+        public virtual IEnumerable<UserPayment>? UserPaymentVM { get; set; }
     }
 }

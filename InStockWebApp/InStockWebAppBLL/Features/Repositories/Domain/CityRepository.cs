@@ -11,14 +11,23 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 {
     public class CityRepository : GenericRepository<City>, ICityRepository
     {
+
+        #region Prop
         private readonly ApplicationDbContext _applicationDbContext;
 
+        #endregion
+
+
+        #region Ctor
         public CityRepository(ApplicationDbContext applicationDbContext) : base(
-            applicationDbContext)
+           applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
+        #endregion
 
+
+        #region Method
         public override Task Add(City entity)
         {
             throw new NotImplementedException();
@@ -33,5 +42,10 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+
+
+
     }
 }
