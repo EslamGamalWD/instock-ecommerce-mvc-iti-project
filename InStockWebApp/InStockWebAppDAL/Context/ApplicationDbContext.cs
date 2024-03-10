@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public virtual DbSet<State> States { get; set; }
     public virtual DbSet<SubCategory> SubCategories { get; set; }
     public virtual DbSet<UserPayment> UserPayments { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }

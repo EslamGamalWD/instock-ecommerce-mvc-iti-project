@@ -1,0 +1,25 @@
+@model SubcategoryVM
+
+@{
+    var categories = (SelectList)ViewBag.CategoryNames;
+}
+
+<div class="form-group">
+    <label asp-for="Name">Name</label>
+    <input type="text" class="form-control" asp-for="Name">
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Description">Description</label>
+    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="form-group mb-4">
+    <label asp-for="CategoryId">Category</label>
+    <select asp-for="CategoryId" asp-items="categories" class="custom-select">
+        <option>Choose any category</option>
+    </select>
+    <div class="invalid-feedback">Example invalid custom select feedback</div>
+</div>
+<button type="submit" class="btn btn-primary">Submit</button>
+<a asp-controller="Subcategory" asp-action="Index" class="btn bg-danger">Cancel</a>

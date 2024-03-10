@@ -1,35 +1,35 @@
-﻿
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title >@ViewData["Title"] - InStock</title>
-    <partial name="~/Views/Shared/Admin/_CSSLayout.cshtml" />
-    @RenderSection("CSS",false)
+    <partial name="~/Views/Shared/Admin/_CSSLayout.cshtml"/>
+    @await RenderSectionAsync("CSS", false)
 </head>
 <body class="  ">
-    <!-- loader Start -->
-    <div id="loading">
-        <div id="loading-center">
+<!-- loader Start -->
+<div id="loading">
+    <div id="loading-center">
+    </div>
+</div>
+<!-- loader END -->
+<!-- Wrapper Start -->
+<div class="wrapper">
+
+    <partial name="~/Views/Shared/Admin/_SideBarLayout.cshtml"/>
+    <partial name="~/Views/Shared/Admin/_TopNavBarLayout.cshtml"/>
+    <partial name="~/Views/Shared/Admin/_ModalLayout.cshtml"/>
+    <div class="content-page">
+        <div class="container-fluid">
+            @RenderBody()
+            <span id="Message" class="d-none"> @TempData["Message"]</span>
         </div>
     </div>
-    <!-- loader END -->
-    <!-- Wrapper Start -->
-    <div class="wrapper">
+</div>
+<partial name="~/Views/Shared/Admin/_JavaScriptLayout.cshtml"/>
 
-        <partial name="~/Views/Shared/Admin/_SideBarLayout.cshtml" />
-        <partial name="~/Views/Shared/Admin/_TopNavBarLayout.cshtml" />
-        <partial name="~/Views/Shared/Admin/_ModalLayout.cshtml" />
-        <div class="content-page">
-            <div class="container-fluid">
-                @RenderBody()
-                <span id="Message" class="d-none"> @TempData["Message"]</span>
-            </div>
-        </div>
-    </div>
-    <partial name="~/Views/Shared/Admin/_JavaScriptLayout.cshtml" />
-
-    @RenderSection("JS",false)
+@await RenderSectionAsync("JS", false)
+@await RenderSectionAsync("JqueryValidation", false)
 </body>
 </html>

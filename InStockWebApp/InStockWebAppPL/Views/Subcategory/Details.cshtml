@@ -1,0 +1,45 @@
+@model SubcategoryVM
+
+@{
+    ViewBag.Title = "Subcategory Details";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">@Model.Name Details</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <form>
+            <input type="hidden" asp-for="Id"/>
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input type="text" class="form-control" asp-for="Name" readonly>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <input type="text" class="form-control" asp-for="Description" readonly>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt">CreatedAt</label>
+                <input type="text" class="form-control" asp-for="CreatedAt" readonly>
+            </div>
+            @if (@Model.ModifiedAt is not null)
+            {
+                <div class="form-group">
+                    <label asp-for="ModifiedAt">ModifiedAt</label>
+                    <input type="text" class="form-control" asp-for="ModifiedAt" readonly>
+                </div>
+            }
+            <div class="form-group mb-4">
+                <label asp-for="Category.Name">Category</label>
+                <input type="text" class="form-control" asp-for="Category.Name" readonly>
+            </div>
+
+            <a asp-controller="Subcategory" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Proceed To Edit</a>
+            <a asp-controller="Subcategory" asp-action="Index" class="btn bg-danger">Back To List</a>
+        </form>
+    </div>
+</div>

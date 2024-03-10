@@ -4,7 +4,8 @@ namespace InStockWebAppBLL.Features.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
-    ISubCategoryRepository SubCategoryRepository { get; }
+    ICategoryRepository CategoryRepository { get; }
+    ISubCategoryRepository SubcategoryRepository { get; }
 
     Task Save();
 }

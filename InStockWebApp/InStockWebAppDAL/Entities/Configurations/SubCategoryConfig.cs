@@ -13,5 +13,7 @@ public class SubCategoryConfig : IEntityTypeConfiguration<SubCategory>
             .HasMaxLength(100);
         builder.Property(p => p.Description)
             .HasMaxLength(250);
+        builder.Property(p => p.CreatedAt)
+            .HasDefaultValueSql("GETDATE()");
     }
 }

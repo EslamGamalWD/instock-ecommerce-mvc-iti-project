@@ -1,0 +1,101 @@
+﻿@model CategoryDetailsVM
+
+@{
+    ViewData["Title"] = "Category Details";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-uppercase">@Model.Name Category</h2>
+                </div>
+                <div class="card-body">
+                    <h5>Description:</h5>
+                    <p>@Model.Description</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Created At:</h5>
+                            <p>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Modified At:</h5>
+                            <p>@(Model.ModifiedAt.HasValue ? Model.ModifiedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Deleted At:</h5>
+                            <p>@(Model.DeletedAt.HasValue ? Model.DeletedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Status:</h5>
+                            <p class="badge @(Model.IsDeleted ? "bg-danger" : "bg-success")">
+                                @(Model.IsDeleted ? "Deleted" : "Available")
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <hr />
+                    <br />
+
+                    <div class="col-lg-12">
+                        <h4>SubCategories:</h4>
+                    </div>
+
+                    <br />
+
+                    <div class="col-lg-12">
+                        <div class="table-responsive rounded mb-3">
+                            <table class="data-tables table mb-0 tbl-server-info text-center">
+                                <thead class="bg-white text-uppercase">
+                                    <tr class="light light-data">
+                                        <th>Name</th>
+                                        <th>Created At</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="light-body">
+                                    @foreach (var item in Model.SubCategories)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td>@item.CreatedAt.ToShortDateString()</td>
+                                            <td>
+                                                <span class="badge badge-@(item.IsDeleted ? "danger" : "success") js-status">
+                                                    @(item.IsDeleted ? "Deleted" : "Available")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center justify-content-center list-action">
+                                                    <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
+                                                       href="/Category/Details/@item.Id">
+                                                        <i class="ri-eye-line mr-0"></i>
+                                                    </a>
+
+                                                    @* <a href="javascript:" class="badge bg-success mr-2 js-render-modal" data-toggle="tooltip" data-placement="top" data-title="Edit Category" data-original-title="Edit" data-url="/Category/Edit/@item.Id">
+                                                        <i class="ri-pencil-line mr-0"></i>
+                                                    </a>
+
+                                                    <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                                       href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a> *@
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("Index", "Category")" class="btn btn-primary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
