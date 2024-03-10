@@ -14,8 +14,8 @@ namespace InStockWebAppBLL.Mapper
         {
             CreateMap<CreateRoleVM, IdentityRole>();
             CreateMap<IdentityRole, GetAllRoleVM>();
-            CreateMap<SubCategory, SubCategoryVM>();
-            CreateMap<SubCategoryVM, SubCategory>();
+            CreateMap<SubCategory, SubcategoryVM>();
+            CreateMap<SubcategoryVM, SubCategory>();
 
 
             CreateMap<User, GetAllUserVM>()

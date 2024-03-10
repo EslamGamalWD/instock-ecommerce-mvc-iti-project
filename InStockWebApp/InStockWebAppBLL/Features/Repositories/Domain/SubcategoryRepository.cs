@@ -1,14 +1,15 @@
 ﻿using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain;
 
-public class SubCategoryRepository : GenericRepository<SubCategory>, ISubCategoryRepository
+public class SubcategoryRepository : GenericRepository<SubCategory>, ISubCategoryRepository
 {
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public SubCategoryRepository(ApplicationDbContext applicationDbContext) : base(
+    public SubcategoryRepository(ApplicationDbContext applicationDbContext) : base(
         applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
@@ -31,6 +32,7 @@ public class SubCategoryRepository : GenericRepository<SubCategory>, ISubCategor
 
     public override void Update(SubCategory entity)
     {
-        throw new NotImplementedException();
+        entity.ModifiedAt = DateTime.Now;
+        _applicationDbContext.Entry(entity).State = EntityState.Modified;
     }
 }

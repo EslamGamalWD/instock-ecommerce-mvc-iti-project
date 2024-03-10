@@ -8,14 +8,14 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _applicationDbContext;
     public ICategoryRepository CategoryRepository { get; }
-    public ISubCategoryRepository SubCategoryRepository { get; }
+    public ISubCategoryRepository SubcategoryRepository { get; }
 
     public UnitOfWork(ApplicationDbContext applicationDbContext,
-        ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository)
+        ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository)
     {
         _applicationDbContext = applicationDbContext;
         CategoryRepository = categoryRepository;
-        SubCategoryRepository = subCategoryRepository;
+        SubcategoryRepository = subcategoryRepository;
     }
 
     public void Dispose()

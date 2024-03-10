@@ -1,4 +1,6 @@
 ﻿<!-- Backend Bundle JavaScript -->
+<!-- Backend Bundle JavaScript -->
+<!-- Backend Bundle JavaScript -->
 <script src="~/AdminResources/js/backend-bundle.min.js"></script>
 
 <!-- Table Treeview JavaScript -->
@@ -17,14 +19,17 @@
 <script src="~/sweatalert/sweetalert2/sweetalert2.min.js"></script>
 <script>
     $(document).ready(function () {
-        var message = $("#Message").text();
+        let message = $("#Message").text();
         if (message !== ' ') {
             Swal.fire({
                 title: 'Success!',
-                text: 'Save SuccessfulLy!',
+                text: 'Saved SuccessfulLy!',
                 icon: 'success',
                 confirmButtonText: 'OK'
             })
         }
     })
 </script>
+
+<!--Toastr Alert-->
+<script src="~/lib/toastr.js/toastr.min.js"></script>
