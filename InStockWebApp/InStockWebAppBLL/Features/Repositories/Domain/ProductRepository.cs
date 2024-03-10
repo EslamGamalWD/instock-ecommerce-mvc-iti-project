@@ -75,6 +75,20 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             }
         }
 
+        public async Task<AlterProductVM> EditDetails(int? id)
+        {
+            try
+            {
+                var DBProduct = await _applicationDbContext.Products
+                    .Include(P => P.SubCategory).Include(P => P.Discount).FirstOrDefaultAsync(P => P.Id == id);
+                return _mapper.Map<AlterProductVM>(DBProduct);
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public async Task<IEnumerable<GetProductsVM>> GetAll()
         {
             try
