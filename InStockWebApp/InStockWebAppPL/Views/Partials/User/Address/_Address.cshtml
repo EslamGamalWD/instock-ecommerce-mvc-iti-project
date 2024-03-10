@@ -1,0 +1,40 @@
+﻿@model CreateUserVM
+@inject ICountryRepository countryrepo
+
+<div class="row">
+    <div class="col-4">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelectCountry">Country</label>
+            </div>
+            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="custom-select" id="inputGroupSelectCountry">
+                <option selected disabled>Choose...</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="col-4">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelectState">State</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelectState">
+            </select>
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelectCity">City</label>
+            </div>
+            <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
+            </select>
+            <span asp-for="CityId" class="text-danger"></span>
+
+        </div>
+
+    </div>
+
+
+</div>

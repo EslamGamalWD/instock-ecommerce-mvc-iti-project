@@ -13,7 +13,8 @@ namespace InStockWebAppBLL.Mapper
         public DomainProfile()
         {
             CreateMap<CreateRoleVM, IdentityRole>();
-            CreateMap<IdentityRole, GetAllRoleVM>();
+            CreateMap<IdentityRole, GetAllRoleVM>()
+                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
             CreateMap<SubCategory, SubcategoryVM>();
             CreateMap<SubcategoryVM, SubCategory>();
 
@@ -29,6 +30,7 @@ namespace InStockWebAppBLL.Mapper
 
 
             CreateMap<CreateUserVM, User>()
+
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.UserType, opt => opt.MapFrom(src => src.UserType))
@@ -43,9 +45,14 @@ namespace InStockWebAppBLL.Mapper
             CreateMap<EditCategoryVM, Category>();
             CreateMap<Category, GetAllCategoriesVM>();
             CreateMap<User, GetUserByIdVM>()
-                
+
                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
+
+
+
+            CreateMap<GetUserByIdVM, EditUserVM>();
+            CreateMap<EditUserVM, User>();
         }
     }
 }

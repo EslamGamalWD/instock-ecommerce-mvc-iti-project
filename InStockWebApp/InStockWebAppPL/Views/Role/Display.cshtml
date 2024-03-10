@@ -1,0 +1,78 @@
+﻿@model CreateUserRolesVM
+@{
+    ViewData["Title"] = "Display";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+            <center>
+                <p>@Model.RoleName</p>
+            </center>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <form asp-action="Display" asp-controller="Role" method="post">
+        <div class="table-responsive rounded mb-3">
+            <table class="data-tables table mb-0 tbl-server-info">
+                <thead class="bg-white text-uppercase">
+                    <tr class="ligth ligth-data">
+                        <th>UserName</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody class="ligth-body">
+                    @for (int i = 0; i < Model.UserInRoleVM.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.UserInRoleVM[i].UserName
+                                <input type="hidden" asp-for="@Model.RoleId" />
+                                <input type="hidden" asp-for="@Model.UserInRoleVM[i].UserId" />
+                                <input type="hidden" asp-for="@Model.UserInRoleVM[i].UserName" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.UserInRoleVM[i].IsSelected" type="checkbox" class="filled-in">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+            <input type="submit" value="Add User" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+
+@section JS {
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.js-render-modal', function () {
+                var btn = $(this);
+                var modal = $('#Modal');
+
+                modal.find('#ModalLabel').text(btn.data('title'));
+
+                if (btn.data('update') !== undefined) {
+                    updatedRow = btn.parents('tr');
+                    console.log(updatedRow);
+                }
+
+                $.get({
+                    url: btn.data('url'),
+                    success: function (form) {
+                        modal.find('.modal-body').html(form);
+                        $.validator.unobtrusive.parse(modal);
+                    },
+                    error: function () {
+                        showErrorMessage();
+                    }
+                });
+
+                modal.modal('show');
+            });
+        });
+    </script>
+}

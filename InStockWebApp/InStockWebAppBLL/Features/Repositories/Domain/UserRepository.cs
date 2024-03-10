@@ -40,7 +40,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         #endregion
 
         #region Method
-        public async Task< bool> Create(CreateUserVM createUserVM)
+        public async Task< string> Create(CreateUserVM createUserVM)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 {
                     string Role = AppRoles.EnumToString(user.UserType);
                     var resultrole = await userManager.AddToRoleAsync(user, Role);
-                    return true;
+                    return user.Id;
                 }
                
             }
@@ -59,7 +59,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
                
             }
-            return false;
+            return null;
 
         }
 
@@ -95,6 +95,28 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             var UsersVM = mapper.Map<GetUserByIdVM>(users);
             return UsersVM;
 
+        }
+
+        public async Task<bool> Edit(EditUserVM editUserVM)
+        {
+            try
+            {
+                var user = await db.Users.Where(a => a.Id==editUserVM.Id).FirstOrDefaultAsync();
+                user.FirstName = editUserVM.FirstName;
+                user.LastName = editUserVM.LastName;
+                user.Email = editUserVM.Email;
+                user.Gender =editUserVM.Gender;
+                user.PhoneNumber = editUserVM.PhoneNumber;
+                user.ModifiedAt =DateTime.Now;
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+          
         }
         #endregion
 

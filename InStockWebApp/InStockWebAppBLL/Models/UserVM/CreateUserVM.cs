@@ -1,16 +1,22 @@
-﻿using InStockWebAppDAL.Entities.Enumerators;
-using System.ComponentModel.DataAnnotations;
+﻿using InStockWebAppDAL.Entities;
+using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace InStockWebAppBLL.Models.UserVM
 {
     public class CreateUserVM
     {
-
+        
         [Required,MaxLength(20,ErrorMessage ="Error : Max Length 20")]
         public string FirstName { get; set; } = string.Empty;
         [Required, MaxLength(20, ErrorMessage = "Error : Max Length 20")]
-
+        [MinLength(2,ErrorMessage ="MinLength 2")]
         public string LastName { get; set; } = string.Empty;
         [Required]
 
@@ -31,5 +37,6 @@ namespace InStockWebAppBLL.Models.UserVM
         [Required]
 
         public int CityId { get; set; }
+        public virtual IEnumerable<UserPayment>? UserPaymentVM { get; set; }
     }
 }

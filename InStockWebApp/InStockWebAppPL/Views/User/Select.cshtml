@@ -9,17 +9,16 @@
         var base64String = Convert.ToBase64String(Model.Photo);
         imgSrc = $"data:image/jpeg;base64,{base64String}";
     }
-                                  
+
 }
-@section CSS{
+@section CSS {
     <style>
         .cardProfile {
-           justify-content:center;
-           display:flex;
-           align-items:center;
+            justify-content: center;
+            display: flex;
+            align-items: center;
         }
 
-          
     </style>
 
 }
@@ -43,10 +42,10 @@
                     <div class="ml-3">
                         <h4 class="mb-1">@Model.FirstName @Model.LastName</h4>
                         <p class="mb-2">@Model.UserType</p>
-                       
+
                     </div>
                 </div>
-               
+
                 <ul class="list-inline p-0 ">
                     <li class="m-2">
                         <div class="d-flex align-items-center">
@@ -57,7 +56,7 @@
                             <p class="mb-0">@Model.CityName @Model.StateName</p>
                         </div>
                     </li>
-                   
+
                     <li class="m-2">
                         <div class="d-flex align-items-center">
                             <svg class="svg-icon mr-3" height="16" width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,13 +92,13 @@
                             <p class="mb-0">Created Time: @Model.CreatedAt</p>
                         </div>
                     </li>
-                    
-                           
+
+
                     <li class="mt-6">
                         <div class="custom-control custom-switch custom-switch-text custom-switch-color mt-5 custom-control-inline">
                             <div class="custom-switch-inner">
                                 <p class="mb-0">
-                                   IsDeleted
+                                    IsDeleted
                                 </p>
                                 <input type="checkbox" class="custom-control-input bg-danger" id="customSwitch-33" disabled checked="@Model.IsDeleted">
                                 <label class="custom-control-label" for="customSwitch-33" data-on-label="Yes" data-off-label="No">
@@ -107,7 +106,7 @@
                             </div>
                         </div>
                     </li>
-                   
+
                 </ul>
 
                 <center>

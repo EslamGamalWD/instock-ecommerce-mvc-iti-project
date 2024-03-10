@@ -1,0 +1,86 @@
+﻿@model CreateUserVM
+
+<div class="form-row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="FirstName">First name</label>
+        <input type="text" class="form-control" id="validationTooltip01" asp-for="FirstName" required>
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="LastName">Last name</label>
+        <input type="text" class="form-control" id="validationTooltip01" asp-for="LastName" required>
+        <span asp-validation-for="LastName" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="PasswordHash">Password</label>
+        <input type="password" class="form-control" id="validationTooltip01" asp-for="PasswordHash" required>
+        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="UserName">UserName</label>
+        <input type="text" class="form-control" id="validationTooltip01" asp-for="UserName" required>
+        <span asp-validation-for="UserName" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Email">Email</label>
+        <input type="Email" class="form-control" id="validationTooltip01" asp-for="Email" required>
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="validationTooltip04">Gender</label>
+        <select asp-for="Gender" class="form-control" id="validationTooltip04" required>
+            <option selected disabled value="">Gender</option>
+            <option value="0">Male</option>
+            <option value="1">FeMale</option>
+        </select>
+        <div class="invalid-tooltip">
+            Please select a valid state.
+        </div>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="validationTooltip04">UserType</label>
+        <select asp-for="UserType" class="form-control select" id="validationTooltip04" required>
+            <option selected disabled value="">User Type</option>
+            <option value="0">Customer</option>
+            <option value="1">Admin</option>
+        </select>
+        <div class="invalid-tooltip">
+            Please select a valid state.
+        </div>
+        <span asp-validation-for="UserType" class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label asp-for="PhoneNumber">Phone Number</label>
+        <input type="PhoneNumber" class="form-control" id="validationTooltip01" asp-for="PhoneNumber" required>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-12 mb-3">
+        <label asp-for="image">Image</label>
+
+        <div class="input-group ">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Upload</span>
+            </div>
+            <div class="custom-file">
+                <input asp-for="image" type="file" class="custom-file-input" id="inputGroupFile01">
+                <label class="custom-file-label selected" for="inputGroupFile01"></label>
+                <input type="hidden" class="ImageName" asp-for="image" />
+            </div>
+        </div>
+        <span asp-for="image" class="text-danger"></span>
+
+    </div>
+
+
+
+
+</div>
