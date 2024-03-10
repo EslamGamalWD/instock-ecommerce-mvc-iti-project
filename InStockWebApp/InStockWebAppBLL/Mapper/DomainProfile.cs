@@ -17,6 +17,10 @@ namespace InStockWebAppBLL.Mapper
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
             CreateMap<SubCategory, SubCategoryVM>();
             CreateMap<SubCategoryVM, SubCategory>();
+            CreateMap<IdentityRole, GetAllRoleVM>();
+            CreateMap<SubCategory, SubcategoryVM>();
+            CreateMap<SubcategoryVM, SubCategory>();
+
 
 
             CreateMap<User, GetAllUserVM>()
@@ -51,8 +55,10 @@ namespace InStockWebAppBLL.Mapper
 
 
 
+
             CreateMap<GetUserByIdVM, EditUserVM>();
             CreateMap<EditUserVM,User >();
+
         }
     }
 }

@@ -1,0 +1,29 @@
+@model SubcategoryVM
+
+@{
+    ViewBag.Title = "Edit Subcategory";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">Edit Subcategory</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Subcategory" asp-action="Edit" class="form-group">
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreatedAt"/>
+            <partial name="~/Views/Partials/Subcategory/CreateEdit.cshtml"/>
+
+        </form>
+    </div>
+</div>
+
+@section JqueryValidation
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
