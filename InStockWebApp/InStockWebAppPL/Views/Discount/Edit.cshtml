@@ -1,0 +1,69 @@
+﻿@model UpdateDiscountVM 
+@{
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+  
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" asp-controller="Discount" data-toggle="validator" method="post">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Name</label>
+                               
+                                <input asp-for="Name" astype="text" class="form-control" placeholder="Enter Discount Name" required value="@Model.Name">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label>Discount Percentage</label>
+                            <input asp-for="Percentage" astype="text" class="form-control" placeholder="Enter Discount Percentage" required>
+                            <span asp-validation-for="Percentage" class="text-danger"></span>
+
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Description</label>
+                               
+                                <textarea asp-for="Description" class="form-control" placeholder="Enter Discount Description" required></textarea>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>          
+                        <div class="col-md-12">
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Upload</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input asp-for="ImagePath" type="file" class="custom-file-input" id="inputGroupFile01">
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                    <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                    <input type="hidden" asp-for="ImagePath" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="validationTooltip04">Discount Status</label>
+                            <select asp-for="IsActive" class="form-control" id="validationTooltip04" required>
+                                <option selected disabled value="">Select discount status</option>
+                                <option value="true">Active</option>
+                                <option value="false">Inactive</option>
+                            </select>
+                            <div class="invalid-tooltip">
+                                Please select a valid status.
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Save Edits</button>
+                    <button type="reset" class="btn btn-danger">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

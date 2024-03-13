@@ -1,0 +1,171 @@
+﻿@model List<GetAllDiscountsVM>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+@{
+    ViewData["Title"] = "Discounts";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div  class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+            <a href="javascript:" data-title="Add Discount" data-url="/Discount/Create" class="btn border add-btn shadow-none mx-2  d-md-block  js-render-modal add-list">
+                <i class="las la-plus mr-3"></i>Add Discount 
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="table-responsive rounded mb-3">
+            <table class="data-tables table mb-0 tbl-server-info">
+                <thead class="bg-white text-uppercase">
+                    <tr class="light light-data">
+                        <th>Discount Name</th>
+                        <th>Percentage</th>
+                        <th>Activity</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Modified At</th>
+                        <th>Actions </th>
+
+                    </tr>
+                </thead>
+                <tbody class="light-body">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Percentage%</td>
+                            <td>
+                                <span class="badge badge-pill badge-@(item.IsActive ? "success":  "warning" ) ">
+                                    @(item.IsActive ? "Active" : "Not Active")
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge badge-@(item.IsDeleted ? "danger" : "success") js-status">
+                                    @(item.IsDeleted ? "Deleted" : "Available")
+                                </span>
+                            </td>
+                           
+                           
+                            <td>@item.CreatedAt</td>
+                            <td class="js-updated-on">@item.ModifiedAt</td>
+
+
+                            <td>
+                                <div class="d-flex align-items-center list-action">
+
+                                    <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Assign to products"
+                                       asp-controller="Discount" asp-action="AssignedProducts" asp-route-id="@item.Id">
+                                        <i class="ri-price-tag-3-line mr-0 green-icon"></i>
+
+                                    </a>
+                                    <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View" asp-controller="Discount" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="ri-eye-line mr-0"></i>
+                                    </a>
+                                    <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" asp-controller="Discount" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="ri-pencil-line mr-0"></i>
+                                    </a>
+
+                                  
+
+
+                                    <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                       href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
+                                 
+             
+
+                                  
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
+
+@section JS {
+    <script src="~/lib/bootbox.js/bootbox.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-render-modal', 'click', function () {
+                var btn = $(this);
+                var modal = $('#Modal');
+
+                modal.find('#ModalLabel').text(btn.data('title'));
+
+                if (btn.data('update') !== undefined) {
+                    updatedRow = btn.parents('tr');
+                    console.log(updatedRow);
+                }
+
+                $.get({
+                    url: btn.data('url'),
+                    success: function (form) {
+                        modal.find('.modal-body').html(form);
+                        $.validator.unobtrusive.parse(modal);
+                    },
+                    error: function () {
+                        showErrorMessage();
+                    }
+                });
+
+                modal.modal('show');
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-toggle-status', 'click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure that you need to toggle this item status?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.post({
+                                url: '/Discount/Delete/' + btn.data('id'),
+                                data: {
+                                    '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                                },
+                                success: function (lastUpdatedOn) {
+                                    var row = btn.parents('tr');
+                                    var status = row.find('.js-status');
+                                    var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                    status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                    row.find('.js-updated-on').html(lastUpdatedOn);
+                                    row.addClass('animate__animated animate__flash');
+                                    var Icon = row.find('.ic');
+                                    var IconBackGround = row.find('.js-toggle-status');
+                                    Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                    IconBackGround.toggleClass('bg-warning  bg-danger')
+
+                                    showSuccessMessage();
+                                },
+                                error: function () {
+                                    showErrorMessage();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+                                    
