@@ -1,0 +1,100 @@
+﻿
+<script>
+    var Index = 0;
+    function addInput() {
+
+
+        var providerInput = document.createElement("input");
+        providerInput.type = "text";
+        providerInput.name = `UserPaymentVM[${Index}].Provider`;
+        providerInput.className = "form-control mb-3";
+        providerInput.placeholder = "Enter Provider ";
+
+        var accountNumberInput = document.createElement("input");
+        accountNumberInput.type = "text";
+        accountNumberInput.name = `UserPaymentVM[${Index}].AccountNumber`;
+        accountNumberInput.className = "form-control mb-3";
+        accountNumberInput.placeholder = "Enter Account Number ";
+
+        var paymentTypeSelect = document.createElement("select");
+        paymentTypeSelect.name = `UserPaymentVM[${Index}].PaymentType`;
+        paymentTypeSelect.className = "form-control mb-3";
+        var paymentTypes = ["MasterCard", "Visa", "AmericanExpress", "PayPal", "Fawry"];
+        for (var i = 0; i < paymentTypes.length; i++) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = paymentTypes[i];
+            paymentTypeSelect.appendChild(option);
+        }
+
+        var paymentStatusSelect = document.createElement("select");
+        paymentStatusSelect.name = `UserPaymentVM[${Index}].Status`;
+        paymentStatusSelect.className = "form-control mb-3";
+        var paymentStatuses = ["UnPaid", "Pending", "Completed", "Failed", "Declined", "Canceled", "Abandoned", "Settling", "Settled", "Refunded"];
+        for (var i = 0; i < paymentStatuses.length; i++) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = paymentStatuses[i];
+            paymentStatusSelect.appendChild(option);
+        }
+
+        var expiryDateInput = document.createElement("input");
+        expiryDateInput.type = "date";
+        expiryDateInput.name = `UserPaymentVM[${Index}].ExpiryDate`;
+        expiryDateInput.className = "form-control mb-3";
+        expiryDateInput.placeholder = "Enter Expiry Date ";
+
+
+
+
+        var parentDiv = document.getElementById("Payment");
+
+
+        var divform = document.createElement("div");
+        divform.className = `divform${Index} card p-3`;
+        divform.appendChild(providerInput);
+        divform.appendChild(accountNumberInput);
+        divform.appendChild(paymentTypeSelect);
+        divform.appendChild(paymentStatusSelect);
+        divform.appendChild(expiryDateInput);
+
+        parentDiv.appendChild(divform);
+        Index++;
+        $('#delete-form').show();
+    }
+    function deleteLastInput() {
+        if (Index > 0) {
+            Index--;
+            let parentDiv = document.querySelector(`.divform${Index}`);
+            parentDiv.parentNode.removeChild(parentDiv);
+            if (Index === 0) {
+                $('#delete-form').hide();
+            }
+        } else {
+            $('#delete-form').hide();
+
+        }
+    }
+
+
+    $('.select').change(function () {
+        var userType = $(this).val();
+
+
+        if (userType == 0) {
+            $('#customerButtonPlaceholder').show();
+            $('#Payment').show();
+        } else {
+            $('#customerButtonPlaceholder').hide();
+
+            $('#delete-form').hide();
+            for (let i = 0; i < Index; i++) {
+                console.log(Index)
+                let parentDiv = document.querySelector(`.divform${i}`);
+                console.log(parentDiv)
+                parentDiv.parentNode.removeChild(parentDiv);
+            }
+
+        }
+    });
+</script>

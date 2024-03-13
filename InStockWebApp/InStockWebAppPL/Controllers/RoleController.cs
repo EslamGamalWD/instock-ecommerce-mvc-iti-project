@@ -54,7 +54,7 @@ namespace InStockWebAppPL.Controllers
                     {
                         TempData["Message"] = null;
 
-                        return PartialView("_Create",model);
+                        return PartialView("_Create", model);
                     }
                 }
             }
@@ -62,11 +62,30 @@ namespace InStockWebAppPL.Controllers
             {
                 TempData["Message"] = null;
 
-                return PartialView("_Create",model);
+                return PartialView("_Create", model);
             }
             TempData["Message"] = null;
 
             return PartialView("_Create", model);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Display(string id)
+        {
+
+            return View(await _roleRepository.GetUsersRole(id));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Display(CreateUserRolesVM createUserRolesVM)
+        {
+            if (await _roleRepository.CreateUsersRole(createUserRolesVM))
+                return RedirectToAction("Index", "Role");
+
+            TempData["Check"] = "Check Your Data Inputs";
+            return View(createUserRolesVM);
         }
         #endregion
 

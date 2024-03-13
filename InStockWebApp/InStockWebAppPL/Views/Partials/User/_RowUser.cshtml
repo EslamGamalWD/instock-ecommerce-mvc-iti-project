@@ -1,0 +1,42 @@
+﻿@model GetAllUserVM
+
+<tr>
+    <td>@Model.FirstName  @Model.LastName</td>
+    <td>
+        <div class="d-flex align-items-center">
+            @{
+                string imgSrc = null;
+                if (Model.Photo != null && Model.Photo.Length > 0)
+                {
+                    var base64String = Convert.ToBase64String(Model.Photo);
+                    imgSrc = $"data:image/jpeg;base64,{base64String}";
+                }
+            }
+            <img src="@imgSrc" class="img-fluid rounded avatar-50 mr-3" alt="image">
+        </div>
+    </td>
+    <td>@Model.Gender</td>
+    <td>@Model.UserType</td>
+    <td>@Model.CityName</td>
+    <td>@Model.StateName</td>
+    <td>@Model.CreatedAt</td>
+    <td>
+        <span class="badge badge-@(Model.IsDeleted ? "danger" : "success") js-status">
+            @(Model.IsDeleted ? "Deleted" : "Available")
+        </span>
+    </td>
+    <td class="js-updated-on">@Model.ModifiedAt</td>
+    <td>
+        <div class="d-flex align-items-center list-action">
+            <a asp-action="Select" asp-controller="User" asp-route-id="@Model.Id" class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"><i class="ri-eye-line mr-0"></i></a>
+            <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
+               asp-action="Edit" asp-controller="User" asp-route-id="@Model.Id"><i class="ri-pencil-line mr-0"></i></a>
+
+        
+
+            <a class="badge @(Model.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+               href="javascript:;" data-id="@Model.Id"><i class="@(Model.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
+
+        </div>
+    </td>
+</tr>

@@ -5,6 +5,7 @@
         <div class="card">
             <div class="card-body">
                 <form asp-action="Create" asp-controller="Category" data-toggle="validator">
+                    @* <div asp-validation-summary="All" class="text-danger"></div> *@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -16,7 +17,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea asp-for="Description" class="form-control" placeholder="Enter Category Description" required></textarea>
+                                <textarea asp-for="Description" class="form-control" style="height:200px" placeholder="Enter Category Description" required></textarea>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>

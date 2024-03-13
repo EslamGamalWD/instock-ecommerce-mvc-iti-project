@@ -17,7 +17,7 @@ function showErrorAlert() {
 }
 
 $(document).ready(function () {
-    $('.js-toggle-status').on('click', function () {
+    $('#datatable').on('click', '.js-toggle-status', function () {
         let btn = $(this);
 
         Swal.fire({
@@ -41,15 +41,19 @@ $(document).ready(function () {
                         let newStatus = status.text().trim() === "Deleted" ? "Active" : "Deleted";
                         if (newStatus === "Deleted") {
                             row.find(".js-toggle-icon").removeClass("ri-delete-bin-line");
-                            row.find(".js-toggle-icon").addClass("ri-lock-line");
+                            row.find(".js-toggle-icon").addClass("ri-toggle-line");
                         } else {
-                            row.find(".js-toggle-icon").removeClass("ri-lock-line");
+                            row.find(".js-toggle-icon").removeClass("ri-toggle-line");
                             row.find(".js-toggle-icon").addClass("ri-delete-bin-line");
                         }
 
                         status.text(newStatus).toggleClass("badge-success badge-warning");
                         row.find(".js-modified-at").html(modifiedAt);
+                        
                         row.addClass("animate__animated animate__flash");
+                        setTimeout(() => {
+                            $(row).removeClass("animate__animated animate__flash")
+                        }, 1000);
                         let message = newStatus === "Active"
                             ? `Subcategory#${btn.data("id")} has been activated successfully`
                             : `Subcategory#${btn.data("id")} has been deleted successfully`;

@@ -1,0 +1,86 @@
+﻿@model EditUserVM
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">Add User</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="needs-validation" enctype="multipart/form-data" asp-action="Edit" asp-controller="User" novalidate>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName">First name</label>
+                    <input type="text" class="form-control" id="validationTooltip01" asp-for="FirstName" required>
+                    <span asp-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName">Last name</label>
+                    <input type="text" class="form-control" id="validationTooltip01" asp-for="LastName" required>
+                    <span asp-for="LastName" class="text-danger"></span>
+
+                </div>
+             
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email">Email</label>
+                    <input type="Email" class="form-control" id="validationTooltip01" asp-for="Email" required>
+                    <span asp-for="Email" class="text-danger"></span>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="validationTooltip04">Gender</label>
+                    <select asp-for="Gender" class="form-control" id="validationTooltip04" required>
+                        <option selected disabled value="">Gender</option>
+                        @if(Model.Gender==InStockWebAppDAL.Entities.Enumerators.Gender.Male)
+                        {
+                            <option selected value="0">Male</option>
+                            <option value="1">FeMale</option>
+                        }
+                        else
+                        {
+
+                            <option  value="0">Male</option>
+                            <option selected value="1">FeMale</option>
+                        
+                        }
+
+                            
+                           
+
+                    </select>
+                    <div class="invalid-tooltip">
+                        Please select a valid state.
+                    </div>
+                    <span asp-for="Gender" class="text-danger"></span>
+
+                </div>
+               
+                <div class="col-md-6 mb-3">
+                    <label asp-for="PhoneNumber">Phone Number</label>
+                    <input type="PhoneNumber" class="form-control" id="validationTooltip01" asp-for="PhoneNumber" required>
+                    <span asp-for="PhoneNumber" class="text-danger"></span>
+
+                </div>
+              
+
+
+
+
+           
+          
+
+
+            </div>
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button type="reset" class="btn btn-danger">Reset</button>
+        </form>
+    </div>
+</div>
+
+@section JS {
+    <partial name="~/Views/Partials/User/_UserCreateJS.cshtml" />
+
+}

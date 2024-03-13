@@ -1,0 +1,78 @@
+﻿<script src="~/lib/bootbox.js/bootbox.js"></script>
+<script src="~/lib/bootbox.js/bootbox.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('body').delegate('.js-render-modal', 'click', function () {
+            var btn = $(this);
+            var modal = $('#Modal');
+
+            modal.find('#ModalLabel').text(btn.data('title'));
+
+            if (btn.data('update') !== undefined) {
+                updatedRow = btn.parents('tr');
+                console.log(updatedRow);
+            }
+
+            $.get({
+                url: btn.data('url'),
+                success: function (form) {
+                    modal.find('.modal-body').html(form);
+                    $.validator.unobtrusive.parse(modal);
+                },
+                error: function () {
+                    showErrorMessage();
+                }
+            });
+
+            modal.modal('show');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('body').delegate('.js-toggle-status', 'click', function () {
+            var btn = $(this);
+
+            bootbox.confirm({
+                message: "Are you sure that you need to toggle this item status?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-secondary'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.post({
+                            url: '/User/ToggleStatus/' + btn.data('id'),
+                            data: {
+                                '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (lastUpdatedOn) {
+                                var row = btn.parents('tr');
+                                var status = row.find('.js-status');
+                                var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                row.find('.js-updated-on').html(lastUpdatedOn);
+                                row.addClass('animate__animated animate__flash');
+                                var Icon = row.find('.ic');
+                                var IconBackGround = row.find('.js-toggle-status');
+                                Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                IconBackGround.toggleClass('bg-warning  bg-danger')
+
+                                showSuccessMessage();
+                            },
+                            error: function () {
+                                showErrorMessage();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
