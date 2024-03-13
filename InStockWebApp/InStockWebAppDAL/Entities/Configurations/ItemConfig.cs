@@ -11,5 +11,7 @@ public class ItemConfig : IEntityTypeConfiguration<Item>
             .HasKey("Id");
         builder.Property(p => p.TotalPrice)
             .HasPrecision(10, 2);
+        builder.Property(p => p.CreatedAt)
+            .HasDefaultValueSql("GETDATE()");
     }
 }
