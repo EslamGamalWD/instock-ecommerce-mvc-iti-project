@@ -18,7 +18,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             _mapper = mapper;
         }
 
-        public async Task<bool> Add(AlterProductVM entityVM)
+        public async Task<int> Add(AlterProductVM entityVM)
         {
             try
             {
@@ -30,13 +30,13 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     product.CreatedAt = DateTime.Now;
                     _applicationDbContext.Products.Add(product);
                     await _applicationDbContext.SaveChangesAsync();
-                    return true;
+                    return product.Id;
                 }
-                return false;
+                return -1;
                 
             }catch (Exception)
             {
-                return false;
+                return -1;
             }
         }
 
@@ -65,7 +65,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             try
             {
                 var DBProduct=await _applicationDbContext.Products
-                    .Include(P => P.SubCategory).Include(P => P.Discount).FirstOrDefaultAsync(P=>P.Id==id);
+                    .Include(P => P.SubCategory).Include(P => P.Discount).Include(P=>P.Images).FirstOrDefaultAsync(P=>P.Id==id);
                 return _mapper.Map<GetProductsVM>(DBProduct);
 
             }
@@ -80,7 +80,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             try
             {
                 var DBProduct = await _applicationDbContext.Products
-                    .Include(P => P.SubCategory).Include(P => P.Discount).FirstOrDefaultAsync(P => P.Id == id);
+                    .Include(P => P.SubCategory).Include(P => P.Discount).Include(P => P.Images).FirstOrDefaultAsync(P => P.Id == id);
                 return _mapper.Map<AlterProductVM>(DBProduct);
 
             }
@@ -94,7 +94,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             try
             {
                 var DbProducts= await _applicationDbContext.Products
-                    .Include(P=>P.SubCategory).Include(P=>P.Discount).ToListAsync();
+                    .Include(P=>P.SubCategory).Include(P=>P.Discount).Include(P => P.Images).ToListAsync();
                 var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
                 return ShowProducts;
             }catch(Exception) 

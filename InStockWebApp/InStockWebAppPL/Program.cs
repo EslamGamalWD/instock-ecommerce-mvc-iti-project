@@ -5,6 +5,7 @@ using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+using InStockWebAppPL.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,

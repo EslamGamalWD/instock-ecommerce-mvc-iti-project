@@ -8,14 +8,14 @@ namespace InStockWebAppBLL.Models.ProductVM
     string Description,
     decimal Price,
     int InStock,
-    string ImagePath,
+    List<string> ImagePaths,
     DateTime CreatedAt,
     string SubCategoryName,
     string DiscountName
 )
         {
             public GetProductsVM()
-                : this(0, "","", 0, 0, "", DateTime.MinValue, "", "") { }
+                : this(0, "","", 0, 0, new List<string> { }, DateTime.MinValue, "", "") { }
         }
 
 }

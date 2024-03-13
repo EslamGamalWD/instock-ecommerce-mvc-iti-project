@@ -50,9 +50,12 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Image</label>
-                    <label asp-for="ImagePath" type="file" class="form-control" name="pic">@Model.ImagePath</label>
-                    <span asp-validation-for="ImagePath" class="text-danger"></span>
+                    <label>Images</label>
+                    @foreach (var imagePath in Model.ImagePaths)
+                    {
+                        <img src="~/Files/productImages/@imagePath" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                    }
+                    <span asp-validation-for="ImagePaths" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-12">

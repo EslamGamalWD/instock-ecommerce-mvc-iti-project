@@ -1,8 +1,13 @@
-﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+﻿
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
-using Microsoft.AspNetCore.Http;
+using InStockWebAppPL.Settings;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -10,49 +15,63 @@ namespace InStockWebAppPL.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
-
         //private readonly IDiscountRepository _discountRepository;
+        private readonly IProductImageRepository _imageRepository;
+        private readonly Cloudinary _cloudinary;
+        
 
-        public ProductController(IProductRepository productRepository, ISubCategoryRepository subCategoryRepository)
+        public ProductController(IProductRepository productRepository,
+            ISubCategoryRepository subCategoryRepository,IOptions<CloudinarySettings> cloudinary,IProductImageRepository imageRepository)
         {
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
+            _imageRepository=imageRepository;
+            Account account = new()
+            {
+                Cloud=cloudinary.Value.Cloud,
+                ApiKey = cloudinary.Value.ApiKey,
+                ApiSecret = cloudinary.Value.ApiSecret
+            };
+            _cloudinary = new Cloudinary(account);
         }
 
         // GET: ProductController
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             return View(await _productRepository.GetAll());
         }
 
         // GET: ProductController/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             return View(await _productRepository.Details(id));
         }
-
+        [HttpGet]
         // GET: ProductController/Create
-        public async Task<ActionResult> Create()
+        public async Task<IActionResult> Create()
         {
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            ViewData["DiscountId"] = new SelectList(await _productRepository.GetAll(), "Id", "Name");
+            //ViewData["DiscountId"] = new SelectList(await _productRepository.GetAll(), "Id", "Name");
             return View();
         }
 
         // POST: ProductController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AlterProductVM entityVM)
+        public async Task<IActionResult> Create(AlterProductVM entityVM)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    _productRepository.Add(entityVM);
-                    return RedirectToAction(nameof(Index));
+                   
+                    int createdId=await _productRepository.Add(entityVM);
+                    if (createdId != -1)
+                    {
+                        await _imageRepository.add(entityVM.ImageFiles,createdId);
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-                ViewData["DiscountId"] = new SelectList(await _productRepository.GetAll(), "Id", "Name");
                 return View(entityVM);
             }
             catch
@@ -62,24 +81,26 @@ namespace InStockWebAppPL.Controllers
         }
 
         // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {   if (id == null) return NotFound();
-            var product = _productRepository.EditDetails(id);
+            var product = await _productRepository.EditDetails(id);
             if(product==null)return NotFound();
+            ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
             return View(product);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, AlterProductVM entityVM)
+        public async Task<IActionResult> Edit(int id, AlterProductVM entityVM)
         {
             try
             {
                 if (ModelState.IsValid) { 
                     await _productRepository.Update(id,entityVM);
+                    await _imageRepository.add(entityVM.ImageFiles, id);
                     return RedirectToAction(nameof(Index));
                 }
+                ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
                 return View(entityVM);
             }
             catch
@@ -89,15 +110,14 @@ namespace InStockWebAppPL.Controllers
         }
 
         // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             return View();
         }
 
         // POST: ProductController/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
