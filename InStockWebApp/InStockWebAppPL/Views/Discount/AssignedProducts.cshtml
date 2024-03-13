@@ -1,0 +1,85 @@
+﻿@model List<GetProductsVM>
+@{
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+   
+}
+<p>hekko</p>
+<div class="col-lg-12">
+    <div class="table-responsive">
+        <table id="datatable" data-toggle="validator" class="table data-tables table-striped data-table mb-0 tbl-server-info text-center">
+            <thead class="bg-white text-uppercase">
+                <tr class="ligth">
+                    <th style="width: 17%">Product</th>
+                    <th style="width: 17%">Name</th>
+                    <th style="width: 17%">Category</th>
+                    <th style="width: 17%">Price</th>
+                    <th style ="width: 17%">Assign to Discount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="../assets/images/table/product/02.jpg" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                <div>
+                                    Rain Umbrella
+                                    <p class="mb-0"><small>This is test Product</small></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>@product.Name</td>
+                        <td>@product.SubCategoryName</td>
+                        <td>@product.Price</td>
+                        <td class="align-middle text-center" >
+                            <input type="checkbox" class="product-checkbox" value="@product.Id" data-discount-id="@ViewBag.discountId" />
+
+                        </td>
+                    </tr>
+                }
+               
+            </tbody>
+           
+        </table>
+
+        <div class="card-footer">
+            <a href="@Url.Action("Index", "Discount")" class="btn btn-primary">Back to Discounts</a>
+        </div>
+    </div>
+    
+        </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var discountId = $(this).attr('data-discount-id');
+
+        $('.product-checkbox').change(function () {
+            var productId = $(this).val();
+            var isChecked = $(this).is(':checked');
+            var discountId = $(this).data('discount-id'); 
+
+            
+            $.ajax({
+                url: '@Url.Action("UpdateDiscountList", "Discount")', 
+                type: 'POST',
+                data: {
+                    productId: productId,
+                    isInDiscount: isChecked,
+                    discountId: discountId, 
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() 
+                },
+                success: function (response) {
+
+                    alert('Product has been ' + (isChecked ? 'added to' : 'removed from') + ' the discount list.');
+                },
+                error: function (xhr, status, error) {
+
+                    alert('An error occurred.');
+                }
+            });
+        });
+    });
+</script>

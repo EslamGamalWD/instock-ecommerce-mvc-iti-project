@@ -10,14 +10,16 @@ public class UnitOfWork : IUnitOfWork
     public ICategoryRepository CategoryRepository { get; }
     public ISubCategoryRepository SubcategoryRepository { get; }
     public IProductRepository ProductRepository { get; }
+    public IDiscountRepository DiscountRepository { get; }
 
     public UnitOfWork(ApplicationDbContext applicationDbContext,
-        ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository, IProductRepository productRepository)
+        ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository, IProductRepository productRepository , IDiscountRepository discountRepository)
     {
         _applicationDbContext = applicationDbContext;
         CategoryRepository = categoryRepository;
         SubcategoryRepository = subcategoryRepository;
         ProductRepository = productRepository;
+        DiscountRepository = discountRepository;
     }
 
     public void Dispose()
