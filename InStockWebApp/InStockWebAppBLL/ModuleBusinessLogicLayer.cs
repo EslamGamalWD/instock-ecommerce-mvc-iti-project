@@ -27,7 +27,7 @@ namespace InStockWebAppBLL
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-
+            services.AddScoped<IFilterRepository, FilterRepository>();
 
             return services;
         }

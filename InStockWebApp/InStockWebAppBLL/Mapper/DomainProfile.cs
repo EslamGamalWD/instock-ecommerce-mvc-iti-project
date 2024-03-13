@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InStockWebAppBLL.Models.CategoryVM;
+using InStockWebAppBLL.Models.FilterVM;
 using InStockWebAppBLL.Models.RoleVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppBLL.Models.UserVM;
@@ -53,6 +54,9 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<GetUserByIdVM, EditUserVM>();
             CreateMap<EditUserVM, User>();
+
+            CreateMap<Product, ProductFilterVM>();
+            CreateMap<ProductFilterVM, Product>();
         }
     }
 }
