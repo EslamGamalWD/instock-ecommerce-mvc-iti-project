@@ -4,6 +4,7 @@ using InStockWebAppDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InStockWebAppDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240312230247_AddDefaultValueForCreatedAtColumnInCartAndItemTable")]
+    partial class AddDefaultValueForCreatedAtColumnInCartAndItemTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -386,8 +389,12 @@ namespace InStockWebAppDAL.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("DiscountId")
+                    b.Property<int>("DiscountId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InStock")
                         .HasColumnType("int");
@@ -416,28 +423,6 @@ namespace InStockWebAppDAL.Migrations
                     b.HasIndex("SubCategoryId");
 
                     b.ToTable("Product", (string)null);
-                });
-
-            modelBuilder.Entity("InStockWebAppDAL.Entities.ProductImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("InStockWebAppDAL.Entities.ProductReview", b =>
@@ -913,7 +898,9 @@ namespace InStockWebAppDAL.Migrations
                 {
                     b.HasOne("InStockWebAppDAL.Entities.Discount", "Discount")
                         .WithMany("Products")
-                        .HasForeignKey("DiscountId");
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("InStockWebAppDAL.Entities.SubCategory", "SubCategory")
                         .WithMany("Products")
@@ -924,17 +911,6 @@ namespace InStockWebAppDAL.Migrations
                     b.Navigation("Discount");
 
                     b.Navigation("SubCategory");
-                });
-
-            modelBuilder.Entity("InStockWebAppDAL.Entities.ProductImage", b =>
-                {
-                    b.HasOne("InStockWebAppDAL.Entities.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InStockWebAppDAL.Entities.ProductReview", b =>
@@ -1087,11 +1063,6 @@ namespace InStockWebAppDAL.Migrations
             modelBuilder.Entity("InStockWebAppDAL.Entities.OrderLog", b =>
                 {
                     b.Navigation("Notifications");
-                });
-
-            modelBuilder.Entity("InStockWebAppDAL.Entities.Product", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("InStockWebAppDAL.Entities.State", b =>
