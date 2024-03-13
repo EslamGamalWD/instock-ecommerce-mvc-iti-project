@@ -21,7 +21,11 @@ namespace InStockWebAppBLL
             services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
+
             services.AddScoped<ICartRepository, CartRepository>();
+
+
+            services.AddScoped<IFilterRepository, FilterRepository>();
 
 
             return services;
