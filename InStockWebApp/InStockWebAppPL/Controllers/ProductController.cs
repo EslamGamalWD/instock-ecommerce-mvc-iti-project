@@ -135,25 +135,14 @@ namespace InStockWebAppPL.Controllers
                 return View();
             }
         }
-
-        // GET: ProductController/Delete/5
-        public IActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Delete/5
+        //Post: ProductController/ToggleStatus/5
         [HttpPost]
-        public IActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> ToggleStatus(int? id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var toggleDateTime = await _productRepository.ToggleStatus(id);
+            if (toggleDateTime !=null)
+                return Ok(toggleDateTime);
+            return NotFound();
         }
     }
 }

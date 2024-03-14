@@ -40,25 +40,6 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             }
         }
 
-        public async Task<bool> Delete(int? id)
-        {
-            try
-            {
-                var product = _applicationDbContext.Products.Find(id);
-                if (product != null)
-                {
-                    _applicationDbContext.Products.Remove(product);
-                    _applicationDbContext.SaveChanges();
-                    return true;
-                }
-                return false;
-
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-        }
 
         public async Task<GetProductsVM> Details(int? id)
         {
@@ -102,6 +83,52 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 return Enumerable.Empty<GetProductsVM>();
             }
         }
+        public async Task<bool> Delete(int? id)
+        {
+            try
+            {
+                var product = _applicationDbContext.Products.Find(id);
+                if (product != null)
+                {
+                    _applicationDbContext.Products.Remove(product);
+                    _applicationDbContext.SaveChanges();
+                    return true;
+                }
+                return false;
+
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<DateTime?> ToggleStatus(int? id)
+        {
+            try
+            {
+                var product = _applicationDbContext.Products.Find(id);
+                if (product != null)
+                {
+                    product.IsDeleted = !product.IsDeleted;
+                    var now=DateTime.Now;
+                    if(product.IsDeleted)product.DeletedAt= now;
+                    else
+                    {
+                        product.DeletedAt = null;
+                    }
+                    await _applicationDbContext.SaveChangesAsync();
+                    return now;
+                }
+                return null;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<bool> Update(int? id, AlterProductVM entityVM)
         {
             try

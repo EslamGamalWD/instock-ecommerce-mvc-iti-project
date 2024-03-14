@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
 using Hangfire;
-using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
-using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities.Enumerators;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 namespace InStockWebAppPL.Controllers
 {
     public class UserController : Controller

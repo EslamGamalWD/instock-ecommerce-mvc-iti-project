@@ -10,12 +10,13 @@ namespace InStockWebAppBLL.Models.ProductVM
     int InStock,
     List<string> ImagePaths,
     DateTime CreatedAt,
+    bool IsDeleted,
     string SubCategoryName,
     string DiscountName
 )
         {
             public GetProductsVM()
-                : this(0, "","", 0, 0, new List<string> { }, DateTime.MinValue, "", "") { }
+                : this(0, "","", 0, 0, new List<string> { }, DateTime.MinValue,false, "", "") { }
         }
 
 }

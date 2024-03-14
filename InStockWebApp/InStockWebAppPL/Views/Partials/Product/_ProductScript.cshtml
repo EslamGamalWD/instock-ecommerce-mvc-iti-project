@@ -1,0 +1,77 @@
+﻿<script src="~/lib/bootbox.js/bootbox.js"></script>
+<script src="~/lib/bootbox.js/bootbox.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('body').delegate('.js-toggle-status', 'click', function () {
+            var btn = $(this);
+            var currentStatus = btn.closest('tr').find('.js-status').text().trim();
+            var message = currentStatus === 'Deleted' ?
+                "Are you sure that you need to untoggle this item status?" :
+                "Are you sure that you need to toggle this item status?";
+            bootbox.confirm({
+                message: message,
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-danger'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-secondary'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.post({
+                            url: '/Product/ToggleStatus/' + btn.data('id'),
+                            data: {
+                                '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (lastUpdatedOn) {
+                                var row = btn.parents('tr');
+                                var status = row.find('.js-status');
+                                var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                row.find('.js-updated-on').html(lastUpdatedOn);
+                                row.addClass('animate__animated animate__flash');
+                                var Icon = row.find('.ic');
+                                var IconBackGround = row.find('.js-toggle-status');
+                                Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                IconBackGround.toggleClass('bg-warning  bg-danger')
+
+                                showSuccessMessage();
+                            },
+                            error: function () {
+                                showErrorMessage();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script>
+    var index = 0;
+    var inputs = [];
+
+    function AddImage() {
+        var imageInput = document.createElement("input");
+        imageInput.type = "file";
+        imageInput.name = `ImageFiles`;
+        imageInput.multiple = true;
+        imageInput.className = "form-control image-file mb-2";
+        var ImageDiv = document.getElementById("ImageForm");
+        ImageDiv.appendChild(imageInput);
+        inputs.push(imageInput); // Add the input to the list of inputs
+        index++;
+    }
+
+    function RemoveImage() {
+        if (inputs.length > 0) {
+            var lastInput = inputs.pop(); // Remove the last added input
+            lastInput.remove(); // Remove the input element from the DOM
+            index--;
+        }
+    }
+</script>

@@ -10,6 +10,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
 
         Task<bool> Update(int? id, AlterProductVM entityVM);
         Task<bool> Delete(int? id);
+        Task<DateTime?> ToggleStatus(int? id);
         Task<GetProductsVM> Details(int? id);
         Task<AlterProductVM> EditDetails(int? id);
 
