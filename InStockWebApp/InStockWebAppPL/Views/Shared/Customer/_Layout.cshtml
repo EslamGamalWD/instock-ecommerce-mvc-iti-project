@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="~/Customer/vendor/choices.js/public/assets/styles/choices.min.css">
     <!-- Swiper slider-->
     <link rel="stylesheet" href="~/Customer/vendor/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="~/Customer/vendor/nouislider/nouislider.min.css">
+
     <!-- Google fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
@@ -27,6 +29,7 @@
     <link rel="stylesheet" href="~/Customer/css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="~/favicon.ico">
+    @RenderSection("CSS",required:false)
 </head>
 <body>
 <partial name="~/Views/Shared/Customer/_Header.cshtml"/>
@@ -36,13 +39,14 @@
 </div>
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
-
+    @RenderSection("Js", required: false)
 <script src="~/Customer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Customer/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="~/Customer/vendor/nouislider/nouislider.min.js"></script>
 <script src="~/Customer/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="~/Customer/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="~/Customer/js/front.js"></script>
+   
 <script>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite - 
@@ -70,6 +74,6 @@
       </script>
 <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
+ 
 </body>
 </html>

@@ -1,0 +1,72 @@
+﻿@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="card-body">
+    <form action="Create" data-toggle="validator">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <label asp-for="Name" type="text" class="form-control">@Model.Name</label>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Dicount Code</label>
+                    <label asp-for="DiscountName" name="type" class="form-control" data-style="py-0">@Model.DiscountName</label>
+                    <span asp-validation-for="DiscountName" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Price *</label>
+                    <label asp-for="Price" type="text" class="form-control">@Model.Price</label>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>SubCategory *</label>
+                    <label asp-for="SubCategoryName" name="type" class="form-control" data-style="py-0">
+                        @Model.SubCategoryName
+                    </label>
+                    <span asp-validation-for="SubCategoryName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>InStock *</label>
+                    <label asp-for="InStock" type="text" class="form-control">@Model.InStock</label>
+                    <span asp-validation-for="InStock" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Images</label>
+                    @foreach (var imagePath in Model.ImagePaths)
+                    {
+                        <img src="~/Files/productImages/@imagePath" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                    }
+                    <span asp-validation-for="ImagePaths" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Description / Product Details</label>
+                    <label asp-for="Description" class="form-control" rows="4">@Model.Description</label>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <a asp-action="Index" class="btn btn-primary add-list"><i class="btn btn-primary mr-2"></i>Close</a>
+    </form>
+</div>
+

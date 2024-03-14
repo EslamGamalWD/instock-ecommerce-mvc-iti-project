@@ -1,0 +1,104 @@
+﻿@model InStockWebAppBLL.Models.ProductVM.AlterProductVM
+@{
+    string actiony = "";
+}
+@if (ViewData["Title"] == "Create")
+{
+    actiony = "Create";
+}
+else
+{
+    actiony = "Edit";
+}
+<div class="card-body">
+    <form action="@actiony" data-toggle="validator" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @if (actiony == "Edit")
+                    {
+                        <input asp-for="Id" type="hidden" />
+                    }
+                    <label>Name *</label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Enter Name" data-errors="Please Enter Name." required>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Dicount Code</label>
+                    @*   asp-items="ViewBag.DiscountId" *@
+                    @Html.DropDownListFor(model => model.DiscountId, (SelectList)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
+                    <span asp-validation-for="DiscountId" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Price *</label>
+                    <input asp-for="Price" type="text" class="form-control" placeholder="Enter Price" data-errors="Please Enter Price." required>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>SubCategory *</label>
+                    @Html.DropDownListFor(model => model.SubCategoryId, (SelectList)ViewBag.SubCategoryId, new { @class = "selectpicker form-control", data_style = "py-0" })
+                    <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>InStock *</label>
+                    <input asp-for="InStock" type="text" class="form-control" placeholder="Enter Quantity" required>
+                    <span asp-validation-for="InStock" class="text-danger"></span>
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+              
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Description / Product Details</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div onclick="AddImage()" class="btn btn-secondary">
+                <p>Add Image</p>
+            </div>
+            <div onclick="RemoveImage()" class="btn btn-danger">
+                <p>Remove Image</p>
+            </div>
+        </div>
+        <div id="ImageForm"></div>
+        @if (ViewData["Title"] == "Create")
+        {
+            <div>
+                <button type="submit" class="btn btn-primary mr-2">Add Product</button>
+            </div>
+        }
+        else
+        {
+            <div>
+                <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
+            </div>
+        }
+        <div>
+            <button type="reset" class="btn btn-danger">Reset</button>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="btn btn-dark">Back to List</a>
+    </div>
+    @section JS {
+        <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
+
+    }
+</div>

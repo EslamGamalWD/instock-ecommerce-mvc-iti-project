@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using InStockWebAppBLL.Models.CategoryVM;
+using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppBLL.Models.FilterVM;
 using InStockWebAppBLL.Models.RoleVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppBLL.Models.UserVM;
@@ -46,10 +49,15 @@ namespace InStockWebAppBLL.Mapper
             CreateMap<EditCategoryVM, Category>();
             CreateMap<Category, GetAllCategoriesVM>();
             CreateMap<User, GetUserByIdVM>()
-
                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name))
                 .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
 
+            CreateMap<Product, GetProductsVM>()
+            .ForMember(dest => dest.ImagePaths, opt => opt.MapFrom(src => src.Images.Select(img => img.ImagePath)))
+            .ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name))
+            .ForMember(dest => dest.DiscountName, opt => opt.MapFrom(src => src.Discount.Name));
+            CreateMap<Product, AlterProductVM>();
+            CreateMap<AlterProductVM,Product>();
 
 
             CreateMap<GetUserByIdVM, EditUserVM>();
@@ -64,6 +72,25 @@ namespace InStockWebAppBLL.Mapper
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId));
+
+
+            #region Discount
+            CreateMap<CreateDiscountVM, Discount>();
+            CreateMap<Discount, GetDiscountByIdVM>()
+                      .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+            CreateMap<UpdateDiscountVM, Discount>()
+             .ForMember(dest => dest.ModifiedAt, opt => opt.Ignore());
+            CreateMap<Discount, UpdateDiscountVM>();
+            //    .ForMember(dest => dest.ModifiedAt, opt => opt.Ignore()); 
+            CreateMap<Discount, GetAllDiscountsVM>();
+            CreateMap<Discount, CreateDiscountVM>();
+            CreateMap<GetDiscountByIdVM, Discount>();
+
+            CreateMap<Product, GetProductsVM>(); 
+            #endregion
+
+            CreateMap<Product, ProductFilterVM>();
+            CreateMap<ProductFilterVM, Product>();
         }
     }
 }

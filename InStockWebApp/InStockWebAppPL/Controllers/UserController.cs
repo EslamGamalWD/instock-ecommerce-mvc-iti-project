@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
-using InStockWebAppBLL.Features.Interfaces;
+using Hangfire;
 using InStockWebAppBLL.Features.Interfaces.Domain;
-using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities.Enumerators;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 namespace InStockWebAppPL.Controllers
 {
     public class UserController : Controller
@@ -85,8 +81,9 @@ namespace InStockWebAppPL.Controllers
                             .Replace("[Body]", "Welcome to InStock! Start managing your inventory efficiently")
                             .Replace("[URL]", "https://localhost:44305/")
                             .Replace("[AncorTitle]", "Go");
-
-                        await emailSender.SendEmailAsync(modelVM.Email, "Welcome Login", body);
+                        //Use HangFire
+                        BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(modelVM.Email, "Welcome Login", body));
+                        
                         #endregion
 
                         return RedirectToAction("Index", "User");

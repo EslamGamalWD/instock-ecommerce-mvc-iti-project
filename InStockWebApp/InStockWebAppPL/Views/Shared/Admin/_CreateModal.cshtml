@@ -1,0 +1,75 @@
+﻿@model InStockWebAppBLL.Models.ProductVM.AlterProductVM
+<div class="modal fade" id="new-product" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="popup text-left">
+                    <h4 class="mb-3">Add Product</h4>
+                    <div class="content create-workform bg-body">
+                        <form asp-action="Create" asp-controller="Product" method="post" data-toggle="validator">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Name *</label>
+                                        <input asp-for="Name" type="text" class="form-control" placeholder="Enter Name" data-errors="Please Enter Name." required>
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Dicount Code</label>
+                                        <select asp-for="DiscountId" asp-items="ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select>
+                                        <span asp-validation-for="DiscountId" class="text-danger"></span>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Price *</label>
+                                        <input asp-for="Price" type="text" class="form-control" placeholder="Enter Price" data-errors="Please Enter Price." required>
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>SubCategory *</label>
+                                        <select asp-for="SubCategoryId" asp-items="ViewBag.SubCategoryId" name="type" class="selectpicker form-control" data-style="py-0">
+                                        </select>
+                                        <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>InStock *</label>
+                                        <input asp-for="InStock" type="text" class="form-control" placeholder="Enter Quantity" required>
+                                        <span asp-validation-for="InStock" class="text-danger"></span>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                              @*   <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Image</label>
+                                        <input asp-for="ImagePath" type="file" class="form-control image-file" name="pic" accept="image/*">
+                                        <span asp-validation-for="ImagePath" class="text-danger"></span>
+                                    </div>
+                                </div> *@
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Description / Product Details</label>
+                                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mr-2">Add Product</button>
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

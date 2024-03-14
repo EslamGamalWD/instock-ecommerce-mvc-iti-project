@@ -1,0 +1,49 @@
+﻿<style>
+    #minPrice {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 10px;
+        background: #ddd;
+        outline: none;
+        border-radius: 5px;
+    }
+
+    #minPrice::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background: black;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+    #minPrice::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            background: black;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+    #minPrice::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, black 0%, black calc((var(--value) / var(--max)) * 100%), #ddd calc((var(--value) / var(--max)) * 100%), #ddd 100%);
+            border-radius: 5px;
+        }
+
+    #minPrice::-moz-range-track {
+            background: linear-gradient(to right, black 0%, black calc((var(--value) / var(--max)) * 100%), #ddd calc((var(--value) / var(--max)) * 100%), #ddd 100%);
+            border-radius: 5px;
+        }
+
+    #CategoryContent, #PriceContent, #subCategoryContent {
+        display: none;
+        padding: 20px
+    }
+
+    .selected-page {
+        background-color: black;
+        color: white; 
+    }
+</style>

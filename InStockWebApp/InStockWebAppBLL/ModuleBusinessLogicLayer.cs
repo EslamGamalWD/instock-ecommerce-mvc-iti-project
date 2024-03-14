@@ -1,12 +1,5 @@
-﻿using InStockWebAppBLL.Features.Interfaces;
-using InStockWebAppBLL.Features.Repositories;
-using InStockWebAppBLL.Mapper;
+﻿using InStockWebAppBLL.Mapper;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
@@ -27,6 +20,12 @@ namespace InStockWebAppBLL
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+
+
+            services.AddScoped<ICartRepository, CartRepository>();
+
+
+            services.AddScoped<IFilterRepository, FilterRepository>();
 
 
             return services;
