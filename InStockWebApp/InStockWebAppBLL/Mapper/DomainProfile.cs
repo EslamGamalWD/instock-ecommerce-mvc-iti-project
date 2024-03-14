@@ -4,6 +4,7 @@ using InStockWebAppBLL.Models.RoleVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities;
+using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity;
 
 namespace InStockWebAppBLL.Mapper
@@ -53,6 +54,16 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<GetUserByIdVM, EditUserVM>();
             CreateMap<EditUserVM, User>();
+
+
+            CreateMap<RegisterVM, User>()
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId));
         }
     }
 }

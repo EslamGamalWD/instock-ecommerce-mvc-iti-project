@@ -118,6 +118,32 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             }
           
         }
+
+        public async Task<User> Register(RegisterVM model)
+        {
+            try
+            {
+                var user = mapper.Map<User>(model);
+
+                user.UserType = UserType.Customer;
+                user.CreatedAt = DateTime.Now;
+
+                var result = await userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    string role = AppRoles.EnumToString(user.UserType);
+                    var roleResult = await userManager.AddToRoleAsync(user, role);
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error registering user: {ex.Message}");
+            }
+
+            return null;
+        }
         #endregion
 
     }
