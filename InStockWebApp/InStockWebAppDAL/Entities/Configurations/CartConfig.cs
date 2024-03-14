@@ -9,5 +9,7 @@ public class CartConfig : IEntityTypeConfiguration<Cart>
     {
         builder.ToTable("Cart")
             .HasKey("Id");
+        builder.Property(p => p.CreatedAt)
+            .HasDefaultValueSql("GETDATE()");
     }
 }

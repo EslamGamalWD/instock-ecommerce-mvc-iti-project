@@ -1,0 +1,13 @@
+﻿@model IEnumerable<SubcategoryVM>
+<div id="subcategory">
+
+    @foreach (var subcategory in Model)
+    {
+       
+        <div class="form-check m-1">
+            <input class="form-check-input" name="checkbox" type="checkbox" id="checkbox_@subcategory.Id">
+            <label class="form-check-label" for="checkbox_@subcategory.Id">@subcategory.Name</label>
+        </div>
+       
+    }
+</div>

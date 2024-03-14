@@ -1,3 +1,4 @@
+using Hangfire;
 using InStockWebAppBLL;
 using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
@@ -6,7 +7,9 @@ using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+
 using InStockWebAppPL.Settings;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,6 +25,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<ISubCategoryRepository, SubcategoryRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
@@ -60,6 +64,10 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.Configure<MailSetting>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,16 +77,15 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseHangfireDashboard("/HangFire");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}");
+    pattern: "{controller=Cart}/{action=Index}/{id?}");
 
 app.Run();

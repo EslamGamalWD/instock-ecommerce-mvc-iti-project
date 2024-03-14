@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppBLL.Models.FilterVM;
 using InStockWebAppBLL.Models.RoleVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppBLL.Models.UserVM;
@@ -59,6 +61,26 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<GetUserByIdVM, EditUserVM>();
             CreateMap<EditUserVM, User>();
+
+
+            #region Discount
+            CreateMap<CreateDiscountVM, Discount>();
+            CreateMap<Discount, GetDiscountByIdVM>()
+                      .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+            CreateMap<UpdateDiscountVM, Discount>()
+             .ForMember(dest => dest.ModifiedAt, opt => opt.Ignore());
+            CreateMap<Discount, UpdateDiscountVM>();
+            //    .ForMember(dest => dest.ModifiedAt, opt => opt.Ignore()); 
+            CreateMap<Discount, GetAllDiscountsVM>();
+            CreateMap<Discount, CreateDiscountVM>();
+            CreateMap<GetDiscountByIdVM, Discount>();
+
+            CreateMap<Product, GetProductsVM>(); 
+            #endregion
+
+            CreateMap<Product, ProductFilterVM>();
+            CreateMap<ProductFilterVM, Product>();
+
         }
     }
 }

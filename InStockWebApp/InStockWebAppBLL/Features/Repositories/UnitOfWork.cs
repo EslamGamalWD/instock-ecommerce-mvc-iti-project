@@ -9,15 +9,25 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _applicationDbContext;
     public ICategoryRepository CategoryRepository { get; }
     public ISubCategoryRepository SubcategoryRepository { get; }
+
     public IProductRepository ProductRepository { get; }
+    public IDiscountRepository DiscountRepository { get; }
+    public ICartRepository CartRepository { get; }
+    public IItemRepository ItemRepository { get; }
 
     public UnitOfWork(ApplicationDbContext applicationDbContext,
-        ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository, IProductRepository productRepository)
+        ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository,
+        ICartRepository cartRepository, IItemRepository itemRepository,
+        IProductRepository productRepository, IDiscountRepository discountRepository)
+
     {
         _applicationDbContext = applicationDbContext;
         CategoryRepository = categoryRepository;
         SubcategoryRepository = subcategoryRepository;
         ProductRepository = productRepository;
+        DiscountRepository = discountRepository;
+        CartRepository = cartRepository;
+        ItemRepository = itemRepository;
     }
 
     public void Dispose()
