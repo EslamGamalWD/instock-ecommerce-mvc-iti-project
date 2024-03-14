@@ -1,9 +1,24 @@
 ﻿@model InStockWebAppBLL.Models.ProductVM.AlterProductVM
+@{
+    string actiony = "";
+}
+@if (ViewData["Title"] == "Create")
+{
+    actiony = "Create";
+}
+else
+{
+    actiony = "Edit";
+}
 <div class="card-body">
-    <form action="Create" data-toggle="validator">
+    <form action="@actiony" data-toggle="validator" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
+                    @if (actiony == "Edit")
+                    {
+                        <input asp-for="Id" type="hidden" />
+                    }
                     <label>Name *</label>
                     <input asp-for="Name" type="text" class="form-control" placeholder="Enter Name" data-errors="Please Enter Name." required>
                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -13,7 +28,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Dicount Code</label>
-                    <select asp-for="DiscountId" asp-items="ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select>
+                    @*   asp-items="ViewBag.DiscountId" *@
+                    @Html.DropDownListFor(model => model.DiscountId, (SelectList)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
                     <span asp-validation-for="DiscountId" class="text-danger"></span>
                     <div class="help-block with-errors"></div>
                 </div>
@@ -29,8 +45,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label>SubCategory *</label>
-                    <select asp-for="SubCategoryId" asp-items="ViewBag.SubCategoryId" name="type" class="selectpicker form-control" data-style="py-0">
-                    </select>
+                    @Html.DropDownListFor(model => model.SubCategoryId, (SelectList)ViewBag.SubCategoryId, new { @class = "selectpicker form-control", data_style = "py-0" })
                     <span asp-validation-for="SubCategoryId" class="text-danger"></span>
                 </div>
             </div>
@@ -44,29 +59,64 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Image</label>
-                    <input asp-for="ImagePath" type="file" class="form-control image-file" name="pic" accept="image/*">
-                    <span asp-validation-for="ImagePath" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
                     <label>Description / Product Details</label>
                     <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
         </div>
+        <div>
+            <div onclick="AddImage()" class="btn btn-secondary">
+                <p>Add Image</p>
+            </div>
+            <div onclick="RemoveImage()" class="btn btn-danger">
+                <p>Remove Image</p>
+            </div>
+        </div>
+        <div id="ImageForm"></div>
         @if (ViewData["Title"] == "Create")
         {
-            <button type="submit" class="btn btn-primary mr-2">Add Product</button>
-        }else
-        {
-            <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
+            <div>
+                <button type="submit" class="btn btn-primary mr-2">Add Product</button>
+            </div>
         }
-        <button type="reset" class="btn btn-danger">Reset</button>
+        else
+        {
+            <div>
+                <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
+            </div>
+        }
+        <div>
+            <button type="reset" class="btn btn-danger">Reset</button>
+        </div>
     </form>
+
     <div>
         <a asp-action="Index" class="btn btn-dark">Back to List</a>
     </div>
+
+    <script>
+        var index = 0;
+        var inputs = [];
+
+        function AddImage() {
+            var imageInput = document.createElement("input");
+            imageInput.type = "file";
+            imageInput.name = `ImageFiles`;
+            imageInput.multiple = true;
+            imageInput.className = "form-control image-file mb-2";
+            var ImageDiv = document.getElementById("ImageForm");
+            ImageDiv.appendChild(imageInput);
+            inputs.push(imageInput); // Add the input to the list of inputs
+            index++;
+        }
+
+        function RemoveImage() {
+            if (inputs.length > 0) {
+                var lastInput = inputs.pop(); // Remove the last added input
+                lastInput.remove(); // Remove the input element from the DOM
+                index--;
+            }
+        }
+    </script>
 </div>

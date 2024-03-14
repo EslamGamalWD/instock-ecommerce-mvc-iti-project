@@ -26,8 +26,8 @@ namespace InStockWebAppBLL.Helpers.ImageUploader
                 string FinalPath = Path.Combine(FolderPath, FileName);
 
 
-                //4) Save File As Streams "Data Overtime"
-                using (var Stream = new FileStream(FinalPath, FileMode.Create))
+                //4) Save File As Streams "Data Overtime" 
+                    using (var Stream = new FileStream(FinalPath, FileMode.Create))
                 {
                     File.CopyTo(Stream);
                 }
