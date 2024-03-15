@@ -25,12 +25,14 @@ namespace InStockWebAppPL.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userData = await _userManager.GetUserAsync(HttpContext.User);
+
+            var LoggedUser = await _userRepository.GetUserById(userData.Id);
           
-            if (user != null)
+            if (LoggedUser != null)
             {
-                var userVM = _mapper.Map<GetUserByIdVM>(user);
-                var userId = userVM.Id;
+                var userVM = _mapper.Map<GetUserByIdVM>(LoggedUser);
+               
            
                 return View("Details", userVM);
             }
