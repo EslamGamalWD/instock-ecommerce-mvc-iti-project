@@ -30,7 +30,6 @@ public class SubcategoryRepository : GenericRepository<SubCategory>, ISubCategor
         throw new NotImplementedException();
     }
 
- 
 
     public override void Update(SubCategory entity)
     {
@@ -38,11 +37,11 @@ public class SubcategoryRepository : GenericRepository<SubCategory>, ISubCategor
         _applicationDbContext.Entry(entity).State = EntityState.Modified;
     }
 
-    public async Task<IEnumerable<SubCategory>>getAllSubCategoriesByCategoryId(int id)
+    public async Task<IEnumerable<SubCategory>> getAllSubCategoriesByCategoryId(int id)
     {
         var subcategories = await _applicationDbContext.SubCategories
-               .Where(sc => sc.CategoryId == id)
-               .ToListAsync();
+            .Where(sc => sc.CategoryId == id)
+            .ToListAsync();
         return subcategories;
     }
 }

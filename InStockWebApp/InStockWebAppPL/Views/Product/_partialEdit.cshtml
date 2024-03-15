@@ -28,8 +28,12 @@ else
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Dicount Code</label>
+
                     @*   asp-items="ViewBag.DiscountId" *@
                     @Html.DropDownListFor(model => model.DiscountId, (SelectList)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
+
+                    <select asp-for="DiscountId" asp-items="@ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select>
+
                     <span asp-validation-for="DiscountId" class="text-danger"></span>
                     <div class="help-block with-errors"></div>
                 </div>

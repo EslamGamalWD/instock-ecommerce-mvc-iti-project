@@ -7,7 +7,7 @@ public class Product
     public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int InStock { get; set; }
-    public List<ProductImage> Images { get; set; } = new List<ProductImage>();
+    public List<ProductImage> Images { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
