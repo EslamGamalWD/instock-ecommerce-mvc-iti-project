@@ -48,7 +48,7 @@ namespace InStockWebAppPL.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return PartialView("_Create");
         }

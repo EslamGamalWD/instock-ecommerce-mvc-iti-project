@@ -1,0 +1,66 @@
+﻿@model LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+}
+<style>
+    .card-body {
+        padding: 3rem;
+    }
+    .form-group {
+        margin-bottom: 2rem; 
+    }
+    .form-control, .btn {
+       
+        padding: .25rem 1rem; 
+    }
+</style>
+<center>
+    <div class="col-sm-12 col-lg-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title">Login</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <form class="form-horizontal" asp-action="Login" asp-controller="Account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <label class="control-label col-sm-3 align-self-center" asp-for="Email">Email:</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Email" class="form-control" placeholder="Enter Your email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label col-sm-3 align-self-center" asp-for="Password">Password:</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Password" class="form-control" placeholder="Enter Your password">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="RememberMe">
+                                <input asp-for="RememberMe" /> Remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <a class="btn bg-danger" asp-action="Register" asp-controller="Account">Register</a>
+
+                    </div>
+                    @Html.AntiForgeryToken()
+                </form>
+            </div>
+        </div>
+    </div>
+</center>
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

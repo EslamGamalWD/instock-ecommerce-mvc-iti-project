@@ -11,6 +11,7 @@ public interface IUnitOfWork : IDisposable
 
     ICartRepository CartRepository { get; }
     IItemRepository ItemRepository { get; }
+    IUserRepository UserRepository { get; }
 
 
     Task Save();

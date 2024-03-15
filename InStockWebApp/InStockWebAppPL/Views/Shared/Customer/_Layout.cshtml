@@ -8,6 +8,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
+    <!-- bootstrap-->
+	<link href="~/customer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!-- gLightbox gallery-->
     <link rel="stylesheet" href="~/Customer/vendor/glightbox/css/glightbox.min.css">
     <!-- Range slider-->
@@ -37,7 +39,7 @@
 </div>
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
-    @RenderSection("Js", required: false)
+    @RenderSectionAsync("Js", required: false)
 <script src="~/Customer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Customer/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="~/Customer/vendor/nouislider/nouislider.min.js"></script>
