@@ -48,8 +48,9 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                        <img src="~/Files/productImages/@item.ImagePaths.FirstOrDefault()" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                        <img src="~/Files/ProductImages/@item.ImagePaths.FirstOrDefault()" class="img-fluid rounded avatar-50 mr-3" alt="image">
                                     <div>
+                                        @item.ImagePaths.FirstOrDefault()
                                         @item.Name
                                         <p class="mb-0"><small>@item.Description</small></p>
                                     </div>
@@ -83,8 +84,61 @@
         </div>
     </div>
     <!-- Page end  -->
-    @section JS {
+    @* @section JS {
         <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
 
-    }
+    } *@
+    <script src="~/lib/bootbox.js/bootbox.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-toggle-status', 'click', function () {
+                var btn = $(this);
+                var currentStatus = btn.closest('tr').find('.js-status').text().trim();
+                var message = currentStatus === 'Deleted' ?
+                    "Are you sure that you need to untoggle this item status?" :
+                    "Are you sure that you need to toggle this item status?";
+                bootbox.confirm({
+                    message: message,
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.post({
+                                url: '/Product/ToggleStatus/' + btn.data('id'),
+                                data: {
+                                    '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                                },
+                                success: function (lastUpdatedOn) {
+                                    var row = btn.parents('tr');
+                                    var status = row.find('.js-status');
+                                    var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                    status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                    row.find('.js-updated-on').html(lastUpdatedOn);
+                                    row.addClass('animate__animated animate__flash');
+                                    var Icon = row.find('.ic');
+                                    var IconBackGround = row.find('.js-toggle-status');
+                                    Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                    IconBackGround.toggleClass('bg-warning  bg-danger')
+
+                                    showSuccessMessage();
+                                },
+                                error: function () {
+                                    showErrorMessage();
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </div>

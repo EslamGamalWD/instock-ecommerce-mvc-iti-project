@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerSideDetails";
+}
+
+@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewData["Title"] | InStock</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    @section CSS {
+        <partial name="~/Views/Partials/Product/_CSS.cshtml" />
+
+    }
+</head>
+<body>
+    <div class="page-holder bg-light">
+        <section class="py-5">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <!-- PRODUCT SLIDER-->
+                        <div class="row m-sm-0">
+                            <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
+                                <div class="swiper product-slider-thumbs">
+                                    <div class="swiper-wrapper">
+                                        @{
+                                            int i = 0;
+                                        }
+                                        @foreach (var imagePath in Model.ImagePaths)
+                                        {   
+                                            @if(i==5){ break; }
+                                            i++;
+                                            <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="~/Files/ProductImages/@imagePath" alt="..."></div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-10 order-1 order-sm-2">
+                                <div class="swiper product-slider">
+                                    <div class="swiper-wrapper">
+                                        @{i=0;}
+                                        @foreach (var imagePath in Model.ImagePaths)
+                                        {
+                                            @if (i == 5) { break; }
+                                            i++;
+                                            <div class="swiper-slide h-auto"><a class="glightbox product-view" href="~/Files/ProductImages/@imagePath" data-gallery="gallery2" data-glightbox="Product item"><img class="img-fluid" src="@imagePath" alt="..."></a></div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- PRODUCT DETAILS-->
+                    <div class="col-lg-6">
+                        <!--Stars Shapes-->
+                        <ul class="list-inline mb-2 text-sm">
+                            <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
+                            <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
+                            <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
+                            <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
+                            <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
+                            <li class="list-inline-item m-0 4"><i>@Model.AvgRating</i></li>
+                        </ul>
+                        <h1>@Model.Name</h1>
+                        <p class="text-muted lead">$@Model.Price</p>
+                        <p class="text-sm mb-4">@Model.Description</p>
+                                        <form method="post" action="@Url.Action("AddToCart", "Cart")">
+                                         <div class="row align-items-stretch mb-4">
+                                            <div class="col-sm-5 pr-sm-0">
+                                            <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
+                                            <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+                                            <div class="quantity">
+                                            <input type="hidden" name="productId" value="@Model.Id" />
+                                            <button type="button" class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
+                                            <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
+                                            <button type="button"  class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-sm-3 pl-sm-0">
+                                                <button type="submit" class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0" href="cart.html">Add to cart</button>
+                                            </div>
+                                            </div>
+                                        </form>
+                        <br>
+                        <ul class="list-unstyled small d-inline-block">
+                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">Instock:</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
+                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">SubCategory:</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
+                            @if (Model.DiscountName != null)
+                            {
+                                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Discounts:</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <!-- DETAILS TABS-->
+                <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+                    <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
+                    <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                </ul>
+                <div class="tab-content mb-5" id="myTabContent">
+                    <!--Description Tab-->
+                    <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                        <div class="p-4 p-lg-5 bg-white">
+                            <h6 class="text-uppercase">Product description </h6>
+                            <p class="text-muted text-sm mb-0">@Model.Description</p>
+                        </div>
+                    </div>
+                    <!--Reviews Tab-->
+                    <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                        <div class="p-4 p-lg-5 bg-white">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="d-flex mb-3">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="img/customer-1.png" alt="" width="50" /></div>
+                                        <div class="ms-3 flex-shrink-1">
+                                            <h6 class="mb-0 text-uppercase">Jason Doe</h6>
+                                            <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
+                                            <ul class="list-inline mb-1 text-xs">
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
+                                            </ul>
+                                            <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="img/customer-2.png" alt="" width="50" /></div>
+                                        <div class="ms-3 flex-shrink-1">
+                                            <h6 class="mb-0 text-uppercase">Jane Doe</h6>
+                                            <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
+                                            <ul class="list-inline mb-1 text-xs">
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                                                <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
+                                            </ul>
+                                            <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RELATED PRODUCTS-->
+
+            </div>
+        </section>
+        @section JS {
+            <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
+
+        }
+        <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    </div>
+</body>
+</html>

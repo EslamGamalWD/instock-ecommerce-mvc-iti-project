@@ -1,14 +1,9 @@
 ﻿
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
-using InStockWebAppDAL.Entities;
-using InStockWebAppPL.Settings;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Options;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -16,16 +11,17 @@ namespace InStockWebAppPL.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
-        //private readonly IDiscountRepository _discountRepository;
+        private readonly IDiscountRepository _discountRepository;
         private readonly IProductImageRepository _imageRepository;
         
 
         public ProductController(IProductRepository productRepository,
-            ISubCategoryRepository subCategoryRepository,IProductImageRepository imageRepository)
+            ISubCategoryRepository subCategoryRepository,IProductImageRepository imageRepository,IDiscountRepository discountRepository)
         {
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
+            _discountRepository = discountRepository;
         }
 
         // GET: ProductController
@@ -39,20 +35,18 @@ namespace InStockWebAppPL.Controllers
         {
             return View(await _productRepository.Details(id));
         }
+        // GET: ProductController/Details/5
+        public async Task<IActionResult> CustomerSideDetails(int id)
+        {
+            var details=await _productRepository.Details(id);
+            return View(details);
+        }
         [HttpGet]
         // GET: ProductController/Create
         public async Task<IActionResult> Create()
         {
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            var discounts = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Discount 1" },
-                    new SelectListItem { Value = "2", Text = "Discount 2" }
-                };
-
-            // Create a SelectList for the static list of discounts
-            ViewData["DiscountId"] = new SelectList(discounts, "Value", "Text");
-            //ViewData["DiscountId"] = new SelectList(await _productRepository.GetAll(), "Id", "Name");
+            ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
             return View();
         }
 
@@ -74,14 +68,7 @@ namespace InStockWebAppPL.Controllers
                     }
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-                var discounts = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Discount 1" },
-                    new SelectListItem { Value = "2", Text = "Discount 2" }
-                };
-
-                // Create a SelectList for the static list of discounts
-                ViewData["DiscountId"] = new SelectList(discounts, "Value", "Text");
+                ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
                 return View(entityVM);
             }
             catch
@@ -96,14 +83,7 @@ namespace InStockWebAppPL.Controllers
             var product = await _productRepository.EditDetails(id);
             if(product==null)return NotFound();
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            var discounts = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Discount 1" },
-                    new SelectListItem { Value = "2", Text = "Discount 2" }
-                };
-
-            // Create a SelectList for the static list of discounts
-            ViewData["DiscountId"] = new SelectList(discounts, "Value", "Text");
+            ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
             return View(product);
         }
 
@@ -120,14 +100,7 @@ namespace InStockWebAppPL.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-                var discounts = new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "1", Text = "Discount 1" },
-                    new SelectListItem { Value = "2", Text = "Discount 2" }
-                };
-
-                // Create a SelectList for the static list of discounts
-                ViewData["DiscountId"] = new SelectList(discounts, "Value", "Text");
+                ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
                 return View(entityVM);
             }
             catch
