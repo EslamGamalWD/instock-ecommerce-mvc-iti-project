@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Security.Claims;
+using InStockWebAppBLL.Features.Interfaces;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -15,61 +17,77 @@ namespace InStockWebAppPL.Controllers
     {
         private readonly ICategoryRepository categoryRepository;
         private readonly IMapper mapper;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IFilterRepository filter;
         private readonly ISubCategoryRepository subCategoryRepository;
-        public FilterProductController(IFilterRepository filter ,ISubCategoryRepository subCategoryRepository,ICategoryRepository categoryRepository,IMapper mapper)
+
+        public FilterProductController(IFilterRepository filter,
+            ISubCategoryRepository subCategoryRepository, ICategoryRepository categoryRepository,
+            IMapper mapper, IUnitOfWork unitOfWork)
         {
-            this.categoryRepository =categoryRepository;
-            this.mapper=mapper;
-            this.filter=filter;
+            this.categoryRepository = categoryRepository;
+            this.mapper = mapper;
+            _unitOfWork = unitOfWork;
+            this.filter = filter;
             this.subCategoryRepository = subCategoryRepository;
         }
+
         public async Task<IActionResult> Index()
         {
-            int pageSize = 6;
-           
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim is not null)
+            {
+                var userId = claim.Value;
+                var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+                HttpContext.Session.SetInt32("shoppingCartSession", count);
+            }
+
+            var pageSize = 6;
+
 
             ViewBag.Catogery = mapper
                 .Map<IEnumerable<GetAllCategoriesVM>>
-                (await categoryRepository.GetAll());
+                    (await categoryRepository.GetAll());
 
             ViewBag.SubCategory = mapper
                 .Map<IEnumerable<SubcategoryVM>>
-                (await subCategoryRepository.GetAll());
+                    (await subCategoryRepository.GetAll());
 
 
             ViewBag.TotalPages = await filter.totalCount();
 
-            ViewBag.CurrentPage= (int)Math.Ceiling(await filter.totalCount() / (double)pageSize);
+            ViewBag.CurrentPage = (int)Math.Ceiling(await filter.totalCount() / (double)pageSize);
 
             var products = await filter.GetProductsForPage(1, pageSize);
 
             return View(products);
         }
 
-      
+
         [HttpGet]
-        public async Task< IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000)
+        public async Task<IActionResult> Get(int page = 1, int pageSize = 6,
+            string sortOption = "default", int? categoryId = null, string subcategoryIds = null,
+            int minPrice = 0, int maxPrice = 1000000)
         {
-
-
             var totalProducts = await filter.totalCount();
             var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice);
+            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId,
+                subcategoryIds, minPrice, maxPrice);
             return PartialView("_ProductList", productList);
         }
 
         public IActionResult Sort(string sortOption)
         {
-            
             return RedirectToAction("Get", new { sortOption = sortOption });
         }
 
-        public async Task< IActionResult> GetSubcategories(int categoryId)
+        public async Task<IActionResult> GetSubcategories(int categoryId)
         {
-            var subCategory = mapper.Map<IEnumerable<SubcategoryVM> >(await subCategoryRepository.getAllSubCategoriesByCategoryId(categoryId));
+            var subCategory = mapper.Map<IEnumerable<SubcategoryVM>>(
+                await subCategoryRepository.getAllSubCategoriesByCategoryId(categoryId));
             return PartialView("_SubCategoryFilter", subCategory);
         }
     }
