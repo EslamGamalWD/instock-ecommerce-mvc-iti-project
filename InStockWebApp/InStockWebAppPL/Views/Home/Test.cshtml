@@ -1,8 +1,37 @@
-﻿
+﻿@model List<CategoryWithProductsVM>
+
 @{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <h1>Categories</h1>
+    @foreach (var category in Model)
+    {
+        <div>
+            <h2>@category.Name</h2>
+            <div>
+                <h3>Products</h3>
+                <ul>
+                    @foreach (var product in category.Products)
+                    {
+                        <div>
+                            <li>@product.Name - @product.SubCategory.Name - Price: @product.Price</li>
+                        </div>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@* @{
     ViewData["Title"] = "Test";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
-<h1>Test</h1>
+<h1>Test</h1> *@
 

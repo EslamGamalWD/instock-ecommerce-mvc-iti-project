@@ -1,4 +1,765 @@
-﻿@model dynamic
+﻿@model List<CategoryWithProductsVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+}
+<head>
+    <style>
+        .container {
+          width: 100%;
+        }
+
+        .slider-wrapper {
+          position: relative;
+        }
+
+        .slider-wrapper .slide-button {
+          position: absolute;
+          top: 50%;
+          outline: none;
+          border: none;
+          height: 50px;
+          width: 50px;
+          z-index: 5;
+          color: #fff;
+          display: flex;
+          cursor: pointer;
+          font-size: 2.2rem;
+          background: #000;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          transform: translateY(-50%);
+        }
+
+        .slider-wrapper .slide-button:hover {
+          background: #404040;
+        }
+
+        .slider-wrapper .slide-button#prev-slide {
+          left: -25px;
+          display: none;
+        }
+
+        .slider-wrapper .slide-button#next-slide {
+          right: -25px;
+        }
+
+        .slider-wrapper .image-list {
+          display: grid;
+          grid-template-columns: repeat(@Model.Count(), 1fr);
+          gap: 18px;
+          font-size: 0;
+          list-style: none;
+          margin-bottom: 30px;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+
+        .slider-wrapper .image-list::-webkit-scrollbar {
+          display: none;
+        }
+
+        .slider-wrapper .image-list .image-item {
+          width: 360px;
+          height: 500px;
+          object-fit: cover;
+        }
+
+        .slider-wrapper .image-list .image-item-up {
+            width: 360px;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .slider-wrapper .image-list .image-item-down {
+            width: 360px;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .container .slider-scrollbar {
+          height: 24px;
+          width: 100%;
+          display: flex;
+          align-items: center;
+        }
+
+        .slider-scrollbar .scrollbar-track {
+          background: #ccc;
+          width: 100%;
+          height: 2px;
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+          position: relative;
+        }
+
+        .slider-scrollbar:hover .scrollbar-track {
+          height: 4px;
+        }
+
+        .slider-scrollbar .scrollbar-thumb {
+          position: absolute;
+          background: #000;
+          top: 0;
+          bottom: 0;
+          width: 50%;
+          height: 100%;
+          cursor: grab;
+          border-radius: inherit;
+        }
+
+        .slider-scrollbar .scrollbar-thumb:active {
+          cursor: grabbing;
+          height: 8px;
+          top: -2px;
+        }
+
+        .slider-scrollbar .scrollbar-thumb::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: -10px;
+          bottom: -10px;
+        }
+
+        /* Styles for mobile and tablets */
+        /*media only screen and (max-width: 1023px) {
+          .slider-wrapper .slide-button {
+            display: none !important;
+          }
+
+          .slider-wrapper .image-list {
+            gap: 10px;
+            margin-bottom: 15px;
+            scroll-snap-type: x mandatory;
+          }
+
+          .slider-wrapper .image-list .image-item {
+            width: 280px;
+            height: 380px;
+          }
+
+          .slider-scrollbar .scrollbar-thumb {
+            width: 20%;
+          }  
+        }*/
+    </style>
+</head>
+<div class="page-holder">
+    <!--  Modal -->
+    <div class="modal fade" id="productView" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content overflow-hidden border-0">
+                <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body p-0">
+                    <div class="row align-items-stretch">
+                        <div class="col-lg-6 p-lg-0"><a class="glightbox product-view d-block h-100 bg-cover bg-center" style="background: url(img/product-5.jpg)" href="img/product-5.jpg" data-gallery="gallery1" data-glightbox="Red digital smartwatch"></a><a class="glightbox d-none" href="img/product-5-alt-1.jpg" data-gallery="gallery1" data-glightbox="Red digital smartwatch"></a><a class="glightbox d-none" href="img/product-5-alt-2.jpg" data-gallery="gallery1" data-glightbox="Red digital smartwatch"></a></div>
+                        <div class="col-lg-6">
+                            <div class="p-4 my-md-4">
+                                <ul class="list-inline mb-2">
+                                    <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
+                                    <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
+                                    <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
+                                    <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
+                                    <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
+                                </ul>
+                                <h2 class="h4">Red digital smartwatch</h2>
+                                <p class="text-muted">$250</p>
+                                <p class="text-sm mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Vestibulum ultricies aliquam convallis.</p>
+                                <div class="row align-items-stretch mb-4 gx-0">
+                                    <div class="col-sm-7">
+                                        <div class="border d-flex align-items-center justify-content-between py-1 px-3">
+                                            <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+                                            <div class="quantity">
+                                                <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
+                                                <input class="form-control border-0 shadow-0 p-0" type="text" value="1">
+                                                <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5"><a class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0" href="cart.html">Add to cart</a></div>
+                                </div><a class="btn btn-link text-dark text-decoration-none p-0" href="#!"><i class="far fa-heart me-2"></i>Add to wish list</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- HERO SECTION-->
+    <div class="container">
+        <section class="hero pb-3 bg-cover bg-center d-flex align-items-center" style="background: url(/customer/img/hero-banner-alt.jpg)">
+            <div class="container py-5">
+                <div class="row px-4 px-lg-5">
+                    <div class="col-lg-6">
+                        <p class="text-muted small text-uppercase mb-2">New Inspiration 2020</p>
+                        <h1 class="h2 text-uppercase mb-3">20% off on new season</h1><a class="btn btn-dark" href="shop.html">Browse collections</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- CATEGORIES SECTION-->
+        <section class="pt-5">
+            <header class="text-center">
+                <p class="small text-muted small text-uppercase mb-1">Carefully Created Collections</p>
+                <h2 class="h5 text-uppercase mb-4">Browse Our Categories</h2>
+            </header>
+            @* <div class="container">
+                <div class="slider-wrapper">
+                    <button id="prev-slide" class="slide-button material-symbols-rounded">
+                        chevron_left
+                    </button>
+                    <ul class="image-list">
+                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-1" />
+                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-2" />
+                        <img class="image-item" src="/customer/img/cat-img-3.jpg" alt="img-3" />
+                        <img class="image-item" src="/customer/img/cat-img-4.jpg" alt="img-4" />
+                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-5" />
+                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-6" />
+                        <img class="image-item" src="/customer/img/cat-img-3.jpg" alt="img-7" />
+                        <img class="image-item" src="/customer/img/cat-img-4.jpg" alt="img-8" />
+                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-9" />
+                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-10" />
+                    </ul>
+                    <button id="next-slide" class="slide-button material-symbols-rounded">
+                        chevron_right
+                    </button>
+                </div>
+                <div class="slider-scrollbar">
+                    <div class="scrollbar-track">
+                        <div class="scrollbar-thumb"></div>
+                    </div>
+                </div>
+            </div> *@
+
+
+            @* <div class="container">
+                <div class="slider-wrapper">
+                    <button id="prev-slide" class="slide-button material-symbols-rounded">
+                        chevron_left
+                    </button>
+                    <ul class="image-list">
+                        @{
+                            int count = 1;
+                            int imgCategoryCounter = 1;
+                            string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                        }
+                        @foreach (var category in Model)
+                        {
+                            <li>
+                                <div>
+                                    <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@category.Name</strong></a>
+                                </div>
+                            </li>
+
+                            if (count == 4)
+                            {
+                                count = 0;
+                                imgCategoryCounter = 0;
+                            }
+
+                            count++;
+                            imgCategoryCounter++;
+                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                        }
+                    </ul>
+                    <button id="next-slide" class="slide-button material-symbols-rounded">
+                        chevron_right
+                    </button>
+                </div>
+                <div class="slider-scrollbar">
+                    <div class="scrollbar-track">
+                        <div class="scrollbar-thumb"></div>
+                    </div>
+                </div>
+            </div> *@
+
+
+            <div class="container">
+                <div class="slider-wrapper">
+                    <button id="prev-slide" class="slide-button material-symbols-rounded">
+                        chevron_left
+                    </button>
+                    <ul class="image-list">
+                        @{
+                            int count = 1;
+                            int imgCategoryCounter = 1;
+                            string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                        }
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            if (count == 1)
+                            {
+                                <li>
+                                    <div>
+                                        <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                                    </div>
+                                </li>
+                            }
+                            else if (count == 2 && (i + 1) <= Model.Count())
+                            {
+                                <li>
+                                    <div>
+                                        <a class="category-item mb-3" href="shop.html"><img class="image-item-up" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+
+                                        @{
+                                            count++;
+                                            imgCategoryCounter++;
+                                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                                        }
+
+                                        <a class="category-item" href="shop.html"><img class="image-item-down" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
+                                    </div>
+                                </li>
+                            }
+
+                            if (count == 3)
+                            {
+                                i++;
+                                count = 0;
+                                imgCategoryCounter = 0;
+                            }
+
+                            count++;
+                            imgCategoryCounter++;
+                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                        }
+                    </ul>
+                    <button id="next-slide" class="slide-button material-symbols-rounded">
+                        chevron_right
+                    </button>
+                </div>
+                <div class="slider-scrollbar">
+                    <div class="scrollbar-track">
+                        <div class="scrollbar-thumb"></div>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="row">
+                @{
+                    int count = 1;
+                    int imgCategoryCounter = 1;
+                    string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                }
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    if (count == 1)
+                    {
+                        <div class="col-md-4">
+                            <a class="category-item" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                        </div>
+                    }
+                    else if (count == 2 && (i + 1) <= Model.Count())
+                    {
+                        <div class="col-md-4">
+                            <a class="category-item mb-4" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+
+                            @{
+                                count++;
+                                imgCategoryCounter++;
+                                categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                            }
+
+                            <a class="category-item" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
+                        </div>
+                    }
+
+                    if (count == 3)
+                    {
+                        i++;
+                        count = 0;
+                        imgCategoryCounter = 0;
+                    }
+
+                    count++;
+                    imgCategoryCounter++;
+                    categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                }
+            </div> *@
+        </section>
+        <!-- TRENDING PRODUCTS-->
+        <section class="py-5">
+            <header>
+                <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+                <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
+            </header>
+            <div class="row">
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-1.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Kui Ye Chen’s AirPods</a></h6>
+                        <p class="small text-muted">$250</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-primary">Sale</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-2.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Air Jordan 12 gym red</a></h6>
+                        <p class="small text-muted">$300</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-3.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Cyan cotton t-shirt</a></h6>
+                        <p class="small text-muted">$25</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-info">New</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-4.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Timex Unisex Originals</a></h6>
+                        <p class="small text-muted">$351</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-danger">Sold</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-5.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Red digital smartwatch</a></h6>
+                        <p class="small text-muted">$250</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-6.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Nike air max 95</a></h6>
+                        <p class="small text-muted">$300</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-7.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Joemalone Women prefume</a></h6>
+                        <p class="small text-muted">$25</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-8.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Apple Watch</a></h6>
+                        <p class="small text-muted">$351</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        @foreach (var category in Model)
+        {
+            int max = 0;
+
+            if(category.Products.Count() >= 8)
+            {
+                max = 8;
+            }
+            else if (category.Products.Count() >= 4)
+            {
+                max = 4;
+            }
+            else
+            {
+                break;
+            }
+
+            int counter = 0;
+            int imgCounter = 1;
+            string source = $"/customer/img/product-{imgCounter}.jpg";
+
+            <section class="py-5">
+                <header>
+                    <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+                    <h2 class="h5 text-uppercase mb-4">@category.Name</h2>
+                </header>
+                <div class="row">
+                    @foreach (var product in category.Products)
+                    {
+                        if (max == 0)
+                        {
+                            break;
+                        }
+
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                            <div class="product text-center">
+                                <div class="position-relative mb-3">
+                                    @{
+                                        string badgeClass = "badge text-white bg-";
+                                        string badgeText = "";
+                                        if (product.InStock == 0)
+                                        {
+                                            badgeClass += "danger";
+                                            badgeText = "SOLD";
+                                        }
+                                        else if (product.Discount != null && product.Discount.IsActive == true)
+                                        {
+                                            badgeClass += "primary";
+                                            badgeText = "SALE";
+                                        }
+                                        else if ((DateTime.Now - product.CreatedAt).TotalDays <= 14)
+                                        {
+                                            badgeClass += "info";
+                                            badgeText = "NEW";
+                                        }
+                                    }
+                                    <div class="@badgeClass">@badgeText</div>
+                                    <a class="d-block" href="detail.html"><img class="img-fluid w-100" src="@source" alt="..."></a>
+                                    <div class="product-overlay">
+                                        <ul class="mb-0 list-inline">
+                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                            <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h6> <a class="reset-anchor" href="detail.html">@product.Name</a></h6>
+                                <p class="small text-muted">@string.Format("{0} EGP", product.Price.ToString("#,##0.00"))</p>
+                            </div>
+                        </div>
+
+                        counter++;
+                        imgCounter++;
+                        source = $"/customer/img/product-{imgCounter}.jpg";
+
+                        if (counter == max)
+                        {
+                            break;
+                        }
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- SERVICES-->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <div class="row text-center gy-3">
+                    <div class="col-lg-4">
+                        <div class="d-inline-block">
+                            <div class="d-flex align-items-end">
+                                <svg class="svg-icon svg-icon-big svg-icon-light">
+                                    <use xlink:href="#delivery-time-1"> </use>
+                                </svg>
+                                <div class="text-start ms-3">
+                                    <h6 class="text-uppercase mb-1">Free shipping</h6>
+                                    <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="d-inline-block">
+                            <div class="d-flex align-items-end">
+                                <svg class="svg-icon svg-icon-big svg-icon-light">
+                                    <use xlink:href="#helpline-24h-1"> </use>
+                                </svg>
+                                <div class="text-start ms-3">
+                                    <h6 class="text-uppercase mb-1">24 x 7 service</h6>
+                                    <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="d-inline-block">
+                            <div class="d-flex align-items-end">
+                                <svg class="svg-icon svg-icon-big svg-icon-light">
+                                    <use xlink:href="#label-tag-1"> </use>
+                                </svg>
+                                <div class="text-start ms-3">
+                                    <h6 class="text-uppercase mb-1">Festivaloffers</h6>
+                                    <p class="text-sm mb-0 text-muted">Free shipping worldwide</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- NEWSLETTER-->
+        <section class="py-5">
+            <div class="container p-0">
+                <div class="row gy-3">
+                    <div class="col-lg-6">
+                        <h5 class="text-uppercase">Let's be friends!</h5>
+                        <p class="text-sm text-muted mb-0">Nisi nisi tempor consequat laboris nisi.</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <form action="#">
+                            <div class="input-group">
+                                <input class="form-control form-control-lg" type="email" placeholder="Enter your email address" aria-describedby="button-addon2">
+                                <button class="btn btn-dark" id="button-addon2" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<script>
+    const initSlider = () => {
+        const imageList = document.querySelector(".slider-wrapper .image-list");
+        const slideButtons = document.querySelectorAll(".slider-wrapper .slide-button");
+        const sliderScrollbar = document.querySelector(".container .slider-scrollbar");
+        const scrollbarThumb = sliderScrollbar.querySelector(".scrollbar-thumb");
+        const maxScrollLeft = imageList.scrollWidth - imageList.clientWidth;
+
+        // Handle scrollbar thumb drag
+        scrollbarThumb.addEventListener("mousedown", (e) => {
+            const startX = e.clientX;
+            const thumbPosition = scrollbarThumb.offsetLeft;
+            const maxThumbPosition = sliderScrollbar.getBoundingClientRect().width - scrollbarThumb.offsetWidth;
+
+            // Update thumb position on mouse move
+            const handleMouseMove = (e) => {
+                const deltaX = e.clientX - startX;
+                const newThumbPosition = thumbPosition + deltaX;
+
+                // Ensure the scrollbar thumb stays within bounds
+                const boundedPosition = Math.max(0, Math.min(maxThumbPosition, newThumbPosition));
+                const scrollPosition = (boundedPosition / maxThumbPosition) * maxScrollLeft;
+
+                scrollbarThumb.style.left = `${boundedPosition}px`;
+                imageList.scrollLeft = scrollPosition;
+            }
+
+            // Remove event listeners on mouse up
+            const handleMouseUp = () => {
+                document.removeEventListener("mousemove", handleMouseMove);
+                document.removeEventListener("mouseup", handleMouseUp);
+            }
+
+            // Add event listeners for drag interaction
+            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener("mouseup", handleMouseUp);
+        });
+
+        // Slide images according to the slide button clicks
+        slideButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const direction = button.id === "prev-slide" ? -1 : 1;
+                const scrollAmount = imageList.clientWidth * direction;
+                imageList.scrollBy({ left: scrollAmount, behavior: "smooth" });
+            });
+        });
+
+        // Show or hide slide buttons based on scroll position
+        const handleSlideButtons = () => {
+            slideButtons[0].style.display = imageList.scrollLeft <= 0 ? "none" : "flex";
+            slideButtons[1].style.display = imageList.scrollLeft >= maxScrollLeft ? "none" : "flex";
+        }
+
+        // Update scrollbar thumb position based on image scroll
+        const updateScrollThumbPosition = () => {
+            const scrollPosition = imageList.scrollLeft;
+            const thumbPosition = (scrollPosition / maxScrollLeft) * (sliderScrollbar.clientWidth - scrollbarThumb.offsetWidth);
+            scrollbarThumb.style.left = `${thumbPosition}px`;
+        }
+
+        // Call these two functions when image list scrolls
+        imageList.addEventListener("scroll", () => {
+            updateScrollThumbPosition();
+            handleSlideButtons();
+        });
+    }
+
+    window.addEventListener("resize", initSlider);
+    window.addEventListener("load", initSlider);
+</script>
+
+
+
+
+
+
+
+@* @model IEnumerable<Category>
 
 @{
     ViewData["Title"] = "Index";
@@ -221,6 +982,153 @@
                 </div>
             </div>
         </section>
+
+        <!-- TRENDING PRODUCTS-->
+        <section class="py-5">
+            <header>
+                <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
+                <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
+            </header>
+            <div class="row">
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-1.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Kui Ye Chen’s AirPods</a></h6>
+                        <p class="small text-muted">$250</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-primary">Sale</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-2.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Air Jordan 12 gym red</a></h6>
+                        <p class="small text-muted">$300</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-3.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Cyan cotton t-shirt</a></h6>
+                        <p class="small text-muted">$25</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-info">New</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-4.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Timex Unisex Originals</a></h6>
+                        <p class="small text-muted">$351</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-danger">Sold</div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-5.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Red digital smartwatch</a></h6>
+                        <p class="small text-muted">$250</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-6.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Nike air max 95</a></h6>
+                        <p class="small text-muted">$300</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-7.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Joemalone Women prefume</a></h6>
+                        <p class="small text-muted">$25</p>
+                    </div>
+                </div>
+                <!-- PRODUCT-->
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="product text-center">
+                        <div class="position-relative mb-3">
+                            <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="/customer/img/product-8.jpg" alt="..."></a>
+                            <div class="product-overlay">
+                                <ul class="mb-0 list-inline">
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
+                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <h6> <a class="reset-anchor" href="detail.html">Apple Watch</a></h6>
+                        <p class="small text-muted">$351</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- SERVICES-->
         <section class="py-5 bg-light">
             <div class="container">
@@ -287,3 +1195,4 @@
             </div>
         </section>
     </div>
+ *@

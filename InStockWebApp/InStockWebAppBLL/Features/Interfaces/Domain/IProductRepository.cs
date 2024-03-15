@@ -1,4 +1,5 @@
 ﻿using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppDAL.Entities;
 
 
 namespace InStockWebAppBLL.Features.Interfaces.Domain
@@ -13,6 +14,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
         Task<DateTime?> ToggleStatus(int? id);
         Task<GetProductsVM> Details(int? id);
         Task<AlterProductVM> EditDetails(int? id);
+        Task<IEnumerable<Product>> GetProductsBySubcategoryId(int subcategoryId);
 
     }
 }

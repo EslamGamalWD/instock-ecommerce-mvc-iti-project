@@ -107,9 +107,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseHangfireDashboard("/HangFire");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cart}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

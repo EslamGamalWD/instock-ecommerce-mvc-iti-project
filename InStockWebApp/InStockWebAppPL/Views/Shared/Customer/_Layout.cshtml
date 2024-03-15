@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="~/Customer/css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="~/favicon.ico">
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     @RenderSection("CSS",required:false)
 </head>
 <body>
@@ -40,13 +42,15 @@
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
     @RenderSection("Js", required: false)
+    @RenderSection("scripts", required: false)
 <script src="~/Customer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Customer/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="~/Customer/vendor/nouislider/nouislider.min.js"></script>
 <script src="~/Customer/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="~/Customer/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="~/Customer/js/front.js"></script>
-   
+
+ 
 <script>
         // ------------------------------------------------------- //
         //   Inject SVG Sprite - 
