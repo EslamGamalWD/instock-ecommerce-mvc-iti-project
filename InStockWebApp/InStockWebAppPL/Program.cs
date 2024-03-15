@@ -80,11 +80,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 app.UseHangfireDashboard("/HangFire");
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Cart}/{action=Index}/{id?}");
+    pattern: "{controller=FilterProduct}/{action=Index}/{id?}");
 
 app.Run();

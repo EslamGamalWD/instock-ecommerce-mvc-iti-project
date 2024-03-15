@@ -1,10 +1,8 @@
 ﻿
 using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppPL.Settings;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;

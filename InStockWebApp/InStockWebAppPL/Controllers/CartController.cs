@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppDAL.Entities;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers;
 
-[Authorize]
+
 public class CartController : Controller
 {
     private readonly IMapper _mapper;
@@ -18,36 +19,52 @@ public class CartController : Controller
         _unitOfWork = unitOfWork;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var cart = await _unitOfWork.CartRepository.GetUserCart();
+        return View(cart);
     }
 
-    public async Task<IActionResult> AddToShoppingCart(int productId)
+    public async Task<IActionResult> Details(int productId)
     {
-        var userName = User.Identity?.Name;
-        var currentUserCart = await _unitOfWork.CartRepository.GetCart(userName);
-        var item = await _unitOfWork.ItemRepository
-            .GetFirstOrDefault(i => i.ProductId == productId && !i.IsSelected);
+        if (ModelState.IsValid)
+        {
+            // var claimsIdentity = (ClaimsIdentity)User.Identity;
+            // var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+            // var userId = claim.Value;
+            var userId = "97375f38-636c-49f9-a8e4-aab67ffd2c16";
+            var user = await _unitOfWork.UserRepository.GetUser(userId);
+            await _unitOfWork.CartRepository.AddItem(productId, quantity: 1, user);
 
-        if (item is null)
-        {
-            item = new Item
-            {
-                Quantity = 1,
-                ProductId = productId
-                // Product = product
-            };
-        }
-        else
-        {
-            item.Quantity++;
+            var count = await _unitOfWork.CartRepository.GetCartItemsCount();
+            
+            HttpContext.Session.SetInt32("shoppingCartSession", count);
+            return RedirectToAction("Index");
         }
 
-        item.CartId = currentUserCart.Id;
-        item.Cart = currentUserCart;
-        await _unitOfWork.Save();
-
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "FilterProduct");
     }
+
+    // public async Task<IActionResult> AddToShoppingCart(int productId, int quantity = 1,
+    //     int redirect = 0)
+    // {
+    //     var cartItemsCount = await _unitOfWork.CartRepository.AddItem(productId, quantity);
+    //     if (redirect == 0)
+    //         return Ok(cartItemsCount);
+    //
+    //     return RedirectToAction("Index");
+    // }
+    //
+    // public async Task<IActionResult> RemoveFromShoppingCart(int productId)
+    // {
+    //     var cartItemsCount = await _unitOfWork.CartRepository.RemoveItem(productId);
+    //
+    //     return RedirectToAction("Index");
+    // }
+    //
+    // public IActionResult GetTotalItemsCount()
+    // {
+    //     var count = _unitOfWork.CartRepository.GetCartItemsCount();
+    //     return Ok(count);
+    // }
 }
