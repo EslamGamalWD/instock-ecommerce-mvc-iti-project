@@ -89,7 +89,7 @@ namespace InStockWebAppPL.Controllers
         } 
         #endregion
 
-        public async Task<IActionResult> SignOut ()
+        public async Task<IActionResult> Logout()
         {
           await  _signInManager.SignOutAsync();
 
