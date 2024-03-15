@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="~/Customer/css/custom.css">
     <!-- Favicon-->
     <link rel="shortcut icon" href="~/favicon.ico">
-    @RenderSection("CSS",required:false)
+    @await RenderSectionAsync("CSS",required:false)
 </head>
 <body>
 <partial name="~/Views/Shared/Customer/_Header.cshtml"/>

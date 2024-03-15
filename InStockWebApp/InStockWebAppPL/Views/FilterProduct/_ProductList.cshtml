@@ -16,9 +16,18 @@
                                 <i class="far fa-heart"></i>
                             </a>
                         </li>
-                        <li class="list-inline-item m-0 p-0">
-                            <a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="Details" asp-route-productId="@product.Id">Add to cart</a>
-                        </li>
+                        @if (product.InStock > 0)
+                        {
+                            <li class="list-inline-item m-0 p-0">
+                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id" class="btn btn-sm btn-dark">Add to cart</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-inline-item m-0 p-0">
+                                <a href="#" class="btn btn-sm btn-dark" style="pointer-events: none">Add to cart</a>
+                            </li>
+                        }
                         <li class="list-inline-item mr-0">
                             <a class="btn btn-sm btn-outline-dark" data-bs-toggle="modal">
                                 <i class="fas fa-expand"></i>
@@ -27,10 +36,20 @@
                     </ul>
                 </div>
             </div>
-            <h6>
-                <a class="reset-anchor" href="detail.html">@product.Name</a>
-            </h6>
-            <p class="small text-muted">@product.Price</p>
+            <div>
+                @if (product.InStock > 0)
+                {
+                    <span class="d-inline-block rounded-pill mb-2" style="background-color: #DCB14A; font-size: 12px; padding: 2px 12px; font-weight: bold">In Stock</span>
+                }
+                else
+                {
+                    <span class="d-inline-block rounded-pill mb-2" style="background-color: #FBCEB1; font-size: 12px; padding: 2px 12px; font-weight: bold">Out Of Stock</span>
+                }
+                <h6>
+                    <a class="reset-anchor" href="detail.html">@product.Name</a>
+                </h6>
+                <p class="small text-muted">$@product.Price</p>
+            </div>
         </div>
     </div>
 }

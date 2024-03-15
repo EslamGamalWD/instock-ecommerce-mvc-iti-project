@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InStockWebAppBLL.Models.CartVM;
 using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppBLL.Models.ProductVM;
@@ -21,6 +22,7 @@ namespace InStockWebAppBLL.Mapper
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
             CreateMap<SubCategory, SubcategoryVM>();
             CreateMap<SubcategoryVM, SubCategory>();
+            CreateMap<Cart, CartVM>();
 
 
             CreateMap<User, GetAllUserVM>()

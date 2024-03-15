@@ -146,5 +146,9 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 return false;
             }
         }
+
+        public async Task<Product?> GetById(int id) =>
+            await _applicationDbContext.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
     }
 }
