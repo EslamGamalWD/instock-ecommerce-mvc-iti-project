@@ -15,6 +15,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InStockWebAppDAL.Context;
+using System.Collections;
+using System.Diagnostics;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
 {
@@ -85,9 +87,6 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             return UsersVM;
         }
 
-
-
-
         public async Task<GetUserByIdVM> GetUserById(string id)
         {
             var users = await db.Users.Where(a=>a.Id==id).Include(user => user.City)
@@ -136,6 +135,13 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     var roleResult = await userManager.AddToRoleAsync(user, role);
                     return user;
                 }
+                else
+                {
+                    foreach(var error in result.Errors)
+                    {
+                        Console.WriteLine(error);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -143,6 +149,16 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             }
 
             return null;
+        }
+
+        public async Task<User> FindByEmailAsync(string email)
+        {
+            return await userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<bool> CheckPasswordAsync(User user, string password)
+        {
+            return await userManager.CheckPasswordAsync(user, password);
         }
         #endregion
 

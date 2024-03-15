@@ -28,8 +28,8 @@ namespace InStockWebAppPL.Controllers
         {
             return View();
         }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model)
         {
             if (ModelState.IsValid)
@@ -41,7 +41,7 @@ namespace InStockWebAppPL.Controllers
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    return RedirectToAction("Index", "Category");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -51,6 +51,52 @@ namespace InStockWebAppPL.Controllers
 
             return View(model);
         }
+
+        #region Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginVM loginVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userRepository.FindByEmailAsync(loginVM.Email);
+                if (user != null && await _userRepository.CheckPasswordAsync(user, loginVM.Password))
+                {
+
+                    if (user.UserType == UserType.Customer)
+                    {
+                        await _signInManager.SignInAsync(user, loginVM.RememberMe);
+                        return RedirectToAction("Index", "Home");
+                    }
+
+
+                    else if (user.UserType == UserType.Admin)
+                    {
+                        await _signInManager.SignInAsync(user, loginVM.RememberMe);
+                        return RedirectToAction("Index", "Discount");
+                    }
+
+
+                }
+                ModelState.AddModelError("", "Invalid email or password.");
+            }
+            return View(loginVM);
+        } 
+        #endregion
+
+        public async Task<IActionResult> SignOut ()
+        {
+          await  _signInManager.SignOutAsync();
+
+            return RedirectToAction("Login", "Account");
+        }
+
+    
 
         [AllowAnonymous]
         [HttpGet]
