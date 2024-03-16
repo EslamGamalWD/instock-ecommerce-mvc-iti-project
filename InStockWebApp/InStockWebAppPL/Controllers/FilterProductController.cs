@@ -37,27 +37,30 @@ namespace InStockWebAppPL.Controllers
                 .Map<IEnumerable<SubcategoryVM>>
                 (await subCategoryRepository.GetAll());
 
-
-            ViewBag.TotalPages = await filter.totalCount();
-
-            ViewBag.CurrentPage= (int)Math.Ceiling(await filter.totalCount() / (double)pageSize);
-
             var products = await filter.GetProductsForPage(1, pageSize);
+            var totalcount = await filter.totalCount();
+            ViewBag.TotalPages = totalcount;
+
+            ViewBag.CurrentPage= 1;
+
+            ViewBag.ProductCount =totalcount;
 
             return View(products);
         }
 
       
         [HttpGet]
-        public async Task< IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000)
+        public async Task< IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000,string search=null)
         {
 
+            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
 
             var totalProducts = await filter.totalCount();
             var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice);
+            //ViewBag.CurrentPage = page;
+            //ViewBag.TotalPages = totalPages;
+            
+            //ViewBag.ProductCount =productList.ToList().Count();
             return PartialView("_ProductList", productList);
         }
 

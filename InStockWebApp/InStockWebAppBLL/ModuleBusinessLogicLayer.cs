@@ -27,7 +27,7 @@ namespace InStockWebAppBLL
 
             services.AddScoped<IFilterRepository, FilterRepository>();
 
-
+            services.AddScoped<IItemRepository, ItemRepository>();
             return services;
         }
     }

@@ -22,11 +22,22 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             this.mapper=mapper;
         }
 
-        public async Task<IEnumerable<ProductFilterVM>> GetByFilter(int page, int pageSize, string sortOption, int? categoryId, string subcategoryIds, int minPrice, int maxPrice)
+        public async Task<IEnumerable<ProductFilterVM>> GetByFilter(int page, int pageSize, string sortOption, int? categoryId, string subcategoryIds, int minPrice, int maxPrice,string search)
         {
 
-            var products = applicationDbContext.Products.AsQueryable();
-
+            var products = applicationDbContext.Products.Include(a=>a.Images).AsQueryable();
+            if(search !=null)
+            {
+                if (decimal.TryParse(search, out decimal price))
+                {
+                    products = products.Where(p => p.Price == price ||p.Name.Contains(search));
+                }
+                else
+                {
+                    products = products.Where(p => p.Name.Contains(search) );
+                }
+            }
+            var test = products.ToList();
             if (categoryId != null)
             {
                 products = products.Where(p => p.SubCategory.CategoryId == categoryId);

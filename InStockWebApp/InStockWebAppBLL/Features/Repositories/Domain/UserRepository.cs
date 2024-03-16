@@ -15,6 +15,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InStockWebAppDAL.Context;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Hangfire;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
 {
@@ -25,14 +28,18 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDbContext db;
+        private readonly IEmailSender emailSender;
+        private readonly IWebHostEnvironment webHostEnvironmen;
         private readonly IMapper mapper;
 
         #endregion
 
         #region Ctor
-        public UserRepository(ApplicationDbContext db, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UserRepository(ApplicationDbContext db, IEmailSender emailSender, IWebHostEnvironment webHostEnvironmen, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.db=db;
+            this.emailSender=emailSender;
+            this.webHostEnvironmen=webHostEnvironmen;
             this.mapper=mapper;
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -71,6 +78,25 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.IsDeleted = !user.IsDeleted;
                 user.ModifiedAt = DateTime.Now;
                 await db.SaveChangesAsync();
+
+                if(user.IsDeleted)
+                {
+                    #region send Email
+                    
+                    var filePath = $"{webHostEnvironmen.WebRootPath}/Account/Tempelet/htmlpage.html";
+                    StreamReader str = new StreamReader(filePath);
+                    var body = str.ReadToEnd();
+                    str.Close();
+                    body = body.Replace("[Header]", $"No Welcom ya {user.FirstName} {user.LastName}  In Instock Shopping")
+                        .Replace("[Body]", "You have violated privacy and been banned ");
+                       
+                       
+                    //Use HangFire
+                    BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(user.Email, "Block", body));
+
+                    #endregion
+                }
+
                 return DateTime.Now;
             }
             return null;

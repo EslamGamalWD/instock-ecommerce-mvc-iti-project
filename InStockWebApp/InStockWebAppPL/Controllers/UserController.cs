@@ -130,6 +130,7 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> ToggleStatus(string id)
         {
             var toggleDateTime = await userRepo.ToggleStatus(id);
+
             if (toggleDateTime is { })
                 return Ok(toggleDateTime);
             return NotFound();

@@ -1,6 +1,6 @@
 ﻿
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
+//using CloudinaryDotNet;
+//using CloudinaryDotNet.Actions;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppPL.Settings;
@@ -17,7 +17,7 @@ namespace InStockWebAppPL.Controllers
         private readonly ISubCategoryRepository _subCategoryRepository;
         //private readonly IDiscountRepository _discountRepository;
         private readonly IProductImageRepository _imageRepository;
-        private readonly Cloudinary _cloudinary;
+        //private readonly Cloudinary _cloudinary;
         
 
         public ProductController(IProductRepository productRepository,
@@ -26,13 +26,13 @@ namespace InStockWebAppPL.Controllers
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
-            Account account = new()
-            {
-                Cloud=cloudinary.Value.Cloud,
-                ApiKey = cloudinary.Value.ApiKey,
-                ApiSecret = cloudinary.Value.ApiSecret
-            };
-            _cloudinary = new Cloudinary(account);
+            //Account account = new()
+            //{
+            //    Cloud=cloudinary.Value.Cloud,
+            //    ApiKey = cloudinary.Value.ApiKey,
+            //    ApiSecret = cloudinary.Value.ApiSecret
+            //};
+            //_cloudinary = new Cloudinary(account);
         }
 
         // GET: ProductController
