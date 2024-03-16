@@ -1,8 +1,15 @@
-@model dynamic
+@using InStockWebAppDAL.Entities
+@model CartVM
 
 @{
     ViewBag.Title = "InStock | Shopping Cart";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+
+    List<Item> items = [];
+    if (Model.Items.Count() > 0)
+    {
+        items = Model.Items.ToList();
+    }
 }
 
 <div class="container">
@@ -17,7 +24,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-lg-end mb-0 px-0 bg-light">
                             <li class="breadcrumb-item">
-                                <a class="text-dark" href="index.html">Home</a>
+                                <a class="text-dark" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">Cart</li>
                         </ol>
@@ -53,45 +60,60 @@
                         </tr>
                         </thead>
                         <tbody class="border-0">
-                        <tr>
-                            <td class="ps-0 py-3 border-light" scope="row">
-                                <div class="d-flex align-items-center">
-                                    <a class="reset-anchor d-block animsition-link" href="detail.html">
-                                        <img src="img/product-detail-3.jpg" alt="..." width="70"/>
-                                    </a>
-                                    <div class="ms-3">
-                                        <strong class="h6">
-                                            <a class="reset-anchor animsition-link" href="detail.html">Red digital smartwatch</a>
-                                        </strong>
+                        @for (var i = 0; i < items.Count; i++)
+                        {
+                            @* @items[i].Product.Images[0].ImagePath *@
+                            <tr>
+                                <td class="ps-0 py-3 border-light" scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <a class="reset-anchor d-block animsition-link" href="detail.html">
+                                            <img src="" alt="..." width="70"/>
+                                        </a>
+                                        <div class="ms-3">
+                                            <strong class="h6">
+                                                <a class="reset-anchor animsition-link" href="">@items[i].Product.Name</a>
+                                            </strong>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="p-3 align-middle border-light">
-                                <p class="mb-0 small">$250</p>
-                            </td>
-                            <td class="p-3 align-middle border-light">
-                                <div class="border d-flex align-items-center justify-content-between px-3">
-                                    <span class="small text-uppercase text-gray headings-font-family">Quantity</span>
-                                    <div class="quantity">
-                                        <button class="dec-btn p-0">
-                                            <i class="fas fa-caret-left"></i>
-                                        </button>
-                                        <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="1"/>
-                                        <button class="inc-btn p-0">
-                                            <i class="fas fa-caret-right"></i>
-                                        </button>
+                                </td>
+                                <td class="p-3 align-middle border-light">
+                                    <p class="mb-0 small">$@items[i].Product.Price</p>
+                                </td>
+                                <td class="p-3 align-middle border-light">
+                                    <div class="border d-flex align-items-center justify-content-between px-3">
+                                        <span class="small text-uppercase text-gray headings-font-family">Quantity</span>
+                                        <form method="post" class="quantity">
+                                            <button class="dec-btn p-0" asp-controller="Cart" asp-action="DecreaseItemCount" asp-route-itemId="@items[i].Id">
+                                                <i class="fas fa-caret-left"></i>
+                                            </button>
+                                            <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" asp-for="Items.ToList()[i].Quantity"/>
+                                            @if (items[i].Product.InStock > items[i].Quantity)
+                                            {
+                                                <button type="submit" asp-controller="Cart" asp-action="IncreaseItemCount" asp-route-itemId="@items[i].Id" class="inc-btn p-0">
+                                                    <i class="fas fa-caret-right"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" asp-controller="Cart" asp-action="IncreaseItemCount" asp-route-itemId="@items[i].Id" class="inc-btn p-0" disabled>
+                                                    <i class="fas fa-caret-right"></i>
+                                                </button>
+                                            }
+                                        </form>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="p-3 align-middle border-light">
-                                <p class="mb-0 small">$250</p>
-                            </td>
-                            <td class="p-3 align-middle border-light">
-                                <a class="reset-anchor" href="#!">
-                                    <i class="fas fa-trash-alt small text-muted"></i>
-                                </a>
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="p-3 align-middle border-light">
+                                    <p class="mb-0 small">$@items[i].TotalPrice</p>
+                                </td>
+                                <td class="p-3 align-middle border-light">
+                                    <form method="post">
+                                        <button type="submit" asp-controller="Cart" asp-action="DeleteItem" asp-route-itemId="@items[i].Id" class="reset-anchor" style="border: none; background-color: #fff;">
+                                            <i class="fas fa-trash-alt small text-muted"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -99,7 +121,7 @@
                 <div class="bg-light px-4 py-3">
                     <div class="row align-items-center text-center">
                         <div class="col-md-6 mb-3 mb-md-0 text-md-start">
-                            <a class="btn btn-link p-0 text-dark btn-sm" href="shop.html"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a>
+                            <a class="btn btn-link p-0 text-dark btn-sm" asp-controller="FilterProduct" asp-action="Index"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a>
                         </div>
                         <div class="col-md-6 text-md-end">
                             <a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a>
@@ -114,11 +136,11 @@
                         <h5 class="text-uppercase mb-4">Cart total</h5>
                         <ul class="list-unstyled mb-0">
                             <li class="d-flex align-items-center justify-content-between">
-                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span>
+                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$@Model.TotalPrice</span>
                             </li>
                             <li class="border-bottom my-2"></li>
                             <li class="d-flex align-items-center justify-content-between mb-4">
-                                <strong class="text-uppercase small font-weight-bold">Total</strong><span>$250</span>
+                                <strong class="text-uppercase small font-weight-bold">Total</strong><span>$@Model.TotalPrice</span>
                             </li>
                             <li>
                                 <form action="#">

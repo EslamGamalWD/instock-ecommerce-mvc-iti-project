@@ -14,11 +14,13 @@ public class UnitOfWork : IUnitOfWork
     public IDiscountRepository DiscountRepository { get; }
     public ICartRepository CartRepository { get; }
     public IItemRepository ItemRepository { get; }
+    public IUserRepository UserRepository { get; }
 
     public UnitOfWork(ApplicationDbContext applicationDbContext,
         ICategoryRepository categoryRepository, ISubCategoryRepository subcategoryRepository,
         ICartRepository cartRepository, IItemRepository itemRepository,
-        IProductRepository productRepository, IDiscountRepository discountRepository)
+        IProductRepository productRepository, IDiscountRepository discountRepository,
+        IUserRepository userRepository)
 
     {
         _applicationDbContext = applicationDbContext;
@@ -26,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
         SubcategoryRepository = subcategoryRepository;
         ProductRepository = productRepository;
         DiscountRepository = discountRepository;
+        UserRepository = userRepository;
         CartRepository = cartRepository;
         ItemRepository = itemRepository;
     }

@@ -9,7 +9,8 @@ namespace InStockWebAppBLL
 {
     public static class ModuleBusinessLogicLayer
     {
-        public static IServiceCollection AddBusinessLogicLayerDependencies(this IServiceCollection services)
+        public static IServiceCollection AddBusinessLogicLayerDependencies(
+            this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
@@ -21,12 +22,19 @@ namespace InStockWebAppBLL
             services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
-
+            
             services.AddScoped<ICartRepository, CartRepository>();
 
 
             services.AddScoped<IFilterRepository, FilterRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             return services;
         }

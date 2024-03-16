@@ -7,6 +7,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
     public interface IProductRepository
     {
         Task<IEnumerable<GetProductsVM>> GetAll();
+        Task<Product?> GetById(int id);
         Task<int> Add(AlterProductVM entityVM);
 
         Task<bool> Update(int? id, AlterProductVM entityVM);

@@ -47,7 +47,25 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var DBProduct=await _applicationDbContext.Products
                     .Include(P => P.SubCategory).Include(P => P.Discount).Include(P=>P.Images).FirstOrDefaultAsync(P=>P.Id==id);
-                return _mapper.Map<GetProductsVM>(DBProduct);
+                GetProductsVM getProductsVM = new GetProductsVM()
+                {
+                    Id = DBProduct.Id,
+                    Name = DBProduct.Name,
+                    Description = DBProduct.Description,
+                    Price = DBProduct.Price,
+                    InStock=DBProduct.InStock,
+                    AvgRating = DBProduct.AvgRating,
+                    CreatedAt = DBProduct.CreatedAt,
+                    IsDeleted = DBProduct.IsDeleted,
+                    SubCategoryName = DBProduct.SubCategory.Name,
+                    DiscountName = DBProduct.Discount.Name
+                };
+                foreach(var img in DBProduct.Images)
+                {
+                    getProductsVM.ImagePaths.Add( img.ImagePath);
+                }
+                //return _mapper.Map<GetProductsVM>(DBProduct);
+                return getProductsVM;
 
             }
             catch (Exception)
@@ -158,5 +176,9 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
             return products;
         }
+
+        public async Task<Product?> GetById(int id) =>
+            await _applicationDbContext.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
     }
 }

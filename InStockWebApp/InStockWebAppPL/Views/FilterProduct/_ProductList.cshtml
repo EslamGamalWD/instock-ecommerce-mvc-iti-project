@@ -1,4 +1,4 @@
-﻿@model List<ProductFilterVM>
+﻿@model IEnumerable<ProductFilterVM>
 
 @foreach (var product in Model)
 {
@@ -6,17 +6,50 @@
         <div class="product text-center">
             <div class="mb-3 position-relative">
                 <div class="badge text-white bg-primary">New</div>
-                <a class="d-block" href="detail.html"><img class="img-fluid w-100" src="https://media.istockphoto.com/id/962915564/photo/10-oclock-portrait-of-charming-pretty-positive-cheerful-woman-closing-covering-head-face-with.jpg?s=612x612&w=0&k=20&c=GjVtZM_9MqN1Ytvg6za_cvJN4UUL99-eiPU6wyUm7_k=" alt="@product.Name"></a>
+                <a class="d-block" href="detail.html">
+                    <img class="img-fluid w-100" src="https://media.istockphoto.com/id/962915564/photo/10-oclock-portrait-of-charming-pretty-positive-cheerful-woman-closing-covering-head-face-with.jpg?s=612x612&w=0&k=20&c=GjVtZM_9MqN1Ytvg6za_cvJN4UUL99-eiPU6wyUm7_k=" alt="@product.Name">
+                </a>
                 <div class="product-overlay">
                     <ul class="mb-0 list-inline">
-                        <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" @* asp-action="Card" asp-controller="Buy" asp-route-id="@product.Id" *@><i class="far fa-heart"></i></a></li>
-                        <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
-                        <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" data-bs-toggle="modal" ><i class="fas fa-expand"></i></a></li>
+                        <li class="list-inline-item m-0 p-0">
+                            <a class="btn btn-sm btn-outline-dark" @* asp-action="Card" asp-controller="Buy" asp-route-id="@product.Id" *@>
+                                <i class="far fa-heart"></i>
+                            </a>
+                        </li>
+                        @if (product.InStock > 0)
+                        {
+                            <li class="list-inline-item m-0 p-0">
+                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id" class="btn btn-sm btn-dark">Add to cart</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="list-inline-item m-0 p-0">
+                                <a href="#" class="btn btn-sm btn-dark" style="pointer-events: none">Add to cart</a>
+                            </li>
+                        }
+                        <li class="list-inline-item mr-0">
+                            <a class="btn btn-sm btn-outline-dark" data-bs-toggle="modal">
+                                <i class="fas fa-expand"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <h6><a class="reset-anchor" href="detail.html">@product.Name</a></h6>
-            <p class="small text-muted">@product.Price</p>
+            <div>
+                @if (product.InStock > 0)
+                {
+                    <span class="d-inline-block rounded-pill mb-2" style="background-color: #DCB14A; font-size: 12px; padding: 2px 12px; font-weight: bold">In Stock</span>
+                }
+                else
+                {
+                    <span class="d-inline-block rounded-pill mb-2" style="background-color: #FBCEB1; font-size: 12px; padding: 2px 12px; font-weight: bold">Out Of Stock</span>
+                }
+                <h6>
+                    <a class="reset-anchor" href="detail.html">@product.Name</a>
+                </h6>
+                <p class="small text-muted">$@product.Price</p>
+            </div>
         </div>
     </div>
 }

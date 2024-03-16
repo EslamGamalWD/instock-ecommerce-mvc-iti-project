@@ -32,6 +32,7 @@
     <!-- Google Fonts Link For Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     @RenderSection("CSS",required:false)
+    @await RenderSectionAsync("CSS",required:false)
 </head>
 <body>
 <partial name="~/Views/Shared/Customer/_Header.cshtml"/>
@@ -41,8 +42,11 @@
 </div>
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
-    @RenderSection("Js", required: false)
-    @RenderSection("scripts", required: false)
+
+@RenderSection("Js", required: false)
+@RenderSection("scripts", required: false)
+@RenderSectionAsync("Js", required: false)
+
 <script src="~/Customer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Customer/vendor/glightbox/js/glightbox.min.js"></script>
 <script src="~/Customer/vendor/nouislider/nouislider.min.js"></script>

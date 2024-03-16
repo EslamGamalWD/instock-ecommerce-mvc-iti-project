@@ -10,7 +10,9 @@ public interface IUnitOfWork : IDisposable
     IDiscountRepository DiscountRepository { get; }
 
     ICartRepository CartRepository { get; }
+    IProductRepository ProductRepository { get; }
     IItemRepository ItemRepository { get; }
+    IUserRepository UserRepository { get; }
 
 
     Task Save();

@@ -8,6 +8,7 @@ namespace InStockWebAppBLL.Models.ProductVM
     string Description,
     decimal Price,
     int InStock,
+    decimal AvgRating,
     List<string> ImagePaths,
     DateTime CreatedAt,
     bool IsDeleted,
@@ -16,7 +17,7 @@ namespace InStockWebAppBLL.Models.ProductVM
 )
         {
             public GetProductsVM()
-                : this(0, "","", 0, 0, new List<string> { }, DateTime.MinValue,false, "", "") { }
+                : this(0, "","", 0, 0,0, new List<string> { }, DateTime.MinValue,false, "", "") { }
         }
 
 }

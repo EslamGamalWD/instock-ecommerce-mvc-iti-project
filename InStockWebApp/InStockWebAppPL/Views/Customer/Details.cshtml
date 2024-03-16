@@ -1,0 +1,110 @@
+﻿@model GetUserByIdVM
+@{
+    ViewData["Title"] = "Customer Profile";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+
+  //  string imgSrc = null;
+  //  if (Model.Photo != null && Model.Photo.Length > 0)
+  //  {
+       // var base64String = Convert.ToBase64String(Model.Photo);
+        //imgSrc = $"data:image/jpeg;base64,{base64String}";
+   // }
+
+}
+@section CSS {
+    <style>
+        .cardProfile {
+            justify-content: center;
+            display: flex;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1.1rem; 
+        }
+
+    </style>
+
+}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card cardProfile car-transparent">
+            <div class="card-body p-0">
+                <div class="profile-image ">
+                    <img src="@Model.Photo" class="img-fluid rounded w-100" alt="profile-image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card card-block card-stretch card-height">
+            <div class="card-body">
+                <div class="d-flex align-items-center ">
+                    <div class="profile-img ">
+                        <img src="@Model.Photo" class="img-fluid rounded avatar-110" alt="profile-image">
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="mb-1">@Model.FirstName @Model.LastName</h4>
+                    
+
+                    </div>
+                </div>
+
+                <ul class="list-inline p-0 ">
+                    <li class="m-2">
+                        <div class="d-flex align-items-center">
+                            <svg class="svg-icon mr-3" height="16" width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <label for="address">Address : </label>
+                            <p class="mb-0" id="address"> @Model.CityName  ,  @Model.StateName</p>
+                        </div>
+                    </li>
+
+                    <li class="m-2">
+                        <div class="d-flex align-items-center">
+                            <svg class="svg-icon mr-3" height="16" width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <label for="Mobile">PhoneNumber : </label>
+                            <p class="mb-0" id="Mobile">@Model.PhoneNumber</p>
+                        </div>
+                    </li>
+                    <li class="m-2">
+                        <div class="d-flex align-items-center">
+                            <svg class="svg-icon mr-3" height="16" width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <circle cx="12" cy="7" r="4" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 21v-1a6 6 0 0112 0v1M12 11v9" />
+                            </svg>
+                            <label for="Gender">Gender : </label> 
+                            <p class="mb-0" id="Gender">@Model.Gender</p>
+                        </div>
+                    </li>
+                    <li class="m-2">
+                        <div class="d-flex align-items-center">
+                            <svg class="svg-icon mr-3" height="16" width="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <label for="Email">E-mail Address: </label>
+                            <p class="mb-0" id="Email">@Model.Email</p>
+                        </div>
+                    </li>
+
+                   
+
+
+                 
+
+                </ul>
+
+                <center>
+                    <a class="btn btn-success w-57" asp-action="Index" asp-controller="Edit">Edit</a>
+                    <a class="btn btn-success w-57" asp-action="Index" asp-controller="Home">return</a>
+
+                </center>
+            </div>
+        </div>
+    </div>
+</div>

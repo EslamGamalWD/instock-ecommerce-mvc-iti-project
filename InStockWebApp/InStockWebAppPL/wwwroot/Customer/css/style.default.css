@@ -2583,7 +2583,7 @@ textarea.form-control-lg {
   color: transparent;
 }
 
-.form-floating > .form-control:not(:-moz-placeholder-shown) {
+.form-floating > .form-control:not(:freset-moz-placeholder-shown) {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
@@ -12036,6 +12036,8 @@ a.text-hover-dark:focus, a.text-hover-dark:hover {
 
 .reset-anchor {
   color: inherit;
+  border: none;
+  background-color: #fff;
   transition: all 0.3s;
 }
 

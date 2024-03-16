@@ -2,6 +2,8 @@
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppDAL.Entities;
+﻿using System.Security.Claims;
+using InStockWebAppBLL.Features.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers;
@@ -11,37 +13,31 @@ public class HomeController : Controller
     private readonly ICategoryRepository _categoryRepository;
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly IProductRepository _productRepository;
+	private readonly IUnitOfWork _unitOfWork;
 
-    public HomeController(ICategoryRepository categoryRepository,
+	public HomeController(ICategoryRepository categoryRepository,
                           ISubCategoryRepository subCategoryRepository,
-                          IProductRepository productRepository)
+                          IProductRepository productRepository,
+						  IUnitOfWork unitOfWork)
     {
         _categoryRepository = categoryRepository;
         _subCategoryRepository = subCategoryRepository;
         _productRepository = productRepository;
-    }
+		_unitOfWork = unitOfWork;
+	}
 
-    //public async Task<IActionResult> Index()
-    //{
-    //    var categoriesWithSubcategories = await _categoryRepository.GetAll();
-
-    //    foreach (var category in categoriesWithSubcategories)
-    //    {
-    //        category.SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id);
-
-    //        foreach (var subcategory in category.SubCategories)
-    //        {
-    //            subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
-    //        }
-    //    }
-
-    //    return View(categoriesWithSubcategories);
-    //}
-
-    public async Task<IActionResult> Index()
+	public async Task<IActionResult> Index()
     {
-        var categories = await _categoryRepository.GetAll();
+		var claimsIdentity = (ClaimsIdentity)User.Identity;
+		var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+		if (claim is not null)
+		{
+			var userId = claim.Value;
+			var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+			HttpContext.Session.SetInt32("shoppingCartSession", count);
+		}
 
+		var categories = await _categoryRepository.GetAll();
         var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
 
         foreach (var category in categories)
@@ -81,7 +77,7 @@ public class HomeController : Controller
             categoriesWithProductsVMs.Add(categoryWithProductsVM);
         }
 
-        return View(categoriesWithProductsVMs);
+		return View(categoriesWithProductsVMs);
     }
 
     public async Task<IActionResult> Test()
