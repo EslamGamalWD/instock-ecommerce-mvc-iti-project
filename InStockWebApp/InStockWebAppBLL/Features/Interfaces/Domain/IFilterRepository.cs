@@ -12,6 +12,6 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
          Task<IEnumerable<ProductFilterVM>> GetProductsForPage(int page, int pageSize);
         Task<int> totalCount();
 
-        Task<IEnumerable<ProductFilterVM>> GetByFilter(int page, int pageSize, string sortOption , int? categoryId , string subcategoryIds , int minPrice , int maxPrice );
+        Task<IEnumerable<ProductFilterVM>> GetByFilter(int page, int pageSize, string sortOption , int? categoryId , string subcategoryIds , int minPrice , int maxPrice,string search);
     }
 }

@@ -7,7 +7,7 @@ using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
-
+using InStockWebAppPL.Hubs;
 using InStockWebAppPL.Settings;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -27,12 +27,12 @@ builder.Services.AddScoped<ISubCategoryRepository, SubcategoryRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IItemRepository,ItemRepository>();
 builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
-
+builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
 
 builder.Services.AddControllersWithViews();
-builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
+//builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -91,6 +91,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
 
+
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -112,6 +115,11 @@ app.UseAuthorization();
 app.UseHangfireDashboard("/HangFire");
 app.MapControllerRoute(
     name: "default",
+
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+    pattern: "{controller=FilterProduct}/{action=Index}/{id?}");
+app.MapHub<ChatHub>("/Hubs/ChatHub");
 
 app.Run();
