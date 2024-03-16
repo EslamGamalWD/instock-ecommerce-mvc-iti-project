@@ -1,3 +1,7 @@
+﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Features.Repositories.Domain;
+using InStockWebAppBLL.Models.HomeVM;
+using InStockWebAppDAL.Entities;
 ﻿using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -6,25 +10,78 @@ namespace InStockWebAppPL.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ICategoryRepository _categoryRepository;
+    private readonly ISubCategoryRepository _subCategoryRepository;
+    private readonly IProductRepository _productRepository;
+	private readonly IUnitOfWork _unitOfWork;
 
-    public HomeController(IUnitOfWork unitOfWork)
+	public HomeController(ICategoryRepository categoryRepository,
+                          ISubCategoryRepository subCategoryRepository,
+                          IProductRepository productRepository,
+						  IUnitOfWork unitOfWork)
     {
-        _unitOfWork = unitOfWork;
-    }
+        _categoryRepository = categoryRepository;
+        _subCategoryRepository = subCategoryRepository;
+        _productRepository = productRepository;
+		_unitOfWork = unitOfWork;
+	}
 
-    public async Task<IActionResult> Index()
+	public async Task<IActionResult> Index()
     {
-        var claimsIdentity = (ClaimsIdentity)User.Identity;
-        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
-        if (claim is not null)
+		var claimsIdentity = (ClaimsIdentity)User.Identity;
+		var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+		if (claim is not null)
+		{
+			var userId = claim.Value;
+			var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+			HttpContext.Session.SetInt32("shoppingCartSession", count);
+		}
+
+		var categories = await _categoryRepository.GetAll();
+        var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
+
+        foreach (var category in categories)
         {
-            var userId = claim.Value;
-            var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
-            HttpContext.Session.SetInt32("shoppingCartSession", count);
+            if (category.IsDeleted == true) { continue; }
+
+            var categoryWithProductsVM = new CategoryWithProductsVM
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                CreatedAt = category.CreatedAt,
+                ModifiedAt = category.ModifiedAt,
+                DeletedAt = category.DeletedAt,
+                IsDeleted = category.IsDeleted,
+                SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
+            };
+
+            if (categoryWithProductsVM.SubCategories != null)
+            {
+                foreach (var subcategory in categoryWithProductsVM.SubCategories)
+                {
+                    if (subcategory.IsDeleted == true) { continue; }
+
+                    subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
+
+                    if (subcategory.Products != null)
+                    {
+                        categoryWithProductsVM.Products ??= new List<Product>();
+                        categoryWithProductsVM.Products.AddRange(subcategory.Products);
+                    }
+                }
+            }
+
+            if (categoryWithProductsVM.Products != null)
+            {
+                var rnd = new Random();
+                categoryWithProductsVM.Products = categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
+            }
+
+            categoriesWithProductsVMs.Add(categoryWithProductsVM);
         }
 
-        return View();
+		return View(categoriesWithProductsVMs);
     }
     public async Task<IActionResult> Checkout()
     {
@@ -45,8 +102,49 @@ public class HomeController : Controller
          return false;
     }
 
-    public IActionResult Test()
+    public async Task<IActionResult> Test()
     {
-        return View();
+        var categories = await _categoryRepository.GetAll();
+
+        var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
+
+        foreach (var category in categories)
+        {
+            var categoryWithProductsVM = new CategoryWithProductsVM
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                CreatedAt = category.CreatedAt,
+                ModifiedAt = category.ModifiedAt,
+                DeletedAt = category.DeletedAt,
+                IsDeleted = category.IsDeleted,
+                SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
+            };
+
+            if (categoryWithProductsVM.SubCategories != null)
+            {
+                foreach (var subcategory in categoryWithProductsVM.SubCategories)
+                {
+                    subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
+
+                    if (subcategory.Products != null)
+                    {
+                        categoryWithProductsVM.Products ??= new List<Product>();
+                        categoryWithProductsVM.Products.AddRange(subcategory.Products);
+                    }
+                }
+            }
+
+            if (categoryWithProductsVM.Products != null)
+            {
+                var rnd = new Random();
+                categoryWithProductsVM.Products = categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
+            }
+
+            categoriesWithProductsVMs.Add(categoryWithProductsVM);
+        }
+
+        return View(categoriesWithProductsVMs);
     }
 }

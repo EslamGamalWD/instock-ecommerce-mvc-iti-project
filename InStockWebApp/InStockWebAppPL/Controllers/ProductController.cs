@@ -1,5 +1,4 @@
-﻿
-using InStockWebAppBLL.Features.Interfaces.Domain;
+﻿using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
