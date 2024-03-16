@@ -294,27 +294,23 @@
                         {
                             if (count == 1)
                             {
-                                <li>
-                                    <div>
-                                        <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
-                                    </div>
-                                </li>
+                                <div>
+                                    <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                                </div>
                             }
                             else if (count == 2 && (i + 1) <= Model.Count())
                             {
-                                <li>
-                                    <div>
-                                        <a class="category-item mb-3" href="shop.html"><img class="image-item-up" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                                <div>
+                                    <a class="category-item mb-3" href="shop.html"><img class="image-item-up" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
 
-                                        @{
-                                            count++;
-                                            imgCategoryCounter++;
-                                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                                        }
+                                    @{
+                                        count++;
+                                        imgCategoryCounter++;
+                                        categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
+                                    }
 
-                                        <a class="category-item" href="shop.html"><img class="image-item-down" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
-                                    </div>
-                                </li>
+                                    <a class="category-item" href="shop.html"><img class="image-item-down" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
+                                </div>
                             }
 
                             if (count == 3)
@@ -577,7 +573,7 @@
                                         else if (product.Discount != null && product.Discount.IsActive == true)
                                         {
                                             badgeClass += "primary";
-                                            badgeText = "SALE";
+                                            badgeText = $"{product.Discount.Percentage}% SALE";
                                         }
                                         else if ((DateTime.Now - product.CreatedAt).TotalDays <= 14)
                                         {

@@ -42,6 +42,8 @@ public class HomeController : Controller
 
         foreach (var category in categories)
         {
+            if (category.IsDeleted == true) { continue; }
+
             var categoryWithProductsVM = new CategoryWithProductsVM
             {
                 Id = category.Id,
@@ -58,6 +60,8 @@ public class HomeController : Controller
             {
                 foreach (var subcategory in categoryWithProductsVM.SubCategories)
                 {
+                    if (subcategory.IsDeleted == true) { continue; }
+
                     subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
 
                     if (subcategory.Products != null)

@@ -171,7 +171,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 .Include(p => p.SubCategory)
                 .Include(p => p.Discount)
                 .Include(p => p.Images)
-                .Where(p => p.SubCategoryId == subcategoryId)
+                .Where(p => p.SubCategoryId == subcategoryId && !p.IsDeleted)
                 .ToListAsync();
 
             return products;
