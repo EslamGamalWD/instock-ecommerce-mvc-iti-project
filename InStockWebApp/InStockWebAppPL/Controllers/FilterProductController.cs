@@ -64,18 +64,17 @@ namespace InStockWebAppPL.Controllers
             var totalcount = await filter.totalCount();
             ViewBag.TotalPages = totalcount;
 
-            ViewBag.CurrentPage= 1;
+            ViewBag.CurrentPage = 1;
 
-            ViewBag.ProductCount =totalcount;
+            ViewBag.ProductCount = totalcount;
 
             return View(products);
         }
 
 
         [HttpGet]
-        public async Task< IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000,string search=null)
+        public async Task<IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000, string search = null)
         {
-
             var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
 
             var totalProducts = await filter.totalCount();
@@ -96,4 +95,4 @@ namespace InStockWebAppPL.Controllers
             return PartialView("_SubCategoryFilter", subCategory);
         }
     }
-}
+} 

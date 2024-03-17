@@ -117,9 +117,6 @@ app.MapControllerRoute(
     name: "default",
 
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
-    //pattern: "{controller=FilterProduct}/{action=Index}/{id?}");
 app.MapHub<ChatHub>("/Hubs/ChatHub");
 
 app.Run();

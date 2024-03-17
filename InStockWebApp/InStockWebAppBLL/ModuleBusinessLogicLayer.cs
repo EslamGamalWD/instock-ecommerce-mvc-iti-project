@@ -28,7 +28,7 @@ namespace InStockWebAppBLL
 
             services.AddScoped<IFilterRepository, FilterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
-
+            services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
 
             services.AddSession(options =>
             {
