@@ -33,7 +33,7 @@ namespace InStockWebAppBLL.Models.UserVM
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
         public IFormFile? image { get; set; }
-        public byte[]? Photo { get; set; }
+        public string? Photo { get; set; }
         [Required]
 
         public int CityId { get; set; }

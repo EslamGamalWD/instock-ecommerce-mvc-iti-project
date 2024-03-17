@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InStockWebAppBLL.Models.UserVM
 {
-    public record GetAllUserVM(string Id, byte[]? Photo, string FirstName, string LastName, UserType UserType, Gender Gender, string CityName, string StateName,DateTime CreatedAt, DateTime? ModifiedAt,bool IsDeleted)
+    public record GetAllUserVM(string Id, string Photo, string FirstName, string LastName, UserType UserType, Gender Gender, string CityName, string StateName,DateTime CreatedAt, DateTime? ModifiedAt,bool IsDeleted)
     {
         public GetAllUserVM() : this("",null, "", "", default, default, "", "", DateTime.MinValue, null, false) { }
     }

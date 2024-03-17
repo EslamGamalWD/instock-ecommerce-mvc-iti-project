@@ -18,7 +18,7 @@ namespace InStockWebAppDAL.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime? ModifiedAt { get; set; }
-        public byte[]? Photo { get; set; }
+        public string? Photo { get; set; }
 
         //Navigation Property
         public int CityId { get; set; }

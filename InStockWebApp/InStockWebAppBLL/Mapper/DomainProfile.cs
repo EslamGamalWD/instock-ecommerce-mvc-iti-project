@@ -10,6 +10,7 @@ using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities;
 using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity;
+using InStockWebAppBLL.Models.ReviewVM;
 
 namespace InStockWebAppBLL.Mapper
 {
@@ -93,6 +94,9 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<Product, ProductFilterVM>();
             CreateMap<ProductFilterVM, Product>();
+
+
+            CreateMap<ReviewVM, ProductReview>();
         }
     }
 }
