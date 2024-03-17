@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+}
+
+<div class="card mb-4" id="forms">
+    <div class="card-header">Forms</div>
+    <div class="card-body">
+        <form id="userForm">
+            <div class="mb-3">
+                <label class="form-label" for="firstName">First Name</label>
+                <input class="form-control" id="firstName" type="text" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="lastName">Last Name</label>
+                <input class="form-control" id="lastName" type="text" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" type="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="phone">Phone</label>
+                <input class="form-control" id="phone" type="text" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="message">Message</label>
+                <textarea class="form-control" id="message"></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section JS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- SignalR CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/Hubs/ChatHub")
+                .build();
+
+            connection.start()
+                .then(() => console.log("SignalR connection established"))
+                .catch(err => console.error("Error starting connection:", err));
+
+            $('#userForm').submit(function (event) {
+                event.preventDefault();
+
+                // Validate form fields
+                const firstName = $('#firstName').val().trim();
+                const lastName = $('#lastName').val().trim();
+                const email = $('#email').val().trim();
+                const message = $('#message').val().trim();
+                const phone = $('#phone').val().trim();
+                if (!firstName || !lastName || !email || !message) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                // Invoke server method with form data
+                connection.invoke("SendFormToAdmin", firstName, lastName, email, phone, message)
+                    .then(() => console.log("Form data sent successfully"))
+                    .catch(err => console.error("Error sending form data:", err));
+            });
+
+            connection.on("FormSubmissionFailed", function (errorMessage) {
+                console.error("Error submitting form:", errorMessage);
+                alert("An error occurred while submitting the form. Please try again later.");
+            });
+        });
+    </script>
+}

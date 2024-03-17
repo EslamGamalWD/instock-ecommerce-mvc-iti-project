@@ -39,5 +39,53 @@ namespace InStockWebAppPL.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit (string id)
+        {
+            var userData = await _userManager.GetUserAsync(HttpContext.User);
+
+            var LoggedUser = await _userRepository.GetUserById(userData.Id);
+
+           
+                var userVM = _mapper.Map<EditUserVM>(LoggedUser);
+
+                return View( userVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserVM modelVM)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+
+
+                    if (await _userRepository.Edit(modelVM))
+                    {
+                        TempData["Message"] = "Customer data has been edited successfully";
+                        return RedirectToAction("Details", "Customer");
+
+                    }
+                    else
+                    {
+                        TempData["Message"] = null;
+                        TempData["Check"] = "There is a problem editing customer details";
+                        return View("Edit", modelVM);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                TempData["Message"] = null;
+
+                return View("Edit", modelVM);
+            }
+
+            TempData["Check"] = "Check You Data inputs ";
+            TempData["Message"] = null;
+
+            return View("Edit", modelVM);
+        }
     }
 }

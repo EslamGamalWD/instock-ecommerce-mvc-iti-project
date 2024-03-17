@@ -28,6 +28,7 @@ namespace InStockWebAppBLL
 
             services.AddScoped<IFilterRepository, FilterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
 
             services.AddSession(options =>
             {
@@ -35,6 +36,9 @@ namespace InStockWebAppBLL
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+
+            services.AddScoped<IItemRepository, ItemRepository>();
 
             return services;
         }

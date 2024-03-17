@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hangfire;
 using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Helpers.ImageUploader;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -53,12 +54,13 @@ namespace InStockWebAppPL.Controllers
                     #region Image
                     if (modelVM.image != null)
                     {
+                        string photo = FilesUploader.UploadFile("ImageProfile", modelVM.image);
+                        if (photo== null)
+                            modelVM.Photo= "Men.jpg";
+                        else
+                            modelVM.Photo= photo;
 
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await modelVM.image.CopyToAsync(memoryStream);
-                            modelVM.Photo = memoryStream.ToArray();
-                        }
+
                     }
                     #endregion
 
@@ -125,6 +127,7 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> ToggleStatus(string id)
         {
             var toggleDateTime = await userRepo.ToggleStatus(id);
+
             if (toggleDateTime is { })
                 return Ok(toggleDateTime);
             return NotFound();

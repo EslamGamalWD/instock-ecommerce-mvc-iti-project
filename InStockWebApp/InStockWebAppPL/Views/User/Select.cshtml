@@ -3,12 +3,7 @@
     ViewData["Title"] = "UserProfile";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 
-    string imgSrc = null;
-    if (Model.Photo != null && Model.Photo.Length > 0)
-    {
-        var base64String = Convert.ToBase64String(Model.Photo);
-        imgSrc = $"data:image/jpeg;base64,{base64String}";
-    }
+   
 
 }
 @section CSS {
@@ -27,7 +22,7 @@
         <div class="card cardProfile car-transparent">
             <div class="card-body p-0">
                 <div class="profile-image ">
-                    <img src="@imgSrc" class="img-fluid rounded w-100" alt="profile-image">
+                    <img src="~/Files/ImageProfile/@Model.Photo" class="img-fluid rounded w-100" alt="profile-image">
                 </div>
             </div>
         </div>
@@ -37,7 +32,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center ">
                     <div class="profile-img ">
-                        <img src="@imgSrc" class="img-fluid rounded avatar-110" alt="profile-image">
+                        <img src="~/Files/ImageProfile/@Model.Photo" class="img-fluid rounded avatar-110" alt="profile-image">
                     </div>
                     <div class="ml-3">
                         <h4 class="mb-1">@Model.FirstName @Model.LastName</h4>

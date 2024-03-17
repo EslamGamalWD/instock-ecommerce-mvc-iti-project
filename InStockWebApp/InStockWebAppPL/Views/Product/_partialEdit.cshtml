@@ -32,7 +32,7 @@ else
                     @*   asp-items="ViewBag.DiscountId" *@
                     @Html.DropDownListFor(model => model.DiscountId, (SelectList)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
 
-                    <select asp-for="DiscountId" asp-items="@ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select>
+                    @* <select asp-for="DiscountId" asp-items="@ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select> *@
 
                     <span asp-validation-for="DiscountId" class="text-danger"></span>
                     <div class="help-block with-errors"></div>
@@ -101,8 +101,8 @@ else
     <div>
         <a asp-action="Index" class="btn btn-dark">Back to List</a>
     </div>
-    @section JS {
+    
+
         <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
 
-    }
 </div>

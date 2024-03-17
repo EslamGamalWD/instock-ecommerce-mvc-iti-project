@@ -1,5 +1,7 @@
 ﻿
 
+using InStockWebAppDAL.Entities;
+
 namespace InStockWebAppBLL.Models.ProductVM
 {
     public record GetProductsVM(
@@ -13,11 +15,12 @@ namespace InStockWebAppBLL.Models.ProductVM
     DateTime CreatedAt,
     bool IsDeleted,
     string SubCategoryName,
-    string DiscountName
+    string DiscountName,
+    List<ProductReview> ProductReviews
 )
         {
             public GetProductsVM()
-                : this(0, "","", 0, 0,0, new List<string> { }, DateTime.MinValue,false, "", "") { }
+                : this(0, "","", 0, 0,0, new List<string> { }, DateTime.MinValue,false, "", "",null) { }
         }
 
 }

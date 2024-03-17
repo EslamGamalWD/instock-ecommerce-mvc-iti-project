@@ -1,4 +1,10 @@
+
 ﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+﻿
+//using CloudinaryDotNet;
+//using CloudinaryDotNet.Actions;
+using InStockWebAppBLL.Features.Interfaces.Domain;
+
 using InStockWebAppBLL.Models.ProductVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -6,12 +12,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InStockWebAppPL.Controllers
 {
+    
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
         private readonly IDiscountRepository _discountRepository;
         private readonly IProductImageRepository _imageRepository;
+
+
+        //private readonly Cloudinary _cloudinary;
+
         
 
         public ProductController(IProductRepository productRepository,
@@ -20,7 +31,17 @@ namespace InStockWebAppPL.Controllers
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
+
             _discountRepository = discountRepository;
+
+            //Account account = new()
+            //{
+            //    Cloud=cloudinary.Value.Cloud,
+            //    ApiKey = cloudinary.Value.ApiKey,
+            //    ApiSecret = cloudinary.Value.ApiSecret
+            //};
+            //_cloudinary = new Cloudinary(account);
+
         }
 
         // GET: ProductController

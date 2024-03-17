@@ -10,6 +10,7 @@ using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities;
 using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity;
+using InStockWebAppBLL.Models.ReviewVM;
 
 namespace InStockWebAppBLL.Mapper
 {
@@ -62,9 +63,9 @@ namespace InStockWebAppBLL.Mapper
                 .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
 
             CreateMap<Product, GetProductsVM>()
-            .ForMember(dest => dest.ImagePaths, opt => opt.MapFrom(src => src.Images.Select(img => img.ImagePath)))
-            .ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name))
-            .ForMember(dest => dest.DiscountName, opt => opt.MapFrom(src => src.Discount.Name));
+             .ForMember(dest => dest.ImagePaths, opt => opt.MapFrom(src => src.Images.Select(img => img.ImagePath).ToList()))
+             .ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name))
+             .ForMember(dest => dest.DiscountName, opt => opt.MapFrom(src => src.Discount.Name));
             CreateMap<Product, AlterProductVM>();
             CreateMap<AlterProductVM,Product>();
 
@@ -100,6 +101,9 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<Product, ProductFilterVM>();
             CreateMap<ProductFilterVM, Product>();
+
+
+            CreateMap<ReviewVM, ProductReview>();
         }
     }
 }
