@@ -13,17 +13,20 @@ public class HomeController : Controller
     private readonly ICategoryRepository _categoryRepository;
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly IProductRepository _productRepository;
-	private readonly IUnitOfWork _unitOfWork;
+    private readonly IDiscountRepository _discountRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
 	public HomeController(ICategoryRepository categoryRepository,
                           ISubCategoryRepository subCategoryRepository,
                           IProductRepository productRepository,
-						  IUnitOfWork unitOfWork)
+                          IDiscountRepository discountRepository,
+                          IUnitOfWork unitOfWork)
     {
         _categoryRepository = categoryRepository;
         _subCategoryRepository = subCategoryRepository;
         _productRepository = productRepository;
-		_unitOfWork = unitOfWork;
+        _discountRepository = discountRepository;
+        _unitOfWork = unitOfWork;
 	}
 
 	public async Task<IActionResult> Index()
@@ -81,7 +84,14 @@ public class HomeController : Controller
             categoriesWithProductsVMs.Add(categoryWithProductsVM);
         }
 
-		return View(categoriesWithProductsVMs);
+        var allDiscounts = await _discountRepository.GetAll();
+        var discounts = allDiscounts.Where(d => d.IsActive).ToList();
+        ViewBag.Discounts = discounts;
+
+        var productsWithDiscount = await _productRepository.GetProductsWithActiveDiscount();
+        ViewBag.DiscountedProducts = productsWithDiscount;
+
+        return View(categoriesWithProductsVMs);
     }
 
     public async Task<IActionResult> Test()

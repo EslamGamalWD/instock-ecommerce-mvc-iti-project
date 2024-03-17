@@ -177,6 +177,19 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             return products;
         }
 
+        public async Task<IEnumerable<Product>> GetProductsWithActiveDiscount()
+        {
+            var productsWithDiscount = await _applicationDbContext.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Discount)
+                .Include(p => p.Images)
+                .Where(p => !p.IsDeleted && p.DiscountId != null &&
+                            !p.Discount.IsDeleted && p.Discount.IsActive)
+                .ToListAsync();
+
+            return productsWithDiscount;
+        }
+
         public async Task<Product?> GetById(int id) =>
             await _applicationDbContext.Products
                 .FirstOrDefaultAsync(p => p.Id == id);
