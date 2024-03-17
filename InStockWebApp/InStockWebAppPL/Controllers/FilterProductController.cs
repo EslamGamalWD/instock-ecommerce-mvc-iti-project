@@ -64,52 +64,40 @@ namespace InStockWebAppPL.Controllers
             var totalcount = await filter.totalCount();
             ViewBag.TotalPages = totalcount;
 
-            ViewBag.CurrentPage= 1;
+            ViewBag.CurrentPage = 1;
 
-            ViewBag.ProductCount =totalcount;
+            ViewBag.ProductCount = totalcount;
 
             return View(products);
         }
 
 
         [HttpGet]
+        public async Task<IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000, string search = null)
+            {
 
-        public async Task<IActionResult> Get(int page = 1, int pageSize = 6,
-            string sortOption = "default", int? categoryId = null, string subcategoryIds = null,
-            int minPrice = 0, int maxPrice = 1000000)
-        {
-            var totalProducts = await filter.totalCount();
-            var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId,
-                subcategoryIds, minPrice, maxPrice);
+                var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
 
-        public async Task< IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000,string search=null)
-        {
+                var totalProducts = await filter.totalCount();
+                var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
+                //ViewBag.CurrentPage = page;
+                //ViewBag.TotalPages = totalPages;
 
-            var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
+                //ViewBag.ProductCount =productList.ToList().Count();
 
-            var totalProducts = await filter.totalCount();
-            var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);
-            //ViewBag.CurrentPage = page;
-            //ViewBag.TotalPages = totalPages;
-            
-            //ViewBag.ProductCount =productList.ToList().Count();
+                return PartialView("_ProductList", productList);
+            }
 
-            return PartialView("_ProductList", productList);
+            public IActionResult Sort(string sortOption)
+            {
+                return RedirectToAction("Get", new { sortOption = sortOption });
+            }
+
+            public async Task<IActionResult> GetSubcategories(int categoryId)
+            {
+                var subCategory = mapper.Map<IEnumerable<SubcategoryVM>>(
+                    await subCategoryRepository.getAllSubCategoriesByCategoryId(categoryId));
+                return PartialView("_SubCategoryFilter", subCategory);
+            }
         }
-
-        public IActionResult Sort(string sortOption)
-        {
-            return RedirectToAction("Get", new { sortOption = sortOption });
-        }
-
-        public async Task<IActionResult> GetSubcategories(int categoryId)
-        {
-            var subCategory = mapper.Map<IEnumerable<SubcategoryVM>>(
-                await subCategoryRepository.getAllSubCategoriesByCategoryId(categoryId));
-            return PartialView("_SubCategoryFilter", subCategory);
-        }
-    }
-}
+    } 
