@@ -31,7 +31,7 @@ namespace InStockWebAppPL.Controllers
             this.filter = filter;
             this.subCategoryRepository = subCategoryRepository;
         }
-
+               
         public async Task<IActionResult> Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

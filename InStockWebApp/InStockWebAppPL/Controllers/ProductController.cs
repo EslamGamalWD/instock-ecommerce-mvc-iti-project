@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InStockWebAppPL.Controllers
 {
+    
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
