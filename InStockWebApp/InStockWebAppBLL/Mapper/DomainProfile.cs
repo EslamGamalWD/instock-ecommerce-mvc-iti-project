@@ -56,9 +56,9 @@ namespace InStockWebAppBLL.Mapper
                 .ForMember(dest => dest.StateName, opt => opt.MapFrom(src => src.City.State.Name));
 
             CreateMap<Product, GetProductsVM>()
-            .ForMember(dest => dest.ImagePaths, opt => opt.MapFrom(src => src.Images.Select(img => img.ImagePath)))
-            .ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name))
-            .ForMember(dest => dest.DiscountName, opt => opt.MapFrom(src => src.Discount.Name));
+             .ForMember(dest => dest.ImagePaths, opt => opt.MapFrom(src => src.Images.Select(img => img.ImagePath).ToList()))
+             .ForMember(dest => dest.SubCategoryName, opt => opt.MapFrom(src => src.SubCategory.Name))
+             .ForMember(dest => dest.DiscountName, opt => opt.MapFrom(src => src.Discount.Name));
             CreateMap<Product, AlterProductVM>();
             CreateMap<AlterProductVM,Product>();
 
