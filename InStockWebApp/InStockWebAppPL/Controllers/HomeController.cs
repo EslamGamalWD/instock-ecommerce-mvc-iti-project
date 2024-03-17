@@ -5,6 +5,8 @@ using InStockWebAppDAL.Entities;
 ﻿using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using InStockWebAppBLL.Models.UserVM;
+using AutoMapper;
 
 namespace InStockWebAppPL.Controllers;
 
@@ -14,16 +16,19 @@ public class HomeController : Controller
     private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly IProductRepository _productRepository;
 	private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
 	public HomeController(ICategoryRepository categoryRepository,
                           ISubCategoryRepository subCategoryRepository,
                           IProductRepository productRepository,
-						  IUnitOfWork unitOfWork)
+						  IUnitOfWork unitOfWork,
+                          IMapper mapper)
     {
         _categoryRepository = categoryRepository;
         _subCategoryRepository = subCategoryRepository;
         _productRepository = productRepository;
 		_unitOfWork = unitOfWork;
+        _mapper = mapper;
 	}
 
 	public async Task<IActionResult> Index()
@@ -92,13 +97,54 @@ public class HomeController : Controller
         //Check if the user didn't add their details before(First time To Order)
         var userId = claim.Value;
         if (await UserDataExist(userId)) return View("PaymentView");
-        return View("ChechoutDetails");
+        var user = _mapper.Map<UserCheckoutDetailsVM>(await _unitOfWork.UserRepository.GetUserById(userId));
+        return View("CheckoutDetails",user);
+    }
+    public async Task<IActionResult> Edit(UserCheckoutDetailsVM modelVM)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _unitOfWork.UserRepository.CheckoutEdit(modelVM))
+                {
+                    return View("PaymentView");
+
+                }
+                else
+                {
+                    //    TempData["Message"] = null;
+                    //    TempData["Check"] = "Error There Are Problem";
+                    return View("CheckoutDetails", modelVM);
+                }
+            }
+        }
+        catch (Exception)
+        {
+            //TempData["Message"] = null;
+
+            return View("CheckoutDetails", modelVM);
+        }
+
+        //TempData["Check"] = "Check You Data inputs ";
+        //TempData["Message"] = null;
+
+        return View("CheckoutDetails", modelVM);
     }
 
     private async Task<bool> UserDataExist(string userId)
     {
         var user= await _unitOfWork.UserRepository.GetUserById(userId);
-        if(user?.CityName != null) return true;
+        if (user != null &&
+         !string.IsNullOrEmpty(user.CityName) &&
+         !string.IsNullOrEmpty(user.StateName) &&
+         !string.IsNullOrEmpty(user.LastName) &&
+         !string.IsNullOrEmpty(user.FirstName) &&
+         !string.IsNullOrEmpty(user.PhoneNumber) &&
+         !string.IsNullOrEmpty(user.Email))
+        {
+            return true;
+        }
          return false;
     }
 

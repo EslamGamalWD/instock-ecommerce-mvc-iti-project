@@ -12,7 +12,7 @@ namespace InStockWebAppBLL.Models.UserVM
 {
     public class UserCheckoutDetailsVM
     {
-
+        public string Id { get; set; }
         [Required, MaxLength(20, ErrorMessage = "Error : Max Length 20")]
         public string FirstName { get; set; } = string.Empty;
 

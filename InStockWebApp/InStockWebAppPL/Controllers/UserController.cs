@@ -62,7 +62,7 @@ namespace InStockWebAppPL.Controllers
                     }
                     #endregion
 
-                    var Result = await userRepo.Create(modelVM);
+                    var Result = await userRepo.Create(modelVM); 
                     if (Result!=null)
                     {
                         #region UserPayment
@@ -174,6 +174,7 @@ namespace InStockWebAppPL.Controllers
 
             return View("Edit", modelVM);
         }
+
         #endregion
 
     }
