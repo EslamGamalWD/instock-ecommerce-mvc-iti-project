@@ -4,15 +4,8 @@
     <td>@Model.FirstName  @Model.LastName</td>
     <td>
         <div class="d-flex align-items-center">
-            @{
-                string imgSrc = null;
-                if (Model.Photo != null && Model.Photo.Length > 0)
-                {
-                    var base64String = Convert.ToBase64String(Model.Photo);
-                    imgSrc = $"data:image/jpeg;base64,{base64String}";
-                }
-            }
-            <img src="@imgSrc" class="img-fluid rounded avatar-50 mr-3" alt="image">
+            
+            <img src="~/Files/ImageProfile/@Model.Photo" class="img-fluid rounded avatar-50 mr-3" alt="image">
         </div>
     </td>
     <td>@Model.Gender</td>

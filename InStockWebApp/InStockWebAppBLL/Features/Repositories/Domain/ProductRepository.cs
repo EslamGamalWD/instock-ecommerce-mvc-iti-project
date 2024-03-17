@@ -45,8 +45,13 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         {
             try
             {
-                var DBProduct=await _applicationDbContext.Products
-                    .Include(P => P.SubCategory).Include(P => P.Discount).Include(P=>P.Images).FirstOrDefaultAsync(P=>P.Id==id);
+                var DBProduct = await _applicationDbContext.Products
+                 .Include(P => P.SubCategory)
+                 .Include(P => P.Discount)
+                 .Include(P => P.Images)
+                 .Include(p => p.Reviews)
+                 .ThenInclude(r => r.User)
+                 .FirstOrDefaultAsync(P => P.Id == id);
                 GetProductsVM getProductsVM = new GetProductsVM()
                 {
                     Id = DBProduct.Id,
@@ -58,7 +63,8 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     CreatedAt = DBProduct.CreatedAt,
                     IsDeleted = DBProduct.IsDeleted,
                     SubCategoryName = DBProduct.SubCategory.Name,
-                    DiscountName = DBProduct.Discount.Name
+                    DiscountName = DBProduct.Discount.Name,
+                    ProductReviews = DBProduct.Reviews
                 };
                 foreach(var img in DBProduct.Images)
                 {

@@ -15,3 +15,49 @@
 <link rel="stylesheet" href="css/custom.css">
 <!-- Favicon-->
 <link rel="shortcut icon" href="img/favicon.png">
+
+<style>
+
+    .rating {
+        display: inline-flex;
+        margin-top: -10px;
+        flex-direction: row-reverse;
+    }
+
+        .rating > input {
+            display: none
+        }
+
+        .rating > label {
+            position: relative;
+            width: 28px;
+            font-size: 36px;
+            color: gold;
+            cursor: pointer;
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0
+            }
+
+            .rating > label:hover:before,
+            .rating > label:hover ~ label:before {
+                opacity: 1 !important
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1
+        }
+
+        .rating:hover > input:checked ~ label:before {
+            opacity: 0.4
+        }
+
+    .swal-button--danger {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+        color: white !important;
+    }
+</style>

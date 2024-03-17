@@ -17,4 +17,6 @@ public class Product
     public SubCategory SubCategory { get; set; } = default!;
     public int? DiscountId { get; set; }
     public Discount Discount { get; set; } = default!;
+
+    public virtual List<ProductReview>? Reviews { get; set; }
 }

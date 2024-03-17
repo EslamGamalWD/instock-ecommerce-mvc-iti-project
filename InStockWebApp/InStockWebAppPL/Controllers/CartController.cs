@@ -5,6 +5,7 @@ using InStockWebAppBLL.Models.CartVM;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 
 namespace InStockWebAppPL.Controllers;
 
@@ -57,12 +58,11 @@ public class CartController : Controller
             }
 
             var product = await _unitOfWork.ProductRepository.GetById(productId);
-            var item = await _unitOfWork.ItemRepository
-                .GetFirstOrDefault(i =>
-                    i.ProductId == productId &&
-                    i.CartId == cart.Id &&
-                    !i.IsSelected &&
-                    !i.IsDeleted);
+            var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i =>
+                i.ProductId == productId &&
+                i.CartId == cart.Id &&
+                !i.IsSelected &&
+                !i.IsDeleted);
 
             if (item is null)
             {
@@ -80,38 +80,41 @@ public class CartController : Controller
                     await _unitOfWork.ItemRepository.Add(item);
                 }
                 else
+                {
                     return RedirectToAction("Index", "FilterProduct");
+                }
             }
             else
             {
-                quantity = item.Quantity;
-                if (product.InStock > quantity)
+                if (product.InStock >= item.Quantity + quantity)
                 {
                     item.Quantity += quantity;
                     item.TotalPrice += quantity * product.Price;
                 }
                 else
+                {
                     return RedirectToAction("Index", "FilterProduct");
+                }
             }
 
             cart.ModifiedAt = DateTime.Now;
             cart.TotalPrice = CalculateCartTotalPrice(cart);
             await _unitOfWork.Save();
-            
+
             var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
             HttpContext.Session.SetInt32("shoppingCartSession", count);
-            return RedirectToAction("Index");
+            return Json(new { success = true, cartCount = count });
         }
 
         return RedirectToAction("Index", "FilterProduct");
     }
 
+
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> IncreaseItemCount(int itemId)
+    public async Task<IActionResult> IncreaseItemCount(string itemId)
     {
         var userId = GetUserId();
-        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id == itemId &&
+        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id == int.Parse(itemId) &&
             !i.IsDeleted, i => i.Product);
 
         if (item.Quantity < item.Product.InStock)
@@ -122,16 +125,26 @@ public class CartController : Controller
             await UpdateCartTotalPrice(userId);
             await _unitOfWork.Save();
         }
+        var totalcount = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+        var product = await _unitOfWork.ProductRepository.GetById(item.ProductId);
+        var cart = await _unitOfWork.CartRepository.GetCart(userId);
 
-        return RedirectToAction("Index");
+        return Json(new { success = true, TotalPrice = item.TotalPrice, Quantity = item.Quantity, total = totalcount, instock = product.InStock, cardPrice = cart.TotalPrice });
     }
 
+
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DecreaseItemCount(int itemId)
+    public async Task<IActionResult> DecreaseItemCount(string itemId)
     {
-        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id == itemId &&
-            !i.IsDeleted, i => i.Product);
+        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(
+            i => i.Id == int.Parse(itemId) && !i.IsDeleted,
+            i => i.Product);
+
+        if (item == null)
+        {
+            return Json(new { success = false, error = "Item not found" });
+        }
+
         var userId = GetUserId();
         var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
 
@@ -150,15 +163,18 @@ public class CartController : Controller
         HttpContext.Session.SetInt32("shoppingCartSession", count - 1);
         await UpdateCartTotalPrice(userId);
         await _unitOfWork.Save();
+        var totalcount = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+        var cart = await _unitOfWork.CartRepository.GetCart(userId);
+        var product = await _unitOfWork.ProductRepository.GetById(item.ProductId);
 
-        return RedirectToAction("Index");
+
+        return Json(new { success = true, TotalPrice = item.TotalPrice, instock = product.InStock, Quantity = item.Quantity, total = totalcount, IsDeleted = item.IsDeleted, cardPrice = cart.TotalPrice });
     }
-
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteItem(int itemId)
+    //[ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteItem(string itemId)
     {
-        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id == itemId &&
+        var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id ==  int.Parse(itemId) &&
             !i.IsDeleted, i => i.Product);
         var userId = GetUserId();
         var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
@@ -172,8 +188,10 @@ public class CartController : Controller
 
         await UpdateCartTotalPrice(userId);
         await _unitOfWork.Save();
+        var cart = await _unitOfWork.CartRepository.GetCart(userId);
+        var totalcount = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
 
-        return RedirectToAction("Index");
+        return Json(new { success = true, cardPrice = cart.TotalPrice, total = totalcount });
     }
 
     private string GetUserId()
@@ -184,7 +202,7 @@ public class CartController : Controller
     }
 
     private decimal CalculateCartTotalPrice(Cart cart) =>
-        cart.Items.Where(i=>!i.IsDeleted).Sum(i => i.TotalPrice);
+        cart.Items.Where(i => !i.IsDeleted).Sum(i => i.TotalPrice);
 
     private async Task UpdateCartTotalPrice(string userId)
     {
