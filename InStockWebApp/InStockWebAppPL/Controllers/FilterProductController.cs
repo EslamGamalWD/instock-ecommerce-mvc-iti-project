@@ -76,7 +76,9 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000, string search = null)
             {
 
+
                 var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
+
 
                 var totalProducts = await filter.totalCount();
                 var totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize);

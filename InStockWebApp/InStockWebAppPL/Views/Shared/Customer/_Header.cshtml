@@ -4,8 +4,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 
-<header
-    class="header bg-white">
+<header class="header bg-white">
     <div class="container px-lg-3">
         <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0">
             <a class="navbar-brand">
@@ -36,18 +35,18 @@
                     @{
                         var count = HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession");
                     }
-                    
+
                     @if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is not null && count > 0)
                     {
                         <li class="nav-item">
 
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(@count)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small id="cartCount" class="text-gray fw-normal">(@count)</small></a>
                         </li>
                     }
                     else if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is null || count == 0)
                     {
                         <li class="nav-item">
-                            <a href="#" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(0)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small id="cartCount" class="text-gray fw-normal">(0)</small></a>
                         </li>
                     }
 
@@ -71,9 +70,12 @@
                             </a>
                         }
                     </li>
+                     @if (SignInManager.IsSignedIn(User))
+                        {
                     <li class="nav-item">
                         <a class="nav-link" href="/Customer/Details"> <i class="fas fa-user me-1 text-gray fw-normal"></i> Profile</a>
                     </li>
+                    }
 
                 </ul>
             </div>
