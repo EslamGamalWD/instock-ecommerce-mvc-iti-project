@@ -93,6 +93,24 @@ public class HomeController : Controller
 
         return View(categoriesWithProductsVMs);
     }
+    public async Task<IActionResult> Checkout()
+    {
+        var claimsIdentity = (ClaimsIdentity)User.Identity;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim is null)
+          return View("NotValidUser");
+        //Check if the user didn't add their details before(First time To Order)
+        var userId = claim.Value;
+        if (await UserDataExist(userId)) return View("PaymentView");
+        return View("ChechoutDetails");
+    }
+
+    private async Task<bool> UserDataExist(string userId)
+    {
+        var user= await _unitOfWork.UserRepository.GetUserById(userId);
+        if(user?.CityName != null) return true;
+         return false;
+    }
 
     public async Task<IActionResult> Test()
     {

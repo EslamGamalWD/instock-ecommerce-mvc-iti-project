@@ -29,12 +29,16 @@ namespace InStockWebAppBLL
             services.AddScoped<IFilterRepository, FilterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
 
+
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+
+            services.AddScoped<IItemRepository, ItemRepository>();
 
             return services;
         }
