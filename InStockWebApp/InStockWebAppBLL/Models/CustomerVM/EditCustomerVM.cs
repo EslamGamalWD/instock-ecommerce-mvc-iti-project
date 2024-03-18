@@ -23,5 +23,7 @@ namespace InStockWebAppBLL.Models.CustomerVM
         public string? Email { get; set; }
 
         public string? Photo {  get; set; }
+
+        public int CityId { get; set; }
     }
 }

@@ -70,7 +70,7 @@ public class CartController : Controller
                 {
                     item = new Item
                     {
-                        ProductId = productId,
+                        ProductId =productId,
                         Product = product,
                         Cart = cart,
                         CartId = cart.Id,

@@ -7,6 +7,7 @@ using InStockWebAppBLL.Features.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using InStockWebAppBLL.Models.UserVM;
 using AutoMapper;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace InStockWebAppPL.Controllers;
 
@@ -33,8 +34,7 @@ public class HomeController : Controller
         _mapper = mapper;
         _discountRepository = discountRepository;
 	}
-
-	public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index()
     {
 		var claimsIdentity = (ClaimsIdentity)User.Identity;
 		var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
