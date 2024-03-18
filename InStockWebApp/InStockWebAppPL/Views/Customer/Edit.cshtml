@@ -1,4 +1,6 @@
 ﻿@model EditUserVM
+@inject ICountryRepository countryrepo
+
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
@@ -36,6 +38,7 @@
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
                         <form asp-action="Edit" asp-controller="Customer" method="post">
+                            <input type="hidden" asp-for="Id" />
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First name</label>
@@ -73,7 +76,31 @@
                                     <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
 
+                                        <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
+                                            <option selected disabled>Country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
+
+                                        <select class="form-control" id="inputGroupSelectState">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
+
+                                        <select asp-for="CityId" class="form-control" id="inputGroupSelectCity">
+                                        </select>
+                                        <span asp-for="CityId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-primary" type="submit">Save changes</button>
                             <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Discard Edits</a>
                           
@@ -93,6 +120,9 @@
 </body>
 
 @section JS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <partial name="~/Views/Partials/User/_UserCreateJS.cshtml" />
-
+ 
+   
 }
