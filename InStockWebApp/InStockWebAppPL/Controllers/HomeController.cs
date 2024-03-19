@@ -33,8 +33,13 @@ public class HomeController : Controller
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountRepository = discountRepository;
+
         _unitOfWork = unitOfWork;
     }
+
+
+	}
+    [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
 
     public async Task<IActionResult> Index()
     {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using InStockWebAppBLL.Models.UserVM;
+using InStockWebAppBLL.Helpers.ImageUploader;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -59,7 +60,18 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    #region Image
+                    if (modelVM.Image != null)
+                    {
+                        string photo = FilesUploader.UploadFile("ImageProfile", modelVM.Image);
+                        if (photo== null)
+                            modelVM.Photo= "Men.jpg";
+                        else
+                            modelVM.Photo= photo;
 
+
+                    }
+                    #endregion
 
                     if (await _userRepository.Edit(modelVM))
                     {

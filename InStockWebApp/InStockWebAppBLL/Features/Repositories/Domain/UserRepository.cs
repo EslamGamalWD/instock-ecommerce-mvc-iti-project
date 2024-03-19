@@ -132,6 +132,10 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.Gender = editUserVM.Gender;
                 user.PhoneNumber = editUserVM.PhoneNumber;
                 user.ModifiedAt = DateTime.Now;
+                if(editUserVM.Photo != null)
+                {
+                    user.Photo =editUserVM.Photo;
+                }
                 if(editUserVM.CityId !=null)
                 {
                     user.CityId = editUserVM.CityId;

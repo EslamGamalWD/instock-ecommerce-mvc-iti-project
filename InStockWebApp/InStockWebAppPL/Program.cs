@@ -107,7 +107,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseResponseCaching();
 app.UseAuthentication();
 app.UseSession();
 app.UseAuthorization();
