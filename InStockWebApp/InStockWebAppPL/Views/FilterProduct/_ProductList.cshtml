@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ProductFilterVM>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 @foreach (var product in Model)
 {
@@ -6,7 +7,7 @@
         <div class="product text-center">
             <div class="mb-3 position-relative">
                 <div class="badge text-white bg-primary">New</div>
-                <a class="d-block" href="detail.html">
+                <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">
                     <img class="img-fluid w-100" src="https://media.istockphoto.com/id/962915564/photo/10-oclock-portrait-of-charming-pretty-positive-cheerful-woman-closing-covering-head-face-with.jpg?s=612x612&w=0&k=20&c=GjVtZM_9MqN1Ytvg6za_cvJN4UUL99-eiPU6wyUm7_k=" alt="@product.Name">
                 </a>
                 <div class="product-overlay">
@@ -19,13 +20,14 @@
                         @if (product.InStock > 0)
                         {
                             <li class="list-inline-item m-0 p-0">
-                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id" class="btn btn-sm btn-dark">Add to cart</a>
+                                <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
                             </li>
                         }
                         else
                         {
                             <li class="list-inline-item m-0 p-0">
-                                <a href="#" class="btn btn-sm btn-dark" style="pointer-events: none">Add to cart</a>
+
+                                <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
                             </li>
                         }
                         <li class="list-inline-item mr-0">
@@ -53,3 +55,56 @@
         </div>
     </div>
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.addToCartBtnProduct').click(function (e) {
+            e.preventDefault();
+            var quantity = 1;
+            var productId = $(this).data('item-id');
+            console.log(productId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Cart/AddToCart/',
+                data: { productId: productId, quantity: quantity },
+                success: function (response) {
+                    if (response.success) {
+
+                        Toastify({
+                            text: "item is Added",
+                            className: "info",
+                            style: {
+                                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            },
+
+                            preventDuplicates: false
+                        }).showToast();
+                        updateCartCount(response.cartCount);
+
+                    } else {
+                        Toastify({
+                            text: "Quantity cannot exceed available stock",
+                            className: "toastify-danger",
+                            style: {
+                                background: "linear-gradient(to right,#f53b5a, #eb1919)",
+                            },
+                            position: "center",
+                            preventDuplicates: false,
+                            duration: 3000
+                        }).showToast();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error adding item to cart:', error);
+                }
+            });
+        });
+
+        function updateCartCount(count) {
+            $('#cartCount').text('(' + count + ')');
+        }
+    });
+</script>

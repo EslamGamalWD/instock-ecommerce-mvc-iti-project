@@ -20,6 +20,7 @@ public class CartController : Controller
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
+    [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
     public async Task<IActionResult> Index()
     {
@@ -70,7 +71,7 @@ public class CartController : Controller
                 {
                     item = new Item
                     {
-                        ProductId = productId,
+                        ProductId =productId,
                         Product = product,
                         Cart = cart,
                         CartId = cart.Id,

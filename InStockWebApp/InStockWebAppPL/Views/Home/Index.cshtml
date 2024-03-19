@@ -298,6 +298,8 @@
             overflow: hidden;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 </head>
 <div class="page-holder">
     <!--  Modal -->
@@ -343,7 +345,7 @@
     <!-- HERO SECTION-->
     <div class="container">
         <!-- HEADER SECTION-->
-        <div class="wrapper">
+        <div class="wrapper pt-3">
             <div class="allImages">
                 @if (discounts.Count() == 0)
                 {
@@ -352,7 +354,7 @@
                             <div class="row px-4 px-lg-5">
                                 <div class="col-lg-6">
                                     <p class="text-muted small text-uppercase mb-2">NEW INSPIRATION 2024</p>
-                                    <h1 class="h2 text-uppercase mb-3">20% OFF ON NEW SEASON</h1><a class="btn btn-dark" href="shop.html">Browse collections</a>
+                                    <h1 class="h2 text-uppercase mb-3">20% OFF ON NEW SEASON</h1>
                                 </div>
                             </div>
                         </div>
@@ -368,7 +370,7 @@
                                 <div class="row px-4 px-lg-5">
                                     <div class="col-lg-6">
                                         <p class="text-muted small text-uppercase mb-2">@discount.Name</p>
-                                        <h1 class="h2 text-uppercase mb-3">@discount.Description</h1><a class="btn btn-dark" href="shop.html">Browse collections</a>
+                                        <h1 class="h2 text-uppercase mb-3">@discount.Description</h1>
                                     </div>
                                 </div>
                             </div>
@@ -378,7 +380,7 @@
             </div>
         </div>
         <!-- CATEGORIES SECTION-->
-        <section class="pt-5">
+        <section class="pt-5" id="categories">
             <header class="text-center">
                 <p class="small text-muted small text-uppercase mb-1">Carefully Created Collections</p>
                 <h2 class="h5 text-uppercase mb-4">Browse Our Categories</h2>
@@ -556,7 +558,7 @@
         <!-- DISCOUNTS SECTION-->
         @if (discountedProducts?.Count() >= 4)
         {
-            <section class="pt-5">
+            <section id="discounts" class="pt-5">
                 <header class="text-center">
                     <p class="small text-muted small text-uppercase mb-1">Handpicked Discounted Items</p>
                     <h2 class="h5 text-uppercase mb-4">Explore Our Discounts</h2>
@@ -609,7 +611,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <h6> <a class="reset-anchor" href="detail.html">@product.Name</a></h6>
+                                        <h6> <a class="reset-anchor" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">@product.Name</a></h6>
                                         <p class="small text-muted">
                                             @if (priceAfterDiscount != null)
                                             {
@@ -719,7 +721,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <h6> <a class="reset-anchor" href="detail.html">@product.Name</a></h6>
+                                <h6> <a class="reset-anchor" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">@product.Name</a></h6>
                                 <p class="small text-muted">
                                     @if (priceAfterDiscount != null && product.InStock != 0 && product.Discount != null && product.Discount.IsActive == true && product.Discount.Percentage != null)
                                     {
@@ -816,12 +818,15 @@
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
                                             <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                            @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
+                                            <li class="list-inline-item m-0 p-0">
+                                                <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
+                                            </li>
                                             <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id" ><i class="fas fa-expand"></i></a></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <h6> <a class="reset-anchor" href="detail.html">@product.Name</a></h6>
+                                <h6> <a class="reset-anchor" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">@product.Name</a></h6>
                                 <p class="small text-muted">
                                     @if (priceAfterDiscount != null && product.InStock != 0 && product.Discount != null && product.Discount.IsActive == true && product.Discount.Percentage != null)
                                     {
@@ -916,6 +921,7 @@
         </section>
     </div>
 </div>
+
 
 
 <script>
@@ -1092,3 +1098,60 @@
         clearInterval(timer);
     }
 </script>
+
+
+@section JS{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.addToCartBtnProduct').click(function (e) {
+                e.preventDefault();
+                var quantity = 1;
+                var productId = $(this).data('item-id');
+                console.log(productId);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Cart/AddToCart/',
+                    data: { productId: productId, quantity: quantity },
+                    success: function (response) {
+                        if (response.success) {
+
+                            Toastify({
+                                text: "item is Added",
+                                className: "info",
+                                style: {
+                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                },
+
+                                preventDuplicates: false
+                            }).showToast();
+                                updateCartCount(response.cartCount);
+                            
+                        } else {
+                            Toastify({
+                                text: "Quantity cannot exceed available stock",
+                                className: "toastify-danger",
+                                style: {
+                                    background: "linear-gradient(to right,#f53b5a, #eb1919)",
+                                },
+                                position: "center",
+                                preventDuplicates: false,
+                                duration: 3000
+                            }).showToast();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error adding item to cart:', error);
+                    }
+                });
+            });
+
+            function updateCartCount(count) {
+                $('#cartCount').text('(' + count + ')');
+            }
+        });
+    </script>
+}

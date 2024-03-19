@@ -132,6 +132,14 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.Gender = editUserVM.Gender;
                 user.PhoneNumber = editUserVM.PhoneNumber;
                 user.ModifiedAt = DateTime.Now;
+                if(editUserVM.Photo != null)
+                {
+                    user.Photo =editUserVM.Photo;
+                }
+                if(editUserVM.CityId !=null)
+                {
+                    user.CityId = editUserVM.CityId;
+                }
                 await db.SaveChangesAsync();
                 return true;
             }
@@ -194,7 +202,9 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.Email = editUserVM.Email;
                 user.PhoneNumber = editUserVM.PhoneNumber;
                 user.ModifiedAt = DateTime.Now;
+
                 user.CityId = editUserVM.CityId;
+
                 await db.SaveChangesAsync();
                 return true;
             }

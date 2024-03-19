@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+}
+@section CSS{
+    <style>
+        .height-100 {
+            height: 50vh;
+        }
+
+        .card {
+            width: 600px;
+            border: none;
+            box-shadow: 3px 3px 5px 9px #eee;
+        }
+
+        .form-control {
+            height: 50px;
+            border: 2px solid #eee;
+        }
+
+            .form-control:focus {
+                box-shadow: none;
+                border: 2px solid #000;
+            }
+
+        .btn-dark {
+            height: 50px;
+            font-size: 11px;
+            padding:10px;
+            width:100px;
+            background-color: #000
+        }
+    </style>
+}
+<div class="container-fluid height-100 m-0 d-flex justify-content-center align-items-center">
+
+    <div class="card p-1 py-4">
+
+
+
+        <div class="d-flex flex-row">
+            <div class="d-flex flex-column ms-1">
+                <h5 class="mb-0">to change your password</h5>
+                <div class="text-left">
+                    <span>we will send only code deals reach you inbox</span>
+                </div>
+            </div>
+        </div>
+
+        <form asp-action="ChangePassword" asp-controller="ChangePassword">
+
+            <div class="px-1 d-flex flex-row gap-2 align-items-center m-1">
+                <input name="code" class="form-control" placeholder="Enter Code">
+                <button class="btn btn-dark">Send </button>
+            </div>
+
+        </form>
+       
+
+
+
+    </div>
+
+</div>

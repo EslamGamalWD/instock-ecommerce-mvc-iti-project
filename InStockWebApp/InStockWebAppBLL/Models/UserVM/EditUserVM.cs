@@ -19,9 +19,11 @@ namespace InStockWebAppBLL.Models.UserVM
         public string LastName { get; set; } = string.Empty;
         [Required]
         public Gender Gender { get; set; }
+        public IFormFile? Image { get; set; }
         public string? Photo { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
         public string? Email { get; set; }
+        public int? CityId { get; set; }
     }
 }

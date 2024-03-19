@@ -1,4 +1,6 @@
 ﻿@model EditUserVM
+@inject ICountryRepository countryrepo
+
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
@@ -9,6 +11,8 @@
 </head>
 <body>
     <div class="container-xl px-4 mt-4">
+    <form asp-action="Edit" asp-controller="Customer" enctype="multipart/form-data" method="post">
+    
 
         <div class="row">
             <div class="col-xl-4">
@@ -17,15 +21,14 @@
                     <div class="card-header">Profile Picture</div>
                     <div class="card-body text-center">
 
-                        <!-- Existing profile image -->
-                        <img class="img-account-profile rounded-circle mb-2" src="@Model.Photo" alt="Profile Image">
+                            <img id="profileImage" style="width:100px;height:100px" class="img-account-profile rounded-circle mb-2" src="~/Files/ImageProfile/@Model.Photo" alt="Profile Image">
 
-                        <!-- File size information -->
-                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                            <!-- File size information -->
+                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
 
-                        <!-- Image upload input -->
-                        <input type="file" id="imageUpload" class="form-control-file" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)" name="Photo">
-                        <label for="imageUpload" class="btn btn-primary">Upload new image</label>
+                            <!-- Image upload input -->
+                            <input type="file" asp-for="Image" id="imageUpload" class="form-control-file" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)" >
+                            <label for="imageUpload" class="btn btn-primary">Upload new image</label>
                     </div>
 
                 </div>
@@ -35,7 +38,8 @@
                 <div class="card mb-4">
                     <div class="card-header">Account Details</div>
                     <div class="card-body">
-                        <form asp-action="Edit" asp-controller="Customer" method="post">
+                        
+                            <input type="hidden" asp-for="Id" />
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First name</label>
@@ -73,17 +77,43 @@
                                     <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
 
+                                        <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
+                                            <option selected disabled>Country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
+
+                                        <select class="form-control" id="inputGroupSelectState">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="input-group">
+
+                                        <select asp-for="CityId" class="form-control" id="inputGroupSelectCity">
+                                        </select>
+                                        <span asp-for="CityId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                             <button class="btn btn-primary" type="submit">Save changes</button>
                             <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Discard Edits</a>
                           
-                        </form>
+                     
 
 
                     </div>
                 </div>
             </div>
         </div>
+   
+    </form>
     </div>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
@@ -93,6 +123,21 @@
 </body>
 
 @section JS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <partial name="~/Views/Partials/User/_UserCreateJS.cshtml" />
+    <script type="text/javascript">
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
 
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                $('#profileImage').attr('src', imageSrc);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+   
 }

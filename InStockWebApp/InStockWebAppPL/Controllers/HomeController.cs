@@ -2,11 +2,12 @@
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppDAL.Entities;
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using InStockWebAppBLL.Models.UserVM;
 using AutoMapper;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace InStockWebAppPL.Controllers;
 
@@ -19,38 +20,47 @@ public class HomeController : Controller
     private readonly IDiscountRepository _discountRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-	public HomeController(ICategoryRepository categoryRepository,
-                          ISubCategoryRepository subCategoryRepository,
-                          IProductRepository productRepository,
-						  IUnitOfWork unitOfWork,
-                          IMapper mapper,
-                          IDiscountRepository discountRepository)
+    public HomeController(ICategoryRepository categoryRepository,
+        ISubCategoryRepository subCategoryRepository,
+        IProductRepository productRepository,
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IDiscountRepository discountRepository)
     {
         _categoryRepository = categoryRepository;
         _subCategoryRepository = subCategoryRepository;
         _productRepository = productRepository;
-		_unitOfWork = unitOfWork;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountRepository = discountRepository;
+
+        _unitOfWork = unitOfWork;
+    }
+
+
 	}
+    [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
 
-	public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index()
     {
-		var claimsIdentity = (ClaimsIdentity)User.Identity;
-		var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
-		if (claim is not null)
-		{
-			var userId = claim.Value;
-			var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
-			HttpContext.Session.SetInt32("shoppingCartSession", count);
-		}
+        var claimsIdentity = (ClaimsIdentity)User.Identity;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim is not null)
+        {
+            var userId = claim.Value;
+            var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
+            HttpContext.Session.SetInt32("shoppingCartSession", count);
+        }
 
-		var categories = await _categoryRepository.GetAll();
+        var categories = await _categoryRepository.GetAll();
         var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
 
         foreach (var category in categories)
         {
-            if (category.IsDeleted == true) { continue; }
+            if (category.IsDeleted == true)
+            {
+                continue;
+            }
 
             var categoryWithProductsVM = new CategoryWithProductsVM
             {
@@ -61,16 +71,21 @@ public class HomeController : Controller
                 ModifiedAt = category.ModifiedAt,
                 DeletedAt = category.DeletedAt,
                 IsDeleted = category.IsDeleted,
-                SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
+                SubCategories =
+                    await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
             };
 
             if (categoryWithProductsVM.SubCategories != null)
             {
                 foreach (var subcategory in categoryWithProductsVM.SubCategories)
                 {
-                    if (subcategory.IsDeleted == true) { continue; }
+                    if (subcategory.IsDeleted == true)
+                    {
+                        continue;
+                    }
 
-                    subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
+                    subcategory.Products =
+                        await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
 
                     if (subcategory.Products != null)
                     {
@@ -83,7 +98,8 @@ public class HomeController : Controller
             if (categoryWithProductsVM.Products != null)
             {
                 var rnd = new Random();
-                categoryWithProductsVM.Products = categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
+                categoryWithProductsVM.Products =
+                    categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
             }
 
             categoriesWithProductsVMs.Add(categoryWithProductsVM);
@@ -107,12 +123,14 @@ public class HomeController : Controller
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         if (claim is null)
-          return View("NotValidUser");
+            return View("NotValidUser");
         //Check if the user didn't add their details before(First time To Order)
         var userId = claim.Value;
         if (await UserDataExist(userId)) return View("PaymentView");
-        var user = _mapper.Map<UserCheckoutDetailsVM>(await _unitOfWork.UserRepository.GetUserById(userId));
-        return View("CheckoutDetails",user);
+        var user =
+            _mapper.Map<UserCheckoutDetailsVM>(
+                await _unitOfWork.UserRepository.GetUserById(userId));
+        return View("CheckoutDetails", user);
     }
 
     public async Task<IActionResult> Edit(UserCheckoutDetailsVM modelVM)
@@ -124,7 +142,6 @@ public class HomeController : Controller
                 if (await _unitOfWork.UserRepository.CheckoutEdit(modelVM))
                 {
                     return View("PaymentView");
-
                 }
                 else
                 {
@@ -149,18 +166,19 @@ public class HomeController : Controller
 
     private async Task<bool> UserDataExist(string userId)
     {
-        var user= await _unitOfWork.UserRepository.GetUserById(userId);
+        var user = await _unitOfWork.UserRepository.GetUserById(userId);
         if (user != null &&
-         !string.IsNullOrEmpty(user.CityName) &&
-         !string.IsNullOrEmpty(user.StateName) &&
-         !string.IsNullOrEmpty(user.LastName) &&
-         !string.IsNullOrEmpty(user.FirstName) &&
-         !string.IsNullOrEmpty(user.PhoneNumber) &&
-         !string.IsNullOrEmpty(user.Email))
+            !string.IsNullOrEmpty(user.CityName) &&
+            !string.IsNullOrEmpty(user.StateName) &&
+            !string.IsNullOrEmpty(user.LastName) &&
+            !string.IsNullOrEmpty(user.FirstName) &&
+            !string.IsNullOrEmpty(user.PhoneNumber) &&
+            !string.IsNullOrEmpty(user.Email))
         {
             return true;
         }
-         return false;
+
+        return false;
     }
 
     public async Task<IActionResult> Test()
@@ -180,14 +198,16 @@ public class HomeController : Controller
                 ModifiedAt = category.ModifiedAt,
                 DeletedAt = category.DeletedAt,
                 IsDeleted = category.IsDeleted,
-                SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
+                SubCategories =
+                    await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
             };
 
             if (categoryWithProductsVM.SubCategories != null)
             {
                 foreach (var subcategory in categoryWithProductsVM.SubCategories)
                 {
-                    subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
+                    subcategory.Products =
+                        await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
 
                     if (subcategory.Products != null)
                     {
@@ -200,7 +220,8 @@ public class HomeController : Controller
             if (categoryWithProductsVM.Products != null)
             {
                 var rnd = new Random();
-                categoryWithProductsVM.Products = categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
+                categoryWithProductsVM.Products =
+                    categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
             }
 
             categoriesWithProductsVMs.Add(categoryWithProductsVM);

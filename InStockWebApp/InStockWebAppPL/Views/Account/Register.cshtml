@@ -1,4 +1,5 @@
 ﻿@using InStockWebAppDAL.Entities.Enumerators
+@inject ICountryRepository countryrepo
 @model RegisterVM
 
 @{
@@ -87,6 +88,35 @@
                                         I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
                                     </label>
                                 </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="input-group">
+                                           
+                                            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
+                                                <option selected disabled>Country</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="input-group">
+                                            
+                                            <select class="form-control" id="inputGroupSelectState">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="input-group">
+                                            
+                                            <select asp-for="CityId" class="form-control" id="inputGroupSelectCity">
+                                            </select>
+                                            <span asp-for="CityId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="text-center">
                                     <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
                                 </div>
@@ -219,6 +249,9 @@
           f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
       </script>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <partial name="~/Views/Partials/User/_UserCreateJS.cshtml" />
 }
 
 
@@ -228,6 +261,8 @@
     <script src="~/Account/js/bootstrap.min.js"></script>
     <script src="~/Account/js/perfect-scrollbar.min.js"></script>
     <script src="~/Account/js/smooth-scrollbar.min.js"></script>
+
+
     <script>
         let win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
