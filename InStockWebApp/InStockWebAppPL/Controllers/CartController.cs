@@ -36,7 +36,8 @@ public class CartController : Controller
         }
 
         var cart = await _unitOfWork.CartRepository.GetCart(userId);
-        var cartViewModel = _mapper.Map<CartVM>(cart);
+
+        var cartViewModel = _mapper.Map<CartVM?>(cart);
         return View(cartViewModel);
     }
 
@@ -67,7 +68,7 @@ public class CartController : Controller
 
             if (item is null)
             {
-                if (product.InStock >= quantity)
+                if (product?.InStock >= quantity)
                 {
                     item = new Item
                     {
@@ -87,7 +88,7 @@ public class CartController : Controller
             }
             else
             {
-                if (product.InStock >= item.Quantity + quantity)
+                if (product?.InStock >= item.Quantity + quantity)
                 {
                     item.Quantity += quantity;
                     item.TotalPrice += quantity * product.Price;
