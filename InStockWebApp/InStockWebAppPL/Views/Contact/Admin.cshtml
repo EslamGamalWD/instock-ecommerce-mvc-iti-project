@@ -1,43 +1,219 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity;
+@using InStockWebAppDAL.Entities
+@inject SignInManager<User> signInManager
+@model IEnumerable<ContactMessage>
+
+@inject UserManager<User> userManager;
+@{
     ViewData["Title"] = "Admin";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+
+    dynamic user = null;
+    @if (signInManager.IsSignedIn(User))
+    {
+        user =await userManager.FindByNameAsync(User.Identity.Name);
+    }
+
+}
+@section CSS {
+    <style>
+
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #eee;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #dcb14a;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #dcb14a;
+            }
+
+        .sender{
+            background-color: #dcb14a;
+            font-size: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: #3e3c3c;
+
+        }
+
+        .wrapper {
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+        }
+
+        .main {
+            background-color: transparent;
+            width: 600px;
+            position: relative;
+            padding:10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding: 6px 0px 0px 0px;
+        }
+
+        .scroll {
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            height: 325px;
+        }
+
+        .img1 {
+            border-radius: 50%;
+            background-color: #66BB6A;
+        }
+
+        .name {
+            font-size: 8px;
+        }
+
+        .msg {
+            background-color: #3e3c3c;
+            font-size: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: white;
+        }
+
+
+        .form-control {
+            font-size: 12px;
+            font-weight: 400;
+            width: 500px;
+            height: 30px;
+            border: none;
+        }
+
+        form-control: focus {
+            box-shadow: none;
+            overflow: hidden;
+            border: none;
+        }
+
+        .form-control:focus {
+            box-shadow: none !important;
+        }
+
+       
+
+        .icon2 {
+            color: #dcb14a !important;
+            font-size: 18px !important;
+            position: relative;
+            left: 8px;
+            padding: 0px;
+            cursor: pointer;
+        }
+
+
+        .icondiv {
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            padding: 2px;
+            position: relative;
+            bottom: 1px;
+        }
+     
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 }
 
-<div class="card mb-4" id="forms">
-    <div class="card-header">Forms</div>
-    <div class="card-body">
-        <form id="userForm">
-            <div class="mb-3">
-                <label class="form-label" for="firstName">First Name</label>
-                <input class="form-control" id="firstName" type="text" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="lastName">Last Name</label>
-                <input class="form-control" id="lastName" type="text" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="email">Email</label>
-                <input class="form-control" id="email" type="email" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="phone">Phone</label>
-                <input class="form-control" id="phone" type="text" aria-describedby="emailHelp">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="message">Message</label>
-                <textarea class="form-control" id="message"></textarea>
-            </div>
 
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
-    </div>
-</div>
+
+<div class="wrapper">
+    <div class="main">
+        <div class="px-2 scroll">
+            <div id="messages">
+                @foreach (var item in Model)
+                {
+                    if (item.ReceiverId !=null)
+                    {
+                        <div class="d-flex align-items-center">
+                            <div class="pr-2 pl-1">
+                                <span class="name">Admin</span>
+                                <p class="msg">@item.Message</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center text-right justify-content-end  ">
+                            <div class="pr-2">
+                                <p class="sender">@item.Message</p>
+                            </div>
+                            <div><img src="~/files/imageprofile/@user.Photo" width="50" class="img1" /></div>
+
+                        </div>
+                    }
+                }
+
+              
+            </div>
+        </div>
+
+
+        <div class=" bg-white  d-flex justify-content-between">
+            <form id="userForm" class="p-4">
+                <div class="mb-3">
+                    <input class="form-control" id="firstName" type="hidden" value="@user.FirstName" aria-describedby="emailHelp">
+                    <input class="form-control" id="Id" type="hidden" value="@user.Id" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" id="image" type="hidden" value="@user.Photo" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" id="lastName" type="hidden" value="@user.LastName" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" id="email" type="hidden" value="@user.Email" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <input class="form-control" id="phone" value="@user.PhoneNumber" type="hidden" aria-describedby="emailHelp">
+                </div>
+                <nav class=" bg-white  d-flex justify-content-between">
+                    <input id="message" type="text number" name="text" class="form-control" placeholder="Type a message...">
+
+                    <div  class="icondiv d-flex justify-content-end align-content-center text-center ml-2">
+                        <button style="border:none;background:transparent"><i class="fa fa-arrow-circle-right icon2"></i></button>
+                    </div>
+
+
+                </nav>
+            </form>
+
+
+        </div>
+
+
+</div></div>
+
+
+
 
 @section JS {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- SignalR CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         $(document).ready(function () {
@@ -54,18 +230,56 @@
 
                 // Validate form fields
                 const firstName = $('#firstName').val().trim();
+                const Id = $('#Id').val().trim();
+
                 const lastName = $('#lastName').val().trim();
                 const email = $('#email').val().trim();
                 const message = $('#message').val().trim();
                 const phone = $('#phone').val().trim();
+                const image = $('#image').val().trim();
                 if (!firstName || !lastName || !email || !message) {
-                    alert("Please fill in all fields.");
+                    Swal.fire({
+                        title: 'Write message',
+                        text: 'You have Problem please write message',
+                        icon: 'info',
+                        showCloseButton: true,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                        timer: 1000, // Adjust the time as per your requirement
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    }).showToast();
                     return;
                 }
 
                 // Invoke server method with form data
-                connection.invoke("SendFormToAdmin", firstName, lastName, email, phone, message)
-                    .then(() => console.log("Form data sent successfully"))
+                connection.invoke("SendFormToAdmin",Id, firstName, lastName, email, phone, message, image)
+                    .then(() => {
+                        Toastify({
+                            text: "You send Your Problem Thank You",
+                            className: "info",
+                            style: {
+                                background: "linear-gradient(to right, #dcb14a, #dcb14a)"
+                            },
+                            preventDuplicates: false
+                        }).showToast();
+                        var SenderMessage = `
+                                        <div class="d-flex align-items-center text-right justify-content-end ">
+                        <div class="pr-2">
+                                            <p class="sender">${message}</p>
+                        </div>
+                                <div><img src="/files/imageprofile/${image}" width="30" class="img1" /></div>
+
+                    </div>
+                   `;
+                        $("#messages").append(SenderMessage);
+                        $('#message').val() = '';
+                    })
                     .catch(err => console.error("Error sending form data:", err));
             });
 
