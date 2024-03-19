@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -31,7 +32,9 @@ namespace InStockWebAppPL.Controllers
             this.filter = filter;
             this.subCategoryRepository = subCategoryRepository;
         }
-               
+
+        [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
+
         public async Task<IActionResult> Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

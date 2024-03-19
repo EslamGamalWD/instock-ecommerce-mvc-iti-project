@@ -7,7 +7,7 @@
         <div class="product text-center">
             <div class="mb-3 position-relative">
                 <div class="badge text-white bg-primary">New</div>
-                <a class="d-block" href="detail.html">
+                <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">
                     <img class="img-fluid w-100" src="https://media.istockphoto.com/id/962915564/photo/10-oclock-portrait-of-charming-pretty-positive-cheerful-woman-closing-covering-head-face-with.jpg?s=612x612&w=0&k=20&c=GjVtZM_9MqN1Ytvg6za_cvJN4UUL99-eiPU6wyUm7_k=" alt="@product.Name">
                 </a>
                 <div class="product-overlay">
@@ -20,7 +20,7 @@
                         @if (product.InStock > 0)
                         {
                             <li class="list-inline-item m-0 p-0">
-                                <a class="btn btn-sm btn-dark addToCartBtnProduct"  data-item-id="@product.Id">Add to cart</a>
+                                <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
                             </li>
                         }
                         else

@@ -34,10 +34,10 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public UserRepository(ApplicationDbContext db, IEmailSender emailSender, IWebHostEnvironment webHostEnvironmen, IMapper mapper, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            this.db=db;
-            this.emailSender=emailSender;
-            this.webHostEnvironmen=webHostEnvironmen;
-            this.mapper=mapper;
+            this.db = db;
+            this.emailSender = emailSender;
+            this.webHostEnvironmen = webHostEnvironmen;
+            this.mapper = mapper;
 
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -132,6 +132,10 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.Gender = editUserVM.Gender;
                 user.PhoneNumber = editUserVM.PhoneNumber;
                 user.ModifiedAt = DateTime.Now;
+                if(editUserVM.Photo != null)
+                {
+                    user.Photo =editUserVM.Photo;
+                }
                 if(editUserVM.CityId !=null)
                 {
                     user.CityId = editUserVM.CityId;
@@ -158,6 +162,8 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
                 if (result.Succeeded)
                 {
+                    var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
+
                     string role = AppRoles.EnumToString(user.UserType);
                     var roleResult = await userManager.AddToRoleAsync(user, role);
                     return user;
@@ -198,7 +204,9 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 user.Email = editUserVM.Email;
                 user.PhoneNumber = editUserVM.PhoneNumber;
                 user.ModifiedAt = DateTime.Now;
-                user.CityId=editUserVM.CityId;
+
+                user.CityId = editUserVM.CityId;
+
                 await db.SaveChangesAsync();
                 return true;
             }
