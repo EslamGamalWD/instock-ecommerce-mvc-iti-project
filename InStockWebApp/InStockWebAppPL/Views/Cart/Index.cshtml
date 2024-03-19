@@ -125,8 +125,15 @@
                             <a class="btn btn-link p-0 text-dark btn-sm" asp-controller="FilterProduct" asp-action="Index"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a>
+                            @Html.ActionLink("Proceed to checkout",
+                                     "CreatePaymentSession",
+                                     "Payment",
+                                     new { userId = @Model.UserId}, 
+                                     new { @class = "btn btn-outline-dark btn-sm" })
+
+
                         </div>
+                      
                     </div>
                 </div>
             </div>

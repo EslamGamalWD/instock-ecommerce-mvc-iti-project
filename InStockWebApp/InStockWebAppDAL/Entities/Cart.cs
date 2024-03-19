@@ -11,4 +11,5 @@ public class Cart
     public string UserId { get; set; }
     public User User { get; set; }
     public IEnumerable<Item>? Items { get; set; }
+    public string? CheckoutSessionId { get; set; }
 }

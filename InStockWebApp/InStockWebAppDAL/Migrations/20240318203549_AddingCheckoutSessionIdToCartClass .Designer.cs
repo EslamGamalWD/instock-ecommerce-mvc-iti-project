@@ -4,6 +4,7 @@ using InStockWebAppDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InStockWebAppDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318203549_AddingCheckoutSessionIdToCartClass ")]
+    partial class AddingCheckoutSessionIdToCartClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,9 +397,6 @@ namespace InStockWebAppDAL.Migrations
 
                     b.Property<int?>("DiscountId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ImgeUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("InStock")
                         .HasColumnType("int");

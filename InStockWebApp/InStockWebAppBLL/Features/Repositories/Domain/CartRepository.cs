@@ -58,6 +58,6 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
         return count;
     }
 
-    private decimal CalculateCartTotalPrice(Cart cart) =>
+    public decimal CalculateCartTotalPrice(Cart cart) =>
         cart.Items.Sum(i => i.TotalPrice);
 }
