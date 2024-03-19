@@ -418,6 +418,9 @@ namespace InStockWebAppDAL.Migrations
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UnitsSold")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DiscountId");
