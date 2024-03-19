@@ -29,5 +29,7 @@ namespace InStockWebAppDAL.Entities
         
         public virtual Cart? Cart { get; set; }
         public virtual IEnumerable<UserPayment>? UserPayment { get; set; }
+
+        public virtual ICollection<ContactMessage> ?ContactMessages { get; set; }
     }
 }

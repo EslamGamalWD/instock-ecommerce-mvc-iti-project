@@ -100,7 +100,9 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 pl-sm-0">
-                                    <button type="button" id="addToCartBtn" class="h-100 d-inline-block align-items-center justify-content-center text-uppercase atc-btn">Add to cart</button>
+                                    <button type="button" id="addToCartBtn" data-item-id="@Model.Id" class="h-100 d-inline-block align-items-center justify-content-center text-uppercase atc-btn">Add to cart</button>
+
+                                
                                 </div>
                             </div>
                         </form>
@@ -254,7 +256,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- RELATED PRODUCTS-->
                 @if (relatedProducts?.Count() > 0)
                 {
@@ -305,7 +306,10 @@
                                             <div class="product-overlay">
                                                 <ul class="mb-0 list-inline">
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                                    @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
+                                                    <li class="list-inline-item m-0 p-0">
+                                                        <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
+                                                    </li>
                                                     <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                                 </ul>
                                             </div>
@@ -338,8 +342,7 @@
                     </section>
                 }
 
-            </div>
-        </section>
+                <input type="hidden" id="productId" value="@Model.Id" />
         @section JS {
             <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
 
@@ -447,8 +450,18 @@
                             data: { productId: productId, quantity: quantity },
                             success: function (response) {
                                 if (response.success) {
-                                    console.log('Item added to cart successfully');
+                                    console.log('Item added to cart successfully'); 
                                     console.log(response.cartCount);
+                                            Toastify({
+                                                text: "item is Added",
+                                                className: "info",
+                                                style: {
+                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                   
+                                                },
+
+                                                preventDuplicates: false
+                                            }).showToast();
                                     updateCartCount(response.cartCount); 
                                 } else {
                                     console.error('Error adding item to cart:', response.errorMessage);
@@ -494,7 +507,56 @@
 
               
             </script>
+                    <script>
+                        $(document).ready(function () {
+                            $('.addToCartBtnProduct').click(function (e) {
+                                e.preventDefault();
+                                var quantity = 1;
+                                var productId = $(this).data('item-id');
+                                console.log(productId);
 
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Cart/AddToCart/',
+                                    data: { productId: productId, quantity: quantity },
+                                    success: function (response) {
+                                        if (response.success) {
+
+                                            Toastify({
+                                                text: "item is Added",
+                                                className: "info",
+                                                style: {
+                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                },
+
+                                                preventDuplicates: false
+                                            }).showToast();
+                                            updateCartCount(response.cartCount);
+
+                                        } else {
+                                            Toastify({
+                                                text: "Quantity cannot exceed available stock",
+                                                className: "toastify-danger",
+                                                style: {
+                                                    background: "linear-gradient(to right,#f53b5a, #eb1919)",
+                                                },
+                                                position: "center",
+                                                preventDuplicates: false,
+                                                duration: 3000
+                                            }).showToast();
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error adding item to cart:', error);
+                                    }
+                                });
+                            });
+
+                            function updateCartCount(count) {
+                                $('#cartCount').text('(' + count + ')');
+                            }
+                        });
+                    </script>
             
           <!-- SweetAlert2 CDN -->
             <script src="~/sweatalert/sweetalert2/sweetalert2.min.js"></script>

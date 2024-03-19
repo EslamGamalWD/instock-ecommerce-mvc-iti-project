@@ -29,6 +29,7 @@ namespace InStockWebAppBLL
             services.AddScoped<IFilterRepository, FilterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
+            services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
             services.AddScoped<IGetCategoryWithProductRepository, GetCategoryWithProductRepository>();
             services.AddSession(options =>
             {
