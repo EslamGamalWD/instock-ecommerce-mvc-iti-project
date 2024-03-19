@@ -36,9 +36,7 @@ public class HomeController : Controller
 
         _unitOfWork = unitOfWork;
     }
-
-
-	}
+    
     [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
 
     public async Task<IActionResult> Index()
