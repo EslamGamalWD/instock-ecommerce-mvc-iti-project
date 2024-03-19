@@ -34,6 +34,7 @@ public class HomeController : Controller
         _mapper = mapper;
         _discountRepository = discountRepository;
 	}
+    [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
     public async Task<IActionResult> Index()
     {
 		var claimsIdentity = (ClaimsIdentity)User.Identity;

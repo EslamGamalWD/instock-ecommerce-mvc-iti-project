@@ -31,7 +31,8 @@ namespace InStockWebAppPL.Controllers
             this.filter = filter;
             this.subCategoryRepository = subCategoryRepository;
         }
-               
+        [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
+
         public async Task<IActionResult> Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex flex-column align-items-center text-center">
-                    <img src="~/Files/ProductImages/215c2de5-e567-458c-8c5d-b0ba861a8fb461smiOs86OL._AC_SX466_.jpg" alt="Admin" class="rounded-circle" width="150">
+                    <img src="~/Files/ImageProfile/@Model.Photo" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
                         <h4>@Model.FirstName @Model.LastName</h4>
                        
@@ -74,7 +74,7 @@
                     <div class="col-sm-12">
                         <a class="btn btn-info "  href="Edit">Edit Profile</a>
                         <a class="btn btn-info " asp-action="Index" asp-controller="Home">Browse Products</a>
-                      
+                        <a class="btn btn-info " asp-action="Index" asp-controller="ChangePassword">Change Password</a>
                     </div>
                 </div>
             </div>
