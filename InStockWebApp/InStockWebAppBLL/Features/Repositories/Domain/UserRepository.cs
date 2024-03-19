@@ -11,6 +11,7 @@ using InStockWebAppDAL.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Hangfire;
+using InStockWebAppBLL.Features.Interfaces;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
 {
@@ -52,6 +53,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             try
             {
                 var user = mapper.Map<User>(createUserVM);
+                user.EmailConfirmed = true;
                 var result = await userManager.CreateAsync(user, createUserVM.PasswordHash);
                 if (result.Succeeded)
                 {
@@ -149,40 +151,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             }
         }
 
-        public async Task<User> Register(RegisterVM model)
-        {
-            try
-            {
-                var user = mapper.Map<User>(model);
-
-                user.UserType = UserType.Customer;
-                user.CreatedAt = DateTime.Now;
-
-                var result = await userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
-
-                    string role = AppRoles.EnumToString(user.UserType);
-                    var roleResult = await userManager.AddToRoleAsync(user, role);
-                    return user;
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine(error);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error registering user: {ex.Message}");
-            }
-
-            return null;
-        }
+        
 
         public async Task<User> FindByEmailAsync(string email)
         {
@@ -194,27 +163,40 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             return await userManager.CheckPasswordAsync(user, password);
         }
 
-        public async Task<bool> CheckoutEdit(UserCheckoutDetailsVM editUserVM)
+        public async Task<bool> UserDataExist(string userId)
+        {
+            var user = await GetUserById(userId);
+            if (user != null &&
+                !string.IsNullOrEmpty(user.CityName) &&
+                !string.IsNullOrEmpty(user.StateName) &&
+                !string.IsNullOrEmpty(user.LastName) &&
+                !string.IsNullOrEmpty(user.FirstName) &&
+                !string.IsNullOrEmpty(user.PhoneNumber) &&
+                !string.IsNullOrEmpty(user.Email))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> ConfirmEmail(string id)
         {
             try
             {
-                var user = await db.Users.Where(a => a.Id == editUserVM.Id).FirstOrDefaultAsync();
-                user.FirstName = editUserVM.FirstName;
-                user.LastName = editUserVM.LastName;
-                user.Email = editUserVM.Email;
-                user.PhoneNumber = editUserVM.PhoneNumber;
-                user.ModifiedAt = DateTime.Now;
-
-                user.CityId = editUserVM.CityId;
-
-                await db.SaveChangesAsync();
+                var user = await db.Users.Where(a => a.Id==id).FirstOrDefaultAsync();
+                user.EmailConfirmed = true;
+                db.SaveChanges();
                 return true;
             }
             catch (Exception)
             {
+
                 return false;
             }
         }
+
+
         #endregion
     }
 }

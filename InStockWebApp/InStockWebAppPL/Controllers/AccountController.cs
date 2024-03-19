@@ -8,45 +8,80 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
+using Hangfire;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace InStockWebAppPL.Controllers
 {
     public class AccountController : Controller
     {
+        #region Prop
         private readonly IUserRepository _userRepository;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRegisterRepository registerRepo;
+        private readonly IEmailSender emailSender;
+        private readonly IWebHostEnvironment webHostEnvironmen;
+        #endregion
 
+
+        #region Ctor
         public AccountController(IUserRepository userRepository, SignInManager<User> signInManager,
-            UserManager<User> userManager, IUnitOfWork unitOfWork)
+         UserManager<User> userManager, IUnitOfWork unitOfWork, IRegisterRepository registerRepo, IEmailSender emailSender, IWebHostEnvironment webHostEnvironmen)
         {
             _userRepository = userRepository;
             _signInManager = signInManager;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            this.registerRepo=registerRepo;
+            this.emailSender=emailSender;
+            this.webHostEnvironmen=webHostEnvironmen;
         }
+        #endregion
+
+
+
+
+
+        #region Register
 
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model)
         {
             if (ModelState.IsValid)
             {
-                model.CityId = 2;
-                var user = await _userRepository.Register(model);
+                var user = await registerRepo.Register(model);
 
                 if (user != null)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = token }, protocol: HttpContext.Request.Scheme);
 
-                    return RedirectToAction("Index", "Home");
+                    #region send Email
+                    var filePath = $"{webHostEnvironmen.WebRootPath}/Account/Tempelet/Email.html";
+                    StreamReader str = new StreamReader(filePath);
+                    var body = str.ReadToEnd();
+                    str.Close();
+                    body = body.Replace("[Header]", "Welcom In Instock Shopping")
+                        .Replace("[Body]", "Welcome to InStock! Confirm Your Account")
+                        .Replace("[URL]", $"{callbackUrl}")
+                        .Replace("[AncorTitle]", "Confirm");
+                    //Use HangFire
+                    BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(model.Email, "Welcome Login", body));
+
+                    #endregion
+
+                    return View("Confirmation");
                 }
                 else
                 {
@@ -57,6 +92,25 @@ namespace InStockWebAppPL.Controllers
 
             return View(model);
         }
+
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+          
+            if (userId != null)
+            {
+
+                if(await _userRepository.ConfirmEmail(userId))
+                return RedirectToAction("Login", "Account");
+            }
+           
+                return RedirectToAction("Register");
+            
+
+
+        }
+        #endregion
+
 
         #region Login
 
@@ -73,8 +127,9 @@ namespace InStockWebAppPL.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userRepository.FindByEmailAsync(loginVM.Email);
+               
                 if (user != null &&
-                    await _userRepository.CheckPasswordAsync(user, loginVM.Password))
+                      user.EmailConfirmed&& await _userRepository.CheckPasswordAsync(user, loginVM.Password))
                 {
                     var count = await _unitOfWork.CartRepository.GetCartItemsCount(user.Id);
                     HttpContext.Session.SetInt32("shoppingCartSession", count);
