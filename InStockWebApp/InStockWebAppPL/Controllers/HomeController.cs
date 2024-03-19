@@ -39,11 +39,8 @@ public class HomeController : Controller
         this.getCategoryWithProductRepository=getCategoryWithProductRepository;
         _unitOfWork = unitOfWork;
     }
-
-
-
+    
     [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
-
     public async Task<IActionResult> Index()
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
