@@ -162,6 +162,8 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
                 if (result.Succeeded)
                 {
+                    var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
+
                     string role = AppRoles.EnumToString(user.UserType);
                     var roleResult = await userManager.AddToRoleAsync(user, role);
                     return user;

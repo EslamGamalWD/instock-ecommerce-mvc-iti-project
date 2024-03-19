@@ -21,7 +21,7 @@
                 type: 'GET',
                 success: function (data) {
                     console.log(data)
-                    var items = '<option selected disabled>-- Select State --</option>';
+                    var items = '<option selected disabled>State</option>';
                     $.each(data, function (i, state) {
 
                         items += "<option value='" + state.id + "'>" + state.name + "</option>";
@@ -42,7 +42,7 @@
                 url: '/City/GetAll/' + stateId,
                 type: 'GET',
                 success: function (data) {
-                    var items = '<option selected disabled>-- Select City --</option>';
+                    var items = '<option selected disabled>City</option>';
                     $.each(data, function (i, city) {
                         items += "<option value='" + city.id + "'>" + city.name + "</option>";
                     });
