@@ -25,13 +25,13 @@ namespace InStockWebAppPL.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRegisterRepository registerRepo;
         private readonly IEmailSender emailSender;
-        private readonly IWebHostEnvironment webHostEnvironmen;
+        private readonly IWebHostEnvironment webHostEnvironment;
         #endregion
 
 
         #region Ctor
         public AccountController(IUserRepository userRepository, SignInManager<User> signInManager,
-         UserManager<User> userManager, IUnitOfWork unitOfWork, IRegisterRepository registerRepo, IEmailSender emailSender, IWebHostEnvironment webHostEnvironmen)
+         UserManager<User> userManager, IUnitOfWork unitOfWork, IRegisterRepository registerRepo, IEmailSender emailSender, IWebHostEnvironment webHostEnvironment)
         {
             _userRepository = userRepository;
             _signInManager = signInManager;
@@ -39,7 +39,7 @@ namespace InStockWebAppPL.Controllers
             _unitOfWork = unitOfWork;
             this.registerRepo=registerRepo;
             this.emailSender=emailSender;
-            this.webHostEnvironmen=webHostEnvironmen;
+            this.webHostEnvironment=webHostEnvironment;
         }
         #endregion
 
@@ -54,6 +54,7 @@ namespace InStockWebAppPL.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model)
@@ -68,7 +69,7 @@ namespace InStockWebAppPL.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = token }, protocol: HttpContext.Request.Scheme);
 
                     #region send Email
-                    var filePath = $"{webHostEnvironmen.WebRootPath}/Account/Tempelet/Email.html";
+                    var filePath = $"{webHostEnvironment.WebRootPath}/Account/Tempelet/Email.html";
                     StreamReader str = new StreamReader(filePath);
                     var body = str.ReadToEnd();
                     str.Close();
@@ -104,10 +105,7 @@ namespace InStockWebAppPL.Controllers
                 return RedirectToAction("Login", "Account");
             }
            
-                return RedirectToAction("Register");
-            
-
-
+            return RedirectToAction("Register");
         }
         #endregion
 
