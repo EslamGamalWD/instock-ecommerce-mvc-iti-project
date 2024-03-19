@@ -6,4 +6,5 @@ public interface ICartRepository : IGenericRepository<Cart>
 {
     Task<int> GetCartItemsCount(string userId);
     Task<Cart> GetCart(string userId);
+    decimal CalculateCartTotalPrice(Cart cart);
 }
