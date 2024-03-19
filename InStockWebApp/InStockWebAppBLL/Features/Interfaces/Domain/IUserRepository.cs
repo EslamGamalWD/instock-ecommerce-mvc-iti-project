@@ -11,9 +11,9 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
         Task<GetUserByIdVM> GetUserById(string id);
         Task<User?> GetUser(string id);
         Task<bool> Edit(EditUserVM editUserVM);
-        Task<bool> CheckoutEdit(UserCheckoutDetailsVM editedUser);
-        Task<User> Register(RegisterVM model);
         Task<User> FindByEmailAsync(string email);
         Task<bool> CheckPasswordAsync(User user, string password);
+        Task<bool> UserDataExist(string userId);
+        Task<bool> ConfirmEmail(string id);
     }
 }

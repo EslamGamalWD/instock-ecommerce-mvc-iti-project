@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
 
     List<Item> items = [];
-    if (Model.Items.Count() > 0)
+    if (Model != null )
     {
         items = Model.Items.ToList();
     }
@@ -62,7 +62,7 @@
                             </tr>
                         </thead>
                         <tbody class="border-0">
-                            @for (var i = 0; i < items.Count; i++)
+                            @for (var i = 0; i < items?.Count; i++)
                             {
                                 @* @items[i].Product.Images[0].ImagePath *@
                                 <tr id="#row-@items[i].Id">
@@ -125,8 +125,22 @@
                             <a class="btn btn-link p-0 text-dark btn-sm" asp-controller="FilterProduct" asp-action="Index"><i class="fas fa-long-arrow-alt-left me-2"> </i>Continue shopping</a>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ms-2"></i></a>
+
+                          
+
+                           @if(Model!=null)
+                            {
+                            @Html.ActionLink("Proceed to checkout",
+                                     "CreatePaymentSession",
+                                     "Payment",
+                                     new { userId = @Model.UserId}, 
+                                     new { @class = "btn btn-outline-dark btn-sm" })
+
+
+                            }
+
                         </div>
+                      
                     </div>
                 </div>
             </div>
@@ -137,11 +151,11 @@
                         <h5 class="text-uppercase mb-4">Cart total</h5>
                         <ul class="list-unstyled mb-0">
                             <li class="d-flex align-items-center justify-content-between">
-                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small totalcard">$@Model.TotalPrice</span>
+                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small totalcard">$@Model?.TotalPrice</span>
                             </li>
                             <li class="border-bottom my-2"></li>
                             <li class="d-flex align-items-center justify-content-between mb-4">
-                                <strong class="text-uppercase small font-weight-bold">Total</strong><span class="totalcard">$@Model.TotalPrice</span>
+                                <strong class="text-uppercase small font-weight-bold">Total</strong><span class="totalcard">$@Model?.TotalPrice</span>
                             </li>
                             <li>
                                 <form action="#">
