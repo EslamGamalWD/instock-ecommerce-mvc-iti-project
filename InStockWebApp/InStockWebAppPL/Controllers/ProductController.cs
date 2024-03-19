@@ -4,8 +4,9 @@
 //using CloudinaryDotNet;
 //using CloudinaryDotNet.Actions;
 using InStockWebAppBLL.Features.Interfaces.Domain;
-
+using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -55,12 +56,58 @@ namespace InStockWebAppPL.Controllers
         {
             return View(await _productRepository.Details(id));
         }
+
         // GET: ProductController/Details/5
         public async Task<IActionResult> CustomerSideDetails(int id)
         {
-            var details=await _productRepository.Details(id);
+            var details = await _productRepository.Details(id);
+
+            var product = await _productRepository.GetProductWithSubcategoryById(id);
+
+            var categoryWithProductsVM = new CategoryWithProductsVM
+            {
+                Id = product.SubCategory.CategoryId,
+                Name = product.SubCategory.Name,
+                Description = product.SubCategory.Description,
+                CreatedAt = product.SubCategory.CreatedAt,
+                ModifiedAt = product.SubCategory.ModifiedAt,
+                DeletedAt = product.SubCategory.DeletedAt,
+                IsDeleted = product.SubCategory.IsDeleted,
+                SubCategories = await _subCategoryRepository.getAllSubCategoriesByCategoryId(product.SubCategory.CategoryId)
+            };
+
+            if (categoryWithProductsVM.SubCategories != null)
+            {
+                foreach (var subcategory in categoryWithProductsVM.SubCategories)
+                {
+                    if (subcategory.IsDeleted == true) { continue; }
+
+                    subcategory.Products = await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
+
+                    if (subcategory.Products != null)
+                    {
+                        categoryWithProductsVM.Products ??= new List<Product>();
+                        categoryWithProductsVM.Products.AddRange(subcategory.Products);
+                    }
+                }
+            }
+
+            if (categoryWithProductsVM.Products != null)
+            {
+                categoryWithProductsVM.Products = categoryWithProductsVM.Products.Where(p => p.Id != id).ToList();
+            }
+
+            if (categoryWithProductsVM.Products != null)
+            {
+                var rnd = new Random();
+                categoryWithProductsVM.Products = categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
+            }
+
+            ViewBag.RelatedProducts = categoryWithProductsVM.Products;
+
             return View(details);
         }
+
         [HttpGet]
         // GET: ProductController/Create
         public async Task<IActionResult> Create()

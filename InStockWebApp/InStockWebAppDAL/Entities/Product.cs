@@ -8,7 +8,7 @@ public class Product
     public decimal Price { get; set; }
     public int InStock { get; set; }
     public decimal AvgRating {  get; set; }
-    //public int UnitsSold { get; set; } = 0;
+    public int UnitsSold { get; set; } = 0;
     public List<ProductImage> Images { get; set; } = new List<ProductImage>();
     public DateTime CreatedAt { get; set; }
     public DateTime? ModifiedAt { get; set; }

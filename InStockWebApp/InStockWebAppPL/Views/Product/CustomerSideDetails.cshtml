@@ -6,6 +6,7 @@
 @inject UserManager<User> userManager;
 @{
     ViewData["Title"] = "CustomerSideDetails";
+    var relatedProducts = ViewBag.RelatedProducts as List<Product>;
 
     dynamic user = null;
     @if (signInManager.IsSignedIn(User))
@@ -253,7 +254,89 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- RELATED PRODUCTS-->
+                @if (relatedProducts?.Count() > 0)
+                {
+                    <section class="py-5">
+                        <header>
+                            <h2 class="h5 text-uppercase mb-4">RELATED PRODUCTS</h2>
+                        </header>
+                        <div class="row">
+                            @{
+                                int max = 4;
+                                int counter = 0;
+                                int imgCounter = 1;
+                                string source = $"/customer/img/product-{imgCounter}.jpg";
+                            }
+                            @foreach (var product in relatedProducts)
+                            {
+                                <div class="col-xl-3 col-lg-4 col-sm-6">
+                                    <div class="product text-center">
+                                        <div class="position-relative mb-3">
+                                            @{
+                                                decimal? priceAfterDiscount = null;
+                                                if (product.Discount != null && product.Discount.Percentage != null)
+                                                {
+                                                    decimal discountPercentage = (decimal)product.Discount.Percentage;
+                                                    priceAfterDiscount = product.Price - (product.Price * (discountPercentage / 100));
+                                                }
+
+                                                string badgeClass = "badge text-white bg-";
+                                                string badgeText = "";
+                                                if (product.InStock == 0)
+                                                {
+                                                    badgeClass += "danger";
+                                                    badgeText = "SOLD";
+                                                }
+                                                else if (product.Discount != null && product.Discount.IsActive == true)
+                                                {
+                                                    badgeClass += "primary";
+                                                    badgeText = $"{product.Discount.Percentage}% SALE";
+                                                }
+                                                else if ((DateTime.Now - product.CreatedAt).TotalDays <= 14)
+                                                {
+                                                    badgeClass += "info";
+                                                    badgeText = "NEW";
+                                                }
+                                            }
+                                            <div class="@badgeClass">@badgeText</div>
+                                            <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><img class="img-fluid w-100" src="@source" alt="..."></a>
+                                            <div class="product-overlay">
+                                                <ul class="mb-0 list-inline">
+                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <h6> <a class="reset-anchor" href="detail.html">@product.Name</a></h6>
+                                        <p class="small text-muted">
+                                            @if (priceAfterDiscount != null && product.InStock != 0 && product.Discount != null && product.Discount.IsActive == true && product.Discount.Percentage != null)
+                                            {
+                                                <span style="text-decoration: line-through;">@string.Format("{0} EGP", product.Price.ToString("#,##0.00"))</span>
+                                                <span style="font-weight:700;">&nbsp; &nbsp; @string.Format("{0} EGP", priceAfterDiscount?.ToString("#,##0.00"))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@string.Format("{0} EGP", product.Price.ToString("#,##0.00"))</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+
+                                counter++;
+                                imgCounter++;
+                                source = $"/customer/img/product-{imgCounter}.jpg";
+
+                                if (counter == max)
+                                {
+                                    break;
+                                }
+                            }
+                        </div>
+                    </section>
+                }
 
             </div>
         </section>

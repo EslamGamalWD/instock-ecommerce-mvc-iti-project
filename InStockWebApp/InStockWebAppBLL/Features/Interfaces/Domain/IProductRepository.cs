@@ -17,5 +17,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
         Task<AlterProductVM> EditDetails(int? id);
         Task<IEnumerable<Product>> GetProductsBySubcategoryId(int subcategoryId);
         Task<IEnumerable<Product>> GetProductsWithActiveDiscount();
+        Task<IEnumerable<Product>> GetProductsOrderedByUnitsSold();
+        Task<Product?> GetProductWithSubcategoryById(int id);
     }
 }

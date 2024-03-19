@@ -96,8 +96,12 @@ public class HomeController : Controller
         var productsWithDiscount = await _productRepository.GetProductsWithActiveDiscount();
         ViewBag.DiscountedProducts = productsWithDiscount;
 
+        var productsOrderedByUnitsSold = await _productRepository.GetProductsOrderedByUnitsSold();
+        ViewBag.ProductsByUnitsSold = productsOrderedByUnitsSold;
+
         return View(categoriesWithProductsVMs);
     }
+
     public async Task<IActionResult> Checkout()
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -110,6 +114,7 @@ public class HomeController : Controller
         var user = _mapper.Map<UserCheckoutDetailsVM>(await _unitOfWork.UserRepository.GetUserById(userId));
         return View("CheckoutDetails",user);
     }
+
     public async Task<IActionResult> Edit(UserCheckoutDetailsVM modelVM)
     {
         try
