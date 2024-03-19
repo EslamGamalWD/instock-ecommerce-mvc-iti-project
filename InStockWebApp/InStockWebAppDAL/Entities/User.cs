@@ -20,7 +20,7 @@ namespace InStockWebAppDAL.Entities
         public DateTime? ModifiedAt { get; set; }
         public string? Photo { get; set; }
 
-        public string? AddressLine { get; set; }
+        // public string? AddressLine { get; set; }
 
         //Navigation Property
         public int? CityId { get; set; }
