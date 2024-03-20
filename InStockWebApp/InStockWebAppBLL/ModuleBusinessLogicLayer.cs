@@ -22,14 +22,15 @@ namespace InStockWebAppBLL
             services.AddScoped<IUserPaymentRepository, UserPaymentRepository>();
             services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
-            
+            services.AddScoped<IRegisterRepository,RegisterRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
 
-
+            services.AddScoped<ICheckOutRepository, CheckOutRepository>();
             services.AddScoped<IFilterRepository, FilterRepository>();
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IProductReviewRepository, ProductReviewRepository>();
-
+            services.AddScoped<IContactMessageRepository, ContactMessageRepository>();
+            services.AddScoped<IGetCategoryWithProductRepository, GetCategoryWithProductRepository>();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);

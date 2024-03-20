@@ -10,5 +10,5 @@ public class CartVM
     public bool IsDeleted { get; set; }
     public string UserId { get; set; }
     public User User { get; set; }
-    public IEnumerable<Item>? Items { get; set; }
+    public IEnumerable<Item> Items { get; set; }= new List<Item>();
 }

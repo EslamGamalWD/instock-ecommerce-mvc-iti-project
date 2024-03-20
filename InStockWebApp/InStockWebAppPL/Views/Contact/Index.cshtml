@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<ContactMessage>
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
@@ -22,14 +24,33 @@
             font-size: 0.9rem;
             color: #999;
         }
+
+     
     </style>
 }
 
 <div class="row rounded-lg overflow-hidden shadow">
-   
+  
     <div class="col-12 px-0">
         <div class="px-4 py-5 chat-box bg-white">
-            <div id="Messagechat" ></div>
+            <div id="Messagechat" >
+                @foreach (var item in Model)
+                {
+                    <a href="/Contact/Contact/@item.UserID" class="list-group-item  list-group-item-action list-group-item-light mb-2 rounded-0">
+                        <img src="~/Files/ImageProfile/@item.Photo" alt="user" width="50" class="rounded-circle mr-3">
+                        <div class="media-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h6 class="mb-0">@item.FirstName @item.LastName</h6><small class="small font-weight-bold">new</small>
+                            </div>
+                            <p class="font-italic text-muted mb-0 text-small">@item.Message</p>
+                            <p class="font-italic text-muted mb-0 text-small">@item.PhoneNumber</p>
+                        </div>
+                    </a>
+                    <br>
+                }
+
+
+            </div>
         </div>
        
     </div>
@@ -52,10 +73,9 @@
 
         const formDataDiv = document.getElementById('formData');
 
-        connection.on("ReceiveFormFromUser", function (firstName, lastName, email, phone, message) {
-            var emailLink = `mailto:${email}?subject=Message from ${firstName}&body=${message}`;
-            var messageHTML = `<a href="${emailLink}" class="list-group-item ${email} list-group-item-action list-group-item-light mb-2 rounded-0">
-            <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle mr-3">
+        connection.on("ReceiveFormFromUser", function (Id,firstName, lastName, email, phone, message, image) {
+            var messageHTML = `<a href="/Contact/Contact/${Id}" class="list-group-item ${email} list-group-item-action list-group-item-light mb-2 rounded-0">
+                    <img src="/Files/ImageProfile/${image}" alt="user" width="50" class="rounded-circle mr-3">
             <div class="media-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <h6 class="mb-0">${firstName} ${lastName}</h6><small class="small font-weight-bold">new</small>

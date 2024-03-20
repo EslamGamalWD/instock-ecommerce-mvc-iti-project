@@ -5,14 +5,16 @@
 namespace InStockWebAppDAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingCheckoutSessionIdToCartClass : Migration
+    public partial class AddImageUrlToProductAndCheckOutSessionIdToCart : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "UnitsSold",
-                table: "Product");
+            migrationBuilder.AddColumn<string>(
+                name: "ImgeUrl",
+                table: "Product",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CheckoutSessionId",
@@ -25,15 +27,12 @@ namespace InStockWebAppDAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
+                name: "ImgeUrl",
+                table: "Product");
+
+            migrationBuilder.DropColumn(
                 name: "CheckoutSessionId",
                 table: "Cart");
-
-            migrationBuilder.AddColumn<int>(
-                name: "UnitsSold",
-                table: "Product",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
         }
     }
 }

@@ -5,24 +5,25 @@
 namespace InStockWebAppDAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddingImageUrlPropToProductClass : Migration
+    public partial class addReciverID : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "ImgeUrl",
-                table: "Product",
+                name: "ReceiverId",
+                table: "ContactMessage",
                 type: "nvarchar(max)",
-                nullable: true);
+                nullable: false,
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ImgeUrl",
-                table: "Product");
+                name: "ReceiverId",
+                table: "ContactMessage");
         }
     }
 }

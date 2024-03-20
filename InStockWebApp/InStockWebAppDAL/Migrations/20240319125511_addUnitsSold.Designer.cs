@@ -4,6 +4,7 @@ using InStockWebAppDAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InStockWebAppDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319125511_addUnitsSold")]
+    partial class addUnitsSold
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,10 +84,6 @@ namespace InStockWebAppDAL.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -122,45 +121,6 @@ namespace InStockWebAppDAL.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("City", (string)null);
-                });
-
-            modelBuilder.Entity("InStockWebAppDAL.Entities.ContactMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("ContactMessage");
                 });
 
             modelBuilder.Entity("InStockWebAppDAL.Entities.Country", b =>
@@ -897,15 +857,6 @@ namespace InStockWebAppDAL.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("InStockWebAppDAL.Entities.ContactMessage", b =>
-                {
-                    b.HasOne("InStockWebAppDAL.Entities.User", "User")
-                        .WithMany("ContactMessages")
-                        .HasForeignKey("UserID");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("InStockWebAppDAL.Entities.Item", b =>
                 {
                     b.HasOne("InStockWebAppDAL.Entities.Cart", "Cart")
@@ -1171,8 +1122,6 @@ namespace InStockWebAppDAL.Migrations
             modelBuilder.Entity("InStockWebAppDAL.Entities.User", b =>
                 {
                     b.Navigation("Cart");
-
-                    b.Navigation("ContactMessages");
 
                     b.Navigation("UserPayment");
                 });

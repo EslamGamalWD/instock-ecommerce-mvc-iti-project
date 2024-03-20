@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InStockWebAppDAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240319011204_AddingImageUrlPropToProductClass ")]
-    partial class AddingImageUrlPropToProductClass
+    [Migration("20240319150151_AddImageUrlToProductAndCheckOutSessionIdToCart")]
+    partial class AddImageUrlToProductAndCheckOutSessionIdToCart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -419,6 +419,9 @@ namespace InStockWebAppDAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitsSold")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
