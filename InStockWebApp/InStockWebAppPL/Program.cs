@@ -145,6 +145,11 @@ app.UseHangfireDashboard("/HangFire");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapHub<ChatHub>("/Hubs/ChatHub");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/Hubs/ChatHub");
+    endpoints.MapHub<UserCount>("/Hubs/UserCount");
+});
+
 
 app.Run();

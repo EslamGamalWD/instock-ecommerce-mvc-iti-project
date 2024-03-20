@@ -120,11 +120,24 @@
                     .catch(err => console.error("Error sending form data:", err));
             });
 
-            connection.on("FormSubmissionFailed", function (errorMessage) {
-                console.error("Error submitting form:", errorMessage);
-                alert("An error occurred while submitting the form. Please try again later.");
+            connection.on("ReceiveFormFromUser", function (Id, firstName, lastName, email, phone, message, image) {
+                var messageHTML = `
+                                <div class="media media-chat">
+                                    <img class="avatar" src="/Files/ImageProfile/${image}" alt="...">
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                            <p>${message}</p>
+                                        </div>
+                                    </div>
+                                </div>`;
+                $('#SenderMessage').append(messageHTML);
             });
         });
     </script>
+
+   
+
+  
+
 }
 
