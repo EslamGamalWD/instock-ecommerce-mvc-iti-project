@@ -44,13 +44,16 @@ public class HomeController : Controller
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+
         if (claim is not null)
         {
             var userId = claim.Value;
             var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
             HttpContext.Session.SetInt32("shoppingCartSession", count);
         }
+
         var categories = await _categoryRepository.GetAll();
+
         var allDiscounts = await _discountRepository.GetAll();
         var discounts = allDiscounts.Where(d => d.IsActive).ToList();
         ViewBag.Discounts = discounts;
