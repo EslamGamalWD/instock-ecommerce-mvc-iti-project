@@ -103,7 +103,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 var DbProducts= await _applicationDbContext.Products
                     .Include(P=>P.SubCategory).Include(P=>P.Discount).Include(P => P.Images).ToListAsync();
                 //var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
-                IEnumerable<GetProductsVM> ShowProducts= new List<GetProductsVM>();
+                List<GetProductsVM> ShowProducts= new List<GetProductsVM>() { };
                 foreach (var DBProduct in DbProducts)
                 {
                     GetProductsVM getProductsVM = new GetProductsVM()
@@ -124,7 +124,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     {
                         getProductsVM.ImagePaths.Add(img.ImagePath);
                     }
-                    ShowProducts.Append(getProductsVM);
+                    ShowProducts.Add(getProductsVM);
                 }
                 return ShowProducts;
             }catch(Exception) 
