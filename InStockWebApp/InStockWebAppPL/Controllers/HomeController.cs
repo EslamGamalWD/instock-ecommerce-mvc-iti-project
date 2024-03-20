@@ -38,8 +38,7 @@ public class HomeController : Controller
         this.userRepository=userRepository;
         this.getCategoryWithProductRepository=getCategoryWithProductRepository;
         _unitOfWork = unitOfWork;
-    }
-    
+	}
     [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
     public async Task<IActionResult> Index()
     {
@@ -121,4 +120,5 @@ public class HomeController : Controller
         var categories = await _categoryRepository.GetAll();
         return View(await getCategoryWithProductRepository.CategoryWithProducts(categories));
     }
+
 }

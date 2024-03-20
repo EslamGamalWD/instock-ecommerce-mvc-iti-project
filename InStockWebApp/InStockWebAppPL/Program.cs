@@ -5,6 +5,7 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
+using InStockWebAppBLL.Helpers.LocalizationService;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using InStockWebAppPL.Hubs;
@@ -12,7 +13,11 @@ using InStockWebAppPL.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +35,28 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+builder.Services.AddSingleton<LanguageService>();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddMvc().AddViewLocalization().AddDataAnnotationsLocalization(options => {
+    options.DataAnnotationLocalizerProvider = (type, factory) => {
+        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName);
+        return factory.Create("ShareResource", assemblyName.Name);
+    };
+});
+// Configure supported cultures
+var supportedCultures = new[]
+{
+    new CultureInfo("en-US"),
+    new CultureInfo("ar")
+};
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 builder.Services.AddControllersWithViews();
 //builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection(nameof(CloudinarySettings)));
 
@@ -102,6 +128,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+    // Add localization middleware
+    app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 }
 
 app.UseHttpsRedirection();

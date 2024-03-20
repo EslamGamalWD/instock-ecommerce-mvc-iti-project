@@ -1,9 +1,11 @@
 ﻿
 using AutoMapper;
+using Azure;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
@@ -100,7 +102,30 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var DbProducts= await _applicationDbContext.Products
                     .Include(P=>P.SubCategory).Include(P=>P.Discount).Include(P => P.Images).ToListAsync();
-                var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
+                //var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
+                IEnumerable<GetProductsVM> ShowProducts= new List<GetProductsVM>();
+                foreach (var DBProduct in DbProducts)
+                {
+                    GetProductsVM getProductsVM = new GetProductsVM()
+                    {
+                        Id = DBProduct.Id,
+                        Name = DBProduct.Name,
+                        Description = DBProduct.Description,
+                        Price = DBProduct.Price,
+                        InStock = DBProduct.InStock,
+                        AvgRating = DBProduct.AvgRating,
+                        CreatedAt = DBProduct.CreatedAt,
+                        IsDeleted = DBProduct.IsDeleted,
+                        SubCategoryName = DBProduct.SubCategory.Name,
+                        DiscountName = DBProduct.Discount.Name,
+                        ProductReviews = DBProduct.Reviews
+                    };
+                    foreach (var img in DBProduct.Images)
+                    {
+                        getProductsVM.ImagePaths.Add(img.ImagePath);
+                    }
+                    ShowProducts.Append(getProductsVM);
+                }
                 return ShowProducts;
             }catch(Exception) 
             { 

@@ -89,6 +89,7 @@ else
         }
         else
         {
+            //Add the existing images here to allow edit them
             <div>
                 <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
             </div>
@@ -102,7 +103,29 @@ else
         <a asp-action="Index" class="btn btn-dark">Back to List</a>
     </div>
     
+    <script>
+        var index = 0;
+        var inputs = [];
 
-        <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
+        function AddImage() {
+            var imageInput = document.createElement("input");
+            imageInput.type = "file";
+            imageInput.name = `ImageFiles`;
+            imageInput.multiple = true;
+            imageInput.className = "form-control image-file mb-2";
+            var ImageDiv = document.getElementById("ImageForm");
+            ImageDiv.appendChild(imageInput);
+            inputs.push(imageInput); // Add the input to the list of inputs
+            index++;
+        }
+
+        function RemoveImage() {
+            if (inputs.length > 0) {
+                var lastInput = inputs.pop(); // Remove the last added input
+                lastInput.remove(); // Remove the input element from the DOM
+                index--;
+            }
+        }
+    </script>
 
 </div>

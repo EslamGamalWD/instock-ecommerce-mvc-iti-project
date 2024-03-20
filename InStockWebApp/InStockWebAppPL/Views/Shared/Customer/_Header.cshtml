@@ -31,6 +31,8 @@
                             <a href="#categories" class="dropdown-item border-0 transition-link">Categories</a>
                             <a href="#discounts" class="dropdown-item border-0 transition-link">Discounts</a>
                             <a href="#bestsellers" class="dropdown-item border-0 transition-link">Best-Sellers</a>
+                            <a href="#trending" class="dropdown-item border-0 transition-link">Trending</a>
+                            <a asp-action="Admin" asp-controller="Contact" class="dropdown-item border-0 transition-link">Contact</a>
                         </div>
                     </li>
                     @{
@@ -75,7 +77,25 @@
                     </li>
 
                 </ul>
-            </div>
+                <div class="dropdown">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"> Language </button>
+                  <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="ar" class="dropdown-item">
+                                <i class="flag-icon flag-icon-gb"></i> Arabic
+                            </a>
+                        </li>
+                    <li>
+                      <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item">
+                        <i class="flag-icon flag-icon-gb"></i> English </a>
+                    </li>
+                    <li>
+                      <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-culture="fr-FR" class="dropdown-item">
+                        <i class="flag-icon flag-icon-gb"></i> French </a>
+                    </li>
+                  </ul>
+                </div>
+                            </div>
         </nav>
     </div>
 </header>
