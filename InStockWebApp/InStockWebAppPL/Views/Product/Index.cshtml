@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<InStockWebAppBLL.Models.ProductVM.GetProductsVM>
+﻿@model IEnumerable<InStockWebAppBLL.Models.ProductVM.GetProductsVM>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
@@ -11,7 +10,7 @@
             <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
                 <div>
                     <h4 class="mb-3">Product List</h4>
-                    <p class="mb-0">The product list effectively dictates product presentation</p>
+                    <p class="mb-0">Here are all the products in the system</p>
                 </div>
                 <a asp-action="Create" class="btn btn-primary add-list"><i class="las la-plus mr-3"></i>Add Product</a>
             </div>
@@ -21,12 +20,6 @@
                 <table class="data-tables table mb-0 tbl-server-info">
                     <thead class="bg-white text-uppercase">
                         <tr class="ligth ligth-data">
-                            <th>
-                                <div class="checkbox d-inline-block">
-                                    <input type="checkbox" class="checkbox-input" id="checkbox1">
-                                    <label for="checkbox1" class="mb-0"></label>
-                                </div>
-                            </th>
                             <th>Product</th>
                             <th>Dicount Code</th>
                             <th>Category</th>
@@ -41,16 +34,9 @@
                         {
                             <tr>
                             <td>
-                                <div class="checkbox d-inline-block">
-                                    <input type="checkbox" class="checkbox-input" id="checkbox2">
-                                    <label for="checkbox2" class="mb-0"></label>
-                                </div>
-                            </td>
-                            <td>
                                 <div class="d-flex align-items-center">
                                         <img src="~/Files/ProductImages/@item.ImagePaths.FirstOrDefault()" class="img-fluid rounded avatar-50 mr-3" alt="image">
                                     <div>
-                                        @item.ImagePaths.FirstOrDefault()
                                         @item.Name
                                         <p class="mb-0"><small>@item.Description</small></p>
                                     </div>

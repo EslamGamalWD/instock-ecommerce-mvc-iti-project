@@ -3,7 +3,6 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ReviewVM;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

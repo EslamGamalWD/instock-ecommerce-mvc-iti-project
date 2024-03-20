@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Helpers.LocalizationService;
+using Microsoft.AspNetCore.Localization;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -17,7 +19,6 @@ namespace InStockWebAppPL.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IUnitOfWork _unitOfWork;
-
         public AccountController(IUserRepository userRepository, SignInManager<User> signInManager,
             UserManager<User> userManager, IUnitOfWork unitOfWork)
         {
@@ -26,7 +27,7 @@ namespace InStockWebAppPL.Controllers
             _userManager = userManager;
             _unitOfWork = unitOfWork;
         }
-
+        
         [HttpGet]
         public IActionResult Register()
         {

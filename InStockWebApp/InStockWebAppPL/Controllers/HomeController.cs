@@ -35,9 +35,6 @@ public class HomeController : Controller
         _discountRepository = discountRepository;
 
         _unitOfWork = unitOfWork;
-    }
-
-
 	}
     [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
 
@@ -229,4 +226,5 @@ public class HomeController : Controller
 
         return View(categoriesWithProductsVMs);
     }
+
 }

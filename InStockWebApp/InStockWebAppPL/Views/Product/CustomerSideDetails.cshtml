@@ -1,5 +1,7 @@
 ﻿@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
-
+@using InStockWebAppBLL.Helpers.LocalizationService
+@using Microsoft.AspNetCore.Localization
+@inject LanguageService _localization
 @using Microsoft.AspNetCore.Identity;
 @using InStockWebAppDAL.Entities
 @inject SignInManager<User> signInManager
@@ -90,7 +92,7 @@
                                
                                 <div class="col-sm-5 pr-sm-0">
                                     <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
-                                        <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+                                        <span class="small text-uppercase text-gray mr-4 no-select">@_localization.Getkey("Quantity")</span>
                                         <div class="quantity">
                                             <input type="hidden" name="productId" value="@Model.Id" />
                                             <button type="button" class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
@@ -106,11 +108,11 @@
                         </form>
                         <br>
                         <ul class="list-unstyled small d-inline-block">
-                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">Instock:</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
-                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">SubCategory:</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
+                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">@_localization.Getkey("Instock"):</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
+                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("SubCategory"):</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
                             @if (Model.DiscountName != null)
                             {
-                                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Discounts:</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
+                                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("Discounts"):</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
                             }
                         </ul>
                     </div>
@@ -119,12 +121,12 @@
                 <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
                     @if (signInManager.IsSignedIn(User))
                             {
-                        <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">@_localization.Getkey("Description")</a></li>
 
-                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">@_localization.Getkey("Reviews")</a></li>
                     }else
                     {
-                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">@_localization.Getkey("Reviews")</a></li>
 
                     }
 
@@ -164,7 +166,7 @@
 
                                 }
                             }else{
-                            <h6 class="text-uppercase">Product description </h6>
+                                <h6 class="text-uppercase">@_localization.Getkey("Product") @_localization.Getkey("Description") </h6>
                             <p class="text-muted text-sm mb-0">@Model.Description</p>
                             }
                         </div>
