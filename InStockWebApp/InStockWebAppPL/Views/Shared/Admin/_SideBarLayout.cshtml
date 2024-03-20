@@ -1,7 +1,7 @@
 ﻿<div class="iq-sidebar  sidebar-default ">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
         <a href="../backend/index.html" class="header-logo">
-            <img src="~/AdminResources/images/logo.png" class="img-fluid rounded-normal light-logo" alt="logo"><h5 class="logo-title light-logo ml-3">POSDash</h5>
+            <img src="~/AdminResources/images/logo.png" class="img-fluid rounded-normal light-logo" alt="logo"><h5 class="logo-title light-logo ml-3">In-Stock</h5>
         </a>
         <div class="iq-menu-bt-sidebar ml-0">
             <i class="las la-bars wrapper-menu"></i>
@@ -10,7 +10,7 @@
     <div class="data-scrollbar" data-scroll="1">
         <nav class="iq-sidebar-menu">
             <ul id="iq-sidebar-toggle" class="iq-menu">
-                <li class="active">
+                <li >
                     <a href="../backend/index.html" class="svg-icon">
                         <svg class="svg-icon" id="p-dash1" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -21,7 +21,7 @@
                     </a>
                 </li>
 
-                <li>
+                <li active-when="User">
                     <a href="#user" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <i class="ri-file-user-line"></i>
                         <span class="ml-4">Users</span>
@@ -43,7 +43,7 @@
                     
                 </li>
 
-                <li>
+                <li active-when="Role">
                     <a href="#role" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <i class="ri-registered-fill"></i>
                         <span class="ml-4">Roles</span>
@@ -63,7 +63,7 @@
                     </ul>
                    
                 </li>
-                <li class=" ">
+                <li active-when="Product">
                     <a href="#product" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <svg class="svg-icon" id="p-dash2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="21" r="1"></circle>
@@ -78,18 +78,18 @@
                     </a>
                     <ul id="product" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li class="">
-                            <a asp-area="" asp-controller="Product" asp-action="Index">
+                            <a  asp-controller="Product" asp-action="Index">
                                 <i class="las la-minus"></i><span>List Product</span>
                             </a>
                         </li>
                         <li class="">
-                            <a asp-area="" asp-controller="Product" asp-action="Create">
+                            <a  asp-controller="Product" asp-action="Create">
                                 <i class="las la-minus"></i><span>Add Product</span>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class=" ">
+                <li active-when="Category">
                     <a href="#category" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <svg class="svg-icon" id="p-dash3" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -103,14 +103,14 @@
                     </a>
                     <ul id="category" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li class="">
-                            <a asp-controller="Category" asp-action="Index">
+                            <a active-when="Category" asp-controller="Category" asp-action="Index">
                                 <i class="las la-minus"></i><span>List Subcategory</span>
                             </a>
                         </li>
                         
                     </ul>
                 </li>
-                <li class=" ">
+                <li active-when="Subcategory">
                     <a href="#subcategory" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <svg class="svg-icon" id="p-dash4" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path>
@@ -160,7 +160,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class=" ">
+                <li active-when="Discount">
                     <a href="#Discount" class="collapsed" data-toggle="collapse" aria-expanded="false">
                         <svg class="svg-icon" id="dollar-sign" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -182,7 +182,7 @@
 
                     </ul>
                 </li>
-                <li>
+                <li active-when="Contact">
                     <a asp-controller="Contact" asp-action="Index" class="svg-icon">
                         <i class="ri-chat-new-line"></i>
                         <span class="ml-4">Problems</span>

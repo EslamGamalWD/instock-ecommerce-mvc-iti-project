@@ -7,8 +7,6 @@ using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using NuGet.Protocol.Plugins;
 using Stripe;
 using System;
 using System.Threading.Tasks;
