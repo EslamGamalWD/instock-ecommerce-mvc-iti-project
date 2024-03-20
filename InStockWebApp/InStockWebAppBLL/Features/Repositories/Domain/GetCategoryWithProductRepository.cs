@@ -36,6 +36,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     Id = category.Id,
                     Name = category.Name,
                     Description = category.Description,
+                    ImagePath = category.ImagePath,
                     CreatedAt = category.CreatedAt,
                     ModifiedAt = category.ModifiedAt,
                     DeletedAt = category.DeletedAt,

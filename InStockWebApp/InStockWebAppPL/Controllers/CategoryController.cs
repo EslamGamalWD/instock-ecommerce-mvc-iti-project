@@ -13,12 +13,14 @@ namespace InStockWebAppPL.Controllers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CategoryController(IMapper mapper, IUnitOfWork unitOfWork, ICategoryRepository categoryRepository)
+        public CategoryController(IMapper mapper, IUnitOfWork unitOfWork, ICategoryRepository categoryRepository, IWebHostEnvironment webHostEnvironment)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _categoryRepository = categoryRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -74,13 +76,32 @@ namespace InStockWebAppPL.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryVM model)
+        public async Task<IActionResult> Create(CreateCategoryVM model, IFormFile? imageFormFile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var category = _mapper.Map<Category>(model);
+
+                    if (imageFormFile != null)
+                    {
+                        string imgExtension = Path.GetExtension(imageFormFile.FileName);
+                        Guid imgGuid = Guid.NewGuid();
+                        string imgName = imgGuid + imgExtension;
+                        string imgPath = "\\Files\\CategoryImages\\" + imgName;
+                        category.ImagePath = imgPath;
+
+                        string imgFullPath = _webHostEnvironment.WebRootPath + imgPath;
+
+                        FileStream imgFileStream = new FileStream(imgFullPath, FileMode.Create);
+                        imageFormFile.CopyTo(imgFileStream);
+                        imgFileStream.Dispose();
+                    }
+                    else
+                    {
+                        category.ImagePath = "\\Files\\CategoryImages\\No_Image.jpg";
+                    }
 
                     if (await _categoryRepository.Add(category))
                     {
@@ -132,13 +153,15 @@ namespace InStockWebAppPL.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditCategoryVM model)
+        public async Task<IActionResult> Edit(EditCategoryVM model, IFormFile? imageFormFile)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var category = _mapper.Map<Category>(model);
+
+                    var oldCategory = await _categoryRepository.GetById(model.ID);
 
                     var existingCategory = await _categoryRepository.GetFirstOrDefault(c => c.Name == category.Name && c.Id != category.Id);
 
@@ -147,6 +170,31 @@ namespace InStockWebAppPL.Controllers
                         TempData["Message"] = "Error: Another category with the same name already exists!";
 
                         return PartialView("_Edit", model);
+                    }
+
+                    if (imageFormFile != null)
+                    {
+                        if (oldCategory?.ImagePath != "\\Files\\CategoryImages\\No_Image.jpg")
+                        {
+                            string oldImgFullPath = _webHostEnvironment.WebRootPath + oldCategory.ImagePath;
+
+                            if (System.IO.File.Exists(oldImgFullPath))
+                            {
+                                System.IO.File.Delete(oldImgFullPath);
+                            }
+                        }
+
+                        string imgExtension = Path.GetExtension(imageFormFile.FileName);
+                        Guid imgGuid = Guid.NewGuid();
+                        string imgName = imgGuid + imgExtension;
+                        string imgPath = "\\Files\\CategoryImages\\" + imgName;
+                        category.ImagePath = imgPath;
+
+                        string imgFullPath = _webHostEnvironment.WebRootPath + imgPath;
+
+                        FileStream imgFileStream = new FileStream(imgFullPath, FileMode.Create);
+                        imageFormFile.CopyTo(imgFileStream);
+                        imgFileStream.Dispose();
                     }
 
                     _categoryRepository.Update(category);

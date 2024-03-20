@@ -39,6 +39,7 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
             {
                 Name = entity.Name,
                 Description = entity.Description,
+                ImagePath = entity.ImagePath,
                 CreatedAt = DateTime.Now,
                 IsDeleted = false
             };
@@ -64,6 +65,12 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
         {
             updatedCategory.Name = entity.Name;
             updatedCategory.Description = entity.Description;
+
+            if (entity.ImagePath != null)
+            {
+                updatedCategory.ImagePath = entity.ImagePath;
+            }
+            
             updatedCategory.ModifiedAt = DateTime.Now;
         }
     }
@@ -107,6 +114,7 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
             Id = category.Id,
             Name = category.Name,
             Description = category.Description,
+            ImagePath = category.ImagePath,
             CreatedAt = category.CreatedAt,
             ModifiedAt = category.ModifiedAt,
             DeletedAt = category.DeletedAt,

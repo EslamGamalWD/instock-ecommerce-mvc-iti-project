@@ -10,31 +10,38 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title text-uppercase">@Model.Name Category</h2>
+					<h2 class="card-title text-uppercase">@Model.Name Category</h2>
                 </div>
                 <div class="card-body">
-                    <h5>Description:</h5>
-                    <p>@Model.Description</p>
                     <div class="row">
-                        <div class="col-md-6">
-                            <h5>Created At:</h5>
-                            <p>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                        <div class="col-md-6" style="width:100%;height:500px;">
+                            <img src="@Model.ImagePath" style="width:100%;height:100%;" />
                         </div>
                         <div class="col-md-6">
-                            <h5>Modified At:</h5>
-                            <p>@(Model.ModifiedAt.HasValue ? Model.ModifiedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5>Deleted At:</h5>
-                            <p>@(Model.DeletedAt.HasValue ? Model.DeletedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>Status:</h5>
-                            <p class="badge @(Model.IsDeleted ? "bg-danger" : "bg-success")">
-                                @(Model.IsDeleted ? "Deleted" : "Available")
-                            </p>
+                            <h5>Description:</h5>
+                            <p>@Model.Description</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Created At:</h5>
+                                    <p>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Modified At:</h5>
+                                    <p>@(Model.ModifiedAt.HasValue ? Model.ModifiedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Deleted At:</h5>
+                                    <p>@(Model.DeletedAt.HasValue ? Model.DeletedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Status:</h5>
+                                    <p class="badge @(Model.IsDeleted ? "bg-danger" : "bg-success")">
+                                        @(Model.IsDeleted ? "Deleted" : "Available")
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
