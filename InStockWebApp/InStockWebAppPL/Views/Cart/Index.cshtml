@@ -130,11 +130,8 @@
 
                             @if (Model != null)
                             {
-                                @Html.ActionLink("Proceed to checkout",
-                                    "CreatePaymentSession",
-                                    "Payment",
-                                    new { userId = @Model.UserId },
-                                    new { @class = "btn btn-outline-dark btn-sm" })
+                                <a asp-action="Checkout" asp-controller="Home" class="btn btn-outline-dark btn-sm">Proceed to checkout</a>
+                           
                             }
 
                         </div>
@@ -178,4 +175,23 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="~/cart/cartdetailes.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Check if TempData["SucessPayment"] is not null
+            var successPayment = @Html.Raw(Json.Serialize(TempData["SucessPayment"]));
+
+            if (successPayment) {
+                // Display toast notification for successful payment
+                Toastify({
+                    text: "Payment successful!",
+                    className: "success",
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                    preventDuplicates: true
+                }).showToast();
+            }
+        });
+    </script>
+    
 }

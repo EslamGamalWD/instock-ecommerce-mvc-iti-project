@@ -10,9 +10,7 @@ public class PaymentDetails
     public string Provider { get; set; } = string.Empty;
     public PaymentStatus PaymentStatus { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime ModifiedAt { get; set; }
+    public DateTime? ModifiedAt { get; set; }
     public bool IsDeleted { get; set; }
-    [ForeignKey("Order")]
-    public int OrderId { get; set; }
-    public Order Order { get; set; }
+   
 }

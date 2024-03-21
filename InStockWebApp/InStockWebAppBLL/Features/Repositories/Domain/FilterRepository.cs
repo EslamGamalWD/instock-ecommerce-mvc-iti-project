@@ -59,17 +59,17 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             switch (sortOption)
             {
                 case "popularity":
-                    products = products.OrderBy(p => p.Name);
+                    products = products.Include(a => a.Images).OrderBy(p => p.Name);
 
                     break;
                 case "low-high":
-                    products = products.OrderBy(p => p.Price);
+                    products = products.Include(a => a.Images).OrderBy(p => p.Price);
                     break;
                 case "high-low":
-                    products = products.OrderByDescending(p => p.Price);
+                    products = products.Include(a => a.Images).OrderByDescending(p => p.Price);
                     break;
                 default:
-                    products = products.OrderBy(p => p.Id);
+                    products = products.Include(a => a.Images).OrderBy(p => p.Id);
                     break;
             }
 
@@ -81,7 +81,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public async Task<IEnumerable<ProductFilterVM>> GetProductsForPage(int page, int pageSize)
         {
-            var products =await applicationDbContext.Products.OrderBy(p => p.Id)
+            var products =await applicationDbContext.Products.Include(a=>a.SubCategory).Include(a => a.Images).OrderBy(p => p.Id)
                .Skip((page - 1) * pageSize)
                .Take(pageSize)
                .ToListAsync();

@@ -20,7 +20,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         }
         public override async Task<bool> Add(Discount addedDiscount)
         {
-            bool discountExists = await _applicationDbContext.Categories.AnyAsync(c => c.Name == addedDiscount.Name);
+            bool discountExists = await _applicationDbContext.Discounts.AnyAsync(c => c.Name == addedDiscount.Name);
 
             if (!discountExists)
             {
