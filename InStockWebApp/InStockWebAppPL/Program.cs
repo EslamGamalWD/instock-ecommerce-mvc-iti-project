@@ -94,22 +94,22 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 //External Logins
+builder.Services.AddAuthentication().AddGoogle(options =>
+{
+    options.ClientId = "794925340425-7ikn9cakv7tsef37g3ghqfbr9hc3do7l.apps.googleusercontent.com";
+    options.ClientSecret = "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";
+});
+
 builder.Services.AddAuthentication().AddMicrosoftAccount(options =>
 {
     options.ClientId = "f2b08cb4-707b-418a-9f66-cabd363fee14";
     options.ClientSecret = "L2C8Q~Xnf2pJcX-z7EJRZox.qvhq0P9N6Pd9-adw";
 });
 
-//builder.Services.AddAuthentication().AddFacebook(options =>
-//{
-//    options.AppId = "764210835665367";
-//    options.AppSecret = "2f6a335d944293a56ba30909ecc82c8a";
-//});
-
 builder.Services.AddAuthentication().AddFacebook(options =>
 {
-    options.AppId = "1839893246447698";
-    options.AppSecret = "37d901b716c469a8862d6a11d922fcce";
+    options.AppId = "7665064126879819";
+    options.AppSecret = "c9ad9df46dd6d19ddd7edd9cb1b05571";
 });
 
 
