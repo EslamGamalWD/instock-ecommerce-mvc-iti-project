@@ -11,6 +11,8 @@ using InStockWebAppDAL.Entities;
 using InStockWebAppDAL.Entities.Enumerators;
 using Microsoft.AspNetCore.Identity;
 using InStockWebAppBLL.Models.ReviewVM;
+using InStockWebAppBLL.Models.PaymentDetailesVM;
+using InStockWebAppBLL.Models.OrderVM;
 
 namespace InStockWebAppBLL.Mapper
 {
@@ -104,6 +106,11 @@ namespace InStockWebAppBLL.Mapper
 
 
             CreateMap<ReviewVM, ProductReview>();
+
+
+            CreateMap<PaymentDetails, AddPaymentDetailesVM>().ReverseMap();
+            CreateMap<Order, AddOrderVM>().ReverseMap();
+
         }
     }
 }

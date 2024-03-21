@@ -75,7 +75,7 @@ public class HomeController : Controller
             return View("NotValidUser");
         //Check if the user didn't add their details before(First time To Order)
         var userId = claim.Value;
-        if (await userRepository.UserDataExist(userId)) return View("PaymentView");
+        if (await userRepository.UserDataExist(userId)) return RedirectToAction("CreatePaymentSession", "Payment", new { userId=userId });
         var user =
             _mapper.Map<UserCheckoutDetailsVM>(
                 await _unitOfWork.UserRepository.GetUserById(userId));

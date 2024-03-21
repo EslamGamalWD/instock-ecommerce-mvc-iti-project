@@ -11,7 +11,7 @@ namespace InStockWebAppBLL.Features.Interfaces
     public interface IpaymentService
     {
       
-        Task<string?> CreatePaymentSession(string cartId);
+        Task<string?> CreatePaymentSession(string cartId ,string Link);
        
     }
 }
