@@ -18,7 +18,9 @@
 @section CSS {
     <style>
 
-
+        body{
+            overflow:hidden
+        }
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -41,7 +43,7 @@
         .sender{
             background-color: #dcb14a;
             font-size: 15px;
-            padding: 15px;
+            padding: 10px;
             border-radius: 5px;
             font-weight: 500;
             color: #3e3c3c;
@@ -54,16 +56,21 @@
             justify-content: center;
             align-items: center;
             background-color: transparent;
+            padding:5px;
+            
         }
 
         .main {
-            background-color: transparent;
+            transform: translateX(280%); /* Initially positioned off-screen at the top */
+            transition: transform 1s ease-in-out; /* Add a transition */
+            background-color: rgba(255, 255, 255, 0.8);
             width: 600px;
             position: relative;
-            padding:10px;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            padding: 6px 0px 0px 0px;
+            /*             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+ */
+        
         }
 
         .scroll {
@@ -97,6 +104,7 @@
             width: 500px;
             height: 30px;
             border: none;
+            padding :5px
         }
 
         form-control: focus {
@@ -132,20 +140,24 @@
      
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+    <link href="~/lib/leaflet/leaflet.css" rel="stylesheet" />
+    <link href="~/lib/leaflet/leaflet.min.css" rel="stylesheet" />
 }
 
 
-
-<div class="wrapper">
-    <div class="main">
+@* <h1 style="text-align:center">Chatting</h1>
+ *@
+<div class="wrapper mt-3  mb-3">
+    <img src="~/Customer/img/Service 24_7-rafiki.svg" width="600px" height="600px">
+    <div class="main" id="chatContainer">
         <div class="px-2 scroll">
+           
             <div id="messages">
                 @foreach (var item in Model)
                 {
                     if (item.ReceiverId !=null)
                     {
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex pl-3 align-items-center">
                             <div class="pr-2 pl-1">
                                 <span class="name">Admin</span>
                                 <p class="msg">@item.Message</p>
@@ -154,7 +166,7 @@
                     }
                     else
                     {
-                        <div class="d-flex align-items-center text-right justify-content-end  ">
+                        <div class="d-flex align-items-center text-right pr-3 justify-content-end  ">
                             <div class="pr-2">
                                 <p class="sender">@item.Message</p>
                             </div>
@@ -288,5 +300,10 @@
                 alert("An error occurred while submitting the form. Please try again later.");
             });
         });
+    </script>
+    <script>
+        setTimeout(function () {
+            document.getElementById("chatContainer").style.transform = "translateX(0)";
+        }, 1000);
     </script>
 }

@@ -124,7 +124,9 @@
                                     <div class="col-lg-4">
                                         <div class="form-group focused">
                                             <label for="inputGroupSelectCountry" class="form-control-label">Country</label>
+                                           
                                             <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
+                                                <option selected disabled>Country</option>
                                             </select>
                                         </div>
                                     </div>
