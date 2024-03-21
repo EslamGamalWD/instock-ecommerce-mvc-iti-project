@@ -8,6 +8,8 @@
         $.ajax({
             url: '/Cart/DecreaseItemCount',
             type: 'POST',
+            cache: false,
+
             data: { itemId: itemId },
             success: function (response) {
                 console.log(response);
@@ -46,6 +48,8 @@
         $.ajax({
             url: '/Cart/IncreaseItemCount',
             type: 'POST',
+            cache: false,
+
             data: { itemId: itemId },
             success: function (response) {
                 if (response.success) {
@@ -87,6 +91,8 @@
         $.ajax({
             type: "POST",
             url: "/Cart/DeleteItem",
+            cache: false,
+
             data: { itemId: itemId },
             success: function (result) {
                 console.log(result);

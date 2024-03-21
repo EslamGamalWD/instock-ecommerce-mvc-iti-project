@@ -31,7 +31,7 @@
                             </li>
                         }
                         <li class="list-inline-item mr-0">
-                            <a class="btn btn-sm btn-outline-dark" data-bs-toggle="modal">
+                            <a class="btn btn-sm btn-outline-dark  js-render-modal" href="javascript:" data-url="/Product/ProductDetailes/@product.Id">
                                 <i class="fas fa-expand"></i>
                             </a>
                         </li>
@@ -55,9 +55,9 @@
         </div>
     </div>
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<input type="hidden" id="productCount" value="@Model.Count()" />
+
 <script>
     $(document).ready(function () {
         $('.addToCartBtnProduct').click(function (e) {
@@ -104,7 +104,12 @@
         });
 
         function updateCartCount(count) {
-            $('#cartCount').text('(' + count + ')');
+            $('#cartCount').text('(' + count + ')'); 
         }
+
+        var productCount = $('#productCount').val();
+        $('.ShowingProduct').text('Showing ' + productCount + ' results');
     });
+
+
 </script>

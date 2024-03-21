@@ -10,6 +10,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
     public interface IOrderRepository
     {
 
-        Task<bool> Add(AddOrderVM addOrderVM);
+        Task<int?> Add(AddOrderVM addOrderVM);
+        Task<IEnumerable<GetAllOrderVM>> GetAllOrders(string userId);
     }
 }

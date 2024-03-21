@@ -55,12 +55,13 @@ namespace InStockWebAppPL.Controllers
                     if (modelVM.image != null)
                     {
                         string photo = FilesUploader.UploadFile("ImageProfile", modelVM.image);
-                        if (photo== null)
-                            modelVM.Photo= "Men.jpg";
-                        else
-                            modelVM.Photo= photo;
+                        modelVM.Photo= photo;
 
 
+                    }
+                    else
+                    {
+                        modelVM.Photo= "Men.jpg";
                     }
                     #endregion
 
