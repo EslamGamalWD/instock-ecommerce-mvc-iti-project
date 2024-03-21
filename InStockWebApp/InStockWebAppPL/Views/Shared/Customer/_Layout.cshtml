@@ -35,7 +35,14 @@
 
     @await RenderSectionAsync("CSS", required: false)
 </head>
-<body class="preload">
+<body>
+
+<div class="spinner-wrapper">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <partial name="~/Views/Shared/Customer/_Header.cshtml"/>
 
 <div>
@@ -45,11 +52,6 @@
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
 
-<div class="loader-wrapper">
-    <span class="loader">
-        <span class="loader-inner"></span>
-    </span>
-</div>
 @await RenderSectionAsync("scripts", required: false)
 
 @await RenderSectionAsync("JS", required: false)
@@ -60,13 +62,6 @@
 <script src="~/Customer/vendor/swiper/swiper-bundle.min.js"></script>
 <script src="~/Customer/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="~/Customer/js/front.js"></script>
-
-<script>
-    $(window).on("load", function() {
-      $("body").removeClass("preload");
-      $(".loader-wrapper").fadeOut("slow");
-    });
-</script>
 
 
 <script>
@@ -101,6 +96,11 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <script>
+        const spinnerWrapperEl = document.querySelector(".spinner-wrapper");
+            
+            window.addEventListener("load", () => {
+                spinnerWrapperEl.classList.add('fade-out-animation');
+            });
 
         $(document).ready(function () {
             const connection = new signalR.HubConnectionBuilder()
