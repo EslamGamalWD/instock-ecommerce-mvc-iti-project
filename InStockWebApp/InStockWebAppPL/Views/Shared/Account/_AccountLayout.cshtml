@@ -16,15 +16,40 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="~/Account/css/soft-ui-dashboard.css" rel="stylesheet"/>
     @await RenderSectionAsync("HeadSection", false)
+    
+    <style>
+        
+    </style>
+    
     <title>@ViewBag.Title</title>
 </head>
 <body>
 
+<div class="spinner-wrapper">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 @RenderBody()
+
+<script>
+    $(window).on("load", function() {
+      $("body").removeClass("preload");
+      $(".loader-wrapper").fadeOut("slow");
+    });
+</script>
 
 @await RenderSectionAsync("scripts", false)
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    const spinnerWrapperEl = document.querySelector(".spinner-wrapper");
+                
+    window.addEventListener("load", () => {
+        spinnerWrapperEl.classList.add('fade-out-animation');
+    });
+</script>
 </body>
 </html>
