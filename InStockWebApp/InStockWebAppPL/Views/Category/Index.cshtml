@@ -1,20 +1,17 @@
-﻿@model IEnumerable<GetAllCategoriesVM>
+@model IEnumerable<GetAllCategoriesVM>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
-<div class="container-fluid">
+
 <div class="row">
-   
-        <div class="col-lg-12">
-            <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
-                <div>
-                    <h4 class="mb-3">Category List</h4>
-                    <p class="mb-0">Here are all the categories in the system</p>
-                </div>
-                <a href="javascript:" data-title="Add Category" data-url="/Category/Create" class="btn btn-primary js-render-modal add-list"><i class="las la-plus mr-3"></i>Add Category</a>
-            </div>
+    <div class="col-lg-12">
+        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+            <a href="javascript:" data-title="Add Category" data-url="/Category/Create" class="btn border add-btn shadow-none mx-2  d-md-block  js-render-modal add-list">
+                <i class="las la-plus mr-3"></i>Add Category
+            </a>
         </div>
+    </div>
     <div class="col-lg-12">
         <div class="table-responsive rounded mb-3">
             <table class="data-tables table mb-0 tbl-server-info text-center">
@@ -40,7 +37,7 @@
                             <td>
                                 <div class="d-flex align-items-center justify-content-center list-action">
                                     <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
-                                    href="/Category/Details/@item.Id">
+                                       href="/Category/Details/@item.Id">
                                         <i class="ri-eye-line mr-0"></i>
                                     </a>
 
@@ -60,7 +57,7 @@
     </div>
 </div>
 
-</div>
+
 @section JS {
 
     <script src="~/lib/bootbox.js/bootbox.js"></script>
