@@ -1,7 +1,7 @@
 ﻿@model List<CategoryWithProductsVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "IN-STOCK Egypt | Best Online Shopping Mall";
     var discounts = ViewBag.Discounts as List<Discount>;
     var discountedProducts = ViewBag.DiscountedProducts as List<Product>;
     var productsByUnitsSold = ViewBag.ProductsByUnitsSold as List<Product>;
@@ -472,19 +472,19 @@
                             if (count == 1)
                             {
                                 <div>
-                                    <a class="category-item" href="shop.html"><div class="image-item"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
+                                    <a class="category-item" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i].Id"><div class="image-item"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
                                 </div>
                             }
                             else if (count == 2 && (i + 1) < Model.Count())
                             {
                                 <div>
-                                    <a class="category-item mb-3" href="shop.html"><div class="image-item-up"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
+                                    <a class="category-item mb-3" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i].Id"><div class="image-item-up"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
 
                                     @{
                                         count++;
                                     }
 
-                                    <a class="category-item" href="shop.html"><div class="image-item-down"><img src="@Model[i + 1].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></div></a>
+                                    <a class="category-item" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i+1].Id"><div class="image-item-down"><img src="@Model[i + 1].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></div></a>
                                 </div>
                             }
 
@@ -610,7 +610,7 @@
                                             <div class="product-overlay">
                                                 <ul class="list-inline">
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a></li>
                                                     <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                                     @* <li class="list-inline-item"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> *@
                                                 </ul>
@@ -728,7 +728,7 @@
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
                                             <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a></li>
                                             <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                         </ul>
                                     </div>
@@ -832,7 +832,7 @@
                                             badgeClass += "info";
                                             badgeText = "NEW";
                                         }
-                                    }
+                                    } 
                                     <div class="@badgeClass">@badgeText</div>
                                     <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                     <div class="product-overlay">
@@ -1172,4 +1172,5 @@
             }
         });
     </script>
+    
 }

@@ -8,7 +8,7 @@
             <div class="mb-3 position-relative">
                 <div class="badge text-white bg-primary">New</div>
                 <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">
-                    <img class="img-fluid w-100" src="https://media.istockphoto.com/id/962915564/photo/10-oclock-portrait-of-charming-pretty-positive-cheerful-woman-closing-covering-head-face-with.jpg?s=612x612&w=0&k=20&c=GjVtZM_9MqN1Ytvg6za_cvJN4UUL99-eiPU6wyUm7_k=" alt="@product.Name">
+                    <img class="img-fluid w-100" src="~/Files/ProductImages/@(product?.Images?.FirstOrDefault()?.ImagePath ?? "profile-bg.jpg")" alt="@product.Name">
                 </a>
                 <div class="product-overlay">
                     <ul class="mb-0 list-inline">

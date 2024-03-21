@@ -1,0 +1,78 @@
+﻿@model DashBoard
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card card-transparent card-block card-stretch card-height border-none">
+            <div class="card-body p-0 mt-lg-2 mt-0">
+                <h3 class="mb-3">Hi Graham, Good Morning</h3>
+                <p class="mb-0 mr-4">Your dashboard gives you views of key performance or business process.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-body">
+                        <input type="hidden" id="UserCount" value="@Model.TotalUser" />
+                        <div class="d-flex align-items-center mb-4 card-total-sale">
+                            <div class="icon iq-icon-box-2 bg-info-light">
+                                <img src="~/Customer/img/10.jpg" class="img-fluid" alt="image">
+                            </div>
+                            <div>
+                                <p class="mb-2">User Online</p>
+                                <h4 id="Count2"></h4>
+                            </div> 
+                        </div> 
+                        <div class="iq-progress-bar mt-2">
+                            <span id="progress-bar" class="bg-info iq-progress progress-1" data-percent="10" style="transition: width 2s ease 0s; width:10px">
+                            </span> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4 card-total-sale">
+                            <div class="icon iq-icon-box-2 bg-danger-light">
+                                <img src="../assets/images/product/2.png" class="img-fluid" alt="image">
+                            </div>
+                            <div>
+                                <p class="mb-2">Total Cost</p>
+                                <h4>$ 4598</h4>
+                            </div>
+                        </div>
+                        <div class="iq-progress-bar mt-2">
+                            <span class="bg-danger iq-progress progress-1" data-percent="70" style="transition: width 2s ease 0s; width: 70%;">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4 card-total-sale">
+                            <div class="icon iq-icon-box-2 bg-success-light">
+                                <img src="../assets/images/product/3.png" class="img-fluid" alt="image">
+                            </div>
+                            <div>
+                                <p class="mb-2">Product Sold</p>
+                                <h4>4589 M</h4>
+                            </div>
+                        </div>
+                        <div class="iq-progress-bar mt-2">
+                            <span class="bg-success iq-progress progress-1" data-percent="75" style="transition: width 2s ease 0s; width: 75%;">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

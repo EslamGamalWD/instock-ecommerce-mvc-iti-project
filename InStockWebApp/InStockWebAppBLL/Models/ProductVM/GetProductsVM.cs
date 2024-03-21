@@ -16,7 +16,7 @@ namespace InStockWebAppBLL.Models.ProductVM
     bool IsDeleted,
     string SubCategoryName,
     string DiscountName,
-    List<ProductReview> ProductReviews
+    List<ProductReview> ?ProductReviews
 )
         {
             public GetProductsVM()

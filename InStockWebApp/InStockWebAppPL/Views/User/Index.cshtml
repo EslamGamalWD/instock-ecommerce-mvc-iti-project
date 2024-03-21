@@ -6,11 +6,16 @@
 }
 <div class="row">
     <div class="col-lg-12">
-        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+        
 
-            <a asp-action="Create" asp-controller="User" class="btn border add-btn shadow-none mx-2  d-md-block   add-list">
-                <i class="las la-plus mr-3"></i>Add User
-            </a>
+        <div class="col-lg-12">
+            <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+                <div>
+                    <h4 class="mb-3">User List</h4>
+                    <p class="mb-0">Here are all the users in the system</p>
+                </div>
+                <a asp-action="Create" asp-controller="User" class="btn btn-primary  add-list"><i class="las la-plus mr-3"></i>Add User</a>
+            </div>
         </div>
     </div>
     <div class="col-lg-12">

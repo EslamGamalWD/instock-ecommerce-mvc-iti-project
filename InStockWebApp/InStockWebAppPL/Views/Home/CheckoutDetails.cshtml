@@ -64,38 +64,44 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="form-label text-sm text-uppercase" asp-for="PhoneNumber">Phone number </label>
-                                    <input asp-for="PhoneNumber" class="form-control form-control-lg" type="tel" id="phone" placeholder="e.g. +02 245354745">
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                </div>
-                                <div class="col-lg-6 form-group">
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <label class="form-label text-sm text-uppercase" for="inputGroupSelectCountry">Country</label>
+                                    <input asp-for="PhoneNumber" class="form-control form-control-lg" type="text" id="phone" placeholder="e.g. +02 245354745">
+@*                                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+ *@                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelectCountry">Country</label>
+                                            </div>
+                                            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="custom-select" id="inputGroupSelectCountry">
+                                                <option selected disabled>Choose...</option>
+                                            </select>
                                         </div>
-                                        <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="custom-select" id="inputGroupSelectCountry">
-                                            <option selected disabled>Choose...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <label class="form-label text-sm text-uppercase" for="inputGroupSelectState">State</label>
-                                        </div>
-                                        <select class="custom-select" id="inputGroupSelectState">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="input-group mb-4">
-                                        <div class="input-group-prepend">
-                                            <label class="form-label text-sm text-uppercase" for="inputGroupSelectCity">City</label>
-                                        </div>
-                                        <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
-                                        </select>
-                                        <span asp-for="CityId" class="text-danger"></span>
 
                                     </div>
+                                    <div class="col-4">
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelectState">State</label>
+                                            </div>
+                                            <select class="custom-select" id="inputGroupSelectState">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="input-group mb-4">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text" for="inputGroupSelectCity">City</label>
+                                            </div>
+                                            <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
+                                            </select>
+                                            <span asp-for="CityId" class="text-danger"></span>
+
+                                        </div>
+
+                                    </div>
+
 
                                 </div>
                                 @*<div class="col-lg-12">
@@ -127,7 +133,49 @@
             </section>
         </div>
         @section JS {
-            <partial name="~/Views/Partials/Shared/_Js.cshtml" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#inputGroupSelectCountry').change(function () {
+                        $("#inputGroupSelectState").empty();
+                        var countryId = $(this).val();
+                        $.ajax({
+                            url: '/State/GetAll/' + countryId,
+                            type: 'GET',
+                            success: function (data) {
+                                console.log(data)
+                                var items = '<option selected disabled>State</option>';
+                                $.each(data, function (i, state) {
+
+                                    items += "<option value='" + state.id + "'>" + state.name + "</option>";
+                                });
+                                $("#inputGroupSelectState").append(items)
+                                console.log(items)
+
+
+                            }
+                        });
+                    });
+
+                    $('#inputGroupSelectState').change(function () {
+                        $("#inputGroupSelectCity").empty();
+
+                        var stateId = $(this).val();
+                        $.ajax({
+                            url: '/City/GetAll/' + stateId,
+                            type: 'GET',
+                            success: function (data) {
+                                var items = '<option selected disabled>City</option>';
+                                $.each(data, function (i, city) {
+                                    items += "<option value='" + city.id + "'>" + city.name + "</option>";
+                                });
+                                $("#inputGroupSelectCity").append(items)
+
+                            }
+                        });
+                    });
+                });
+            </script>
         }
         <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">

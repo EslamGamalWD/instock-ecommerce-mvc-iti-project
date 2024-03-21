@@ -40,6 +40,8 @@ namespace InStockWebAppBLL
 
 
             services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPaymentDetailesRepository, PaymentDetailesRepository>();
 
             return services;
         }

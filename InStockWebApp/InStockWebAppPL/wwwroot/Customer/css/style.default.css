@@ -72,6 +72,11 @@
     box-sizing: border-box;
 }
 
+*:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.8rem rgba(220, 177, 74, 0.6);
+}
+
 @media (prefers-reduced-motion: no-preference) {
     :root {
         scroll-behavior: smooth;

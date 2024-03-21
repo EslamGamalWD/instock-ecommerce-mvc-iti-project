@@ -18,13 +18,13 @@ public class PaymentService : IpaymentService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<string?> CreatePaymentSession(string userId)
+    public async Task<string?> CreatePaymentSession(string userId, string Link)
     {
         SetStripeApiKey();
         var cart = await _cartRepository.GetCart(userId);
         if (cart != null)
         {
-            var sessionOptions = PrepareSessionOptions(cart);
+            var sessionOptions = PrepareSessionOptions(cart,Link);
             var session = await CreateStripeSession(sessionOptions);
             cart.CheckoutSessionId = session.Id;
             await _unitOfWork.Save();
@@ -43,7 +43,7 @@ public class PaymentService : IpaymentService
         StripeConfiguration.ApiKey = apiKey;
     }
 
-    private SessionCreateOptions PrepareSessionOptions(Cart cart)
+    private SessionCreateOptions PrepareSessionOptions(Cart cart,string link)
     {
         decimal shippingPrice = 0;
 
@@ -54,7 +54,7 @@ public class PaymentService : IpaymentService
             PaymentMethodTypes = new List<string> { "card" },
             LineItems = lineItems,
             Mode = "payment",
-            SuccessUrl = "https://example.com/success",
+            SuccessUrl = link,
             CancelUrl = "https://example.com/cancel",
         };
 
@@ -73,7 +73,7 @@ public class PaymentService : IpaymentService
                 PriceData = new SessionLineItemPriceDataOptions
                 {
                     UnitAmount = (long)(product.Price * 100), 
-                    Currency = "usd",
+                    Currency = "egp",
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
                         Name = product.Name,

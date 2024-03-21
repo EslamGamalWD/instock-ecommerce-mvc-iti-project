@@ -39,6 +39,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
                 user.UserType = UserType.Customer;
                 user.CreatedAt = DateTime.Now;
+                user.Photo=(user.Gender ==0 ? "user-1.jpg" : "11.png");
 
                 var result = await userManager.CreateAsync(user, model.Password);
 

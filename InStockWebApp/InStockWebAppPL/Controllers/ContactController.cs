@@ -21,7 +21,6 @@ namespace InStockWebAppPL.Controllers
         }
         public async Task< IActionResult> Index()
         {
-            TempData["Message"] = null;
 
             var Message =await contactMessage?.GetAll();
             return View(Message);
@@ -30,7 +29,6 @@ namespace InStockWebAppPL.Controllers
 
         public async Task<IActionResult>  Admin()
         {
-            TempData["Message"] = null;
 
             var user = await userManager.FindByNameAsync(User.Identity.Name);
             return View(await contactMessage.GetBySenderID(user.Id));

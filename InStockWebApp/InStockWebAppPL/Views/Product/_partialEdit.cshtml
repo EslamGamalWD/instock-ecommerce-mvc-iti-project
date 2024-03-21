@@ -91,19 +91,41 @@ else
                 </div>
             </div>
         </div>
-        <div>
-            <div onclick="AddImage()" class="btn btn-secondary">
-                <p>Add Image</p>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+            <div class="col-4 mt-3 mb-3">
+                <p onclick="AddImage()" class="btn btn-primary text-white ">
+                    Add <i class="ri-image-add-line"></i>
+                </p>
+                <p onclick="RemoveImage()" class="btn btn-danger text-white ">
+                    <i class="ri-delete-bin-line"></i> Imag
+                </p>
             </div>
-            <div onclick="RemoveImage()" class="btn btn-danger">
-                <p>Remove Image</p>
-            </div>
+
+           
+           
         </div>
         <div id="ImageForm"></div>
-        @if (ViewData["Title"] == "Create")
-        {
-            <div>
-                <button type="submit" class="btn btn-primary mr-2">Add Product</button>
+
+        <div class="row">
+            <div class="col-6">
+            @if (ViewData["Title"] == "Create")
+            {
+                
+                    <button type="submit" class="btn btn-primary ">Add Product</button>
+                
+            }
+            else
+            {
+                //Add the existing images here to allow edit them
+                
+                    <button type="submit" class="btn btn-primary ">Edit Product</button>
+               
+            }
+            
+                <button type="reset" class="btn btn-danger m-1">Reset</button>
+                <a asp-action="Index" class="btn btn-dark">Back to List</a>
             </div>
         }
         else
@@ -134,11 +156,10 @@ else
         <div>
             <button type="reset" class="btn btn-danger">Reset</button>
         </div>
+       
     </form>
 
-    <div>
-        <a asp-action="Index" class="btn btn-dark">Back to List</a>
-    </div>
+   
     
     <script>
         var index = 0;

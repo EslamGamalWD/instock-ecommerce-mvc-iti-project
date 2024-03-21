@@ -271,5 +271,11 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                 .Include(p => p.Discount)
                 .Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+        public async Task<int> GetAllProductSold()
+        {
+            var count =await _applicationDbContext.Products.Where(p => p.InStock==0).CountAsync();
+            return count;
+        }
     }
 }
