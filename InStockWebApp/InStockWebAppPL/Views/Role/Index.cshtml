@@ -4,14 +4,17 @@
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 <div class="row">
-    <div class="col-lg-12">
-        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
 
-            <a href="javascript:" data-title="Add Role" data-url="/Role/Create" class="btn border add-btn shadow-none mx-2  d-md-block  js-render-modal add-list">
-                <i class="las la-plus mr-3"></i>Add Role
-            </a>
+    <div class="col-lg-12">
+        <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+            <div>
+                <h4 class="mb-3">Role List</h4>
+                <p class="mb-0">Here are all the roles in the system</p>
+            </div>
+            <a href="javascript:" data-title="Add Role" data-url="/Role/Create" class="btn btn-primary js-render-modal  add-list"><i class="las la-plus mr-3"></i>Add Role</a>
         </div>
     </div>
+   
     <div class="col-lg-12">
         <div class="table-responsive rounded mb-3">
             <table class="data-tables table mb-0 tbl-server-info">

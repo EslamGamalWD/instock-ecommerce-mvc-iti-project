@@ -1,4 +1,6 @@
-﻿namespace InStockWebAppDAL.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InStockWebAppDAL.Entities;
 
 public class Order
 {
@@ -10,6 +12,9 @@ public class Order
     public bool IsDeleted { get; set; }
     public string UserId { get; set; }
     public User User { get; set; }
+    public double? Long { get; set; }
+    public double? Lat { get; set; }
+    [ForeignKey("PaymentDetails")]
     public int PaymentDetailsId { get; set; }
     public PaymentDetails PaymentDetails { get; set; } = default!;
     public IEnumerable<Item> Items { get; set; } = default!;

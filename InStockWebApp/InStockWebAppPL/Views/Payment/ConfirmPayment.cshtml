@@ -1,0 +1,70 @@
+﻿@model OrderAddress
+@{
+    ViewData["Title"] = "ConfirmPayment";
+    Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+}
+<link href="~/lib/leaflet/leaflet.css" rel="stylesheet" />
+<link href="~/lib/leaflet/leaflet.min.css" rel="stylesheet" />
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="addressForm" asp-action="Location" asp-controller="Payment" method="post">
+           
+
+
+            <input type="hidden" id="lat" name="Lat" readonly>
+            <input type="hidden" id="long" name="Long" readonly>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div id="map" style="height: 400px;"></div>
+    </div>
+</div>
+<script src="~/lib/leaflet/leaflet.js"></script>
+<script src="~/lib/leaflet/leaflet.min.js"></script>
+
+<!-- JavaScript code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([30.5045, 12345511.0226], 6); // Centered on the address
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Marker to indicate the selected location
+    var marker = L.marker([30.5045, 12345511.0226], { draggable: true }).addTo(map);
+
+    // Update input fields with coordinates when marker is dragged
+    marker.on('dragend', function (event) {
+        var marker = event.target;
+        var position = marker.getLatLng();
+        document.getElementById('lat').value = position.lat.toFixed(4);
+        document.getElementById('long').value = position.lng.toFixed(4);
+    });
+
+    // Update input fields with coordinates when map is clicked
+    map.on('click', function (event) {
+        var lat = event.latlng.lat.toFixed(4);
+        var lng = event.latlng.lng.toFixed(4);
+        document.getElementById('lat').value = lat;
+        document.getElementById('long').value = lng;
+
+        // Move the marker to the clicked location
+        marker.setLatLng(event.latlng);
+
+        // Open your app with the clicked location
+        openAppWithLocation(lat, lng);
+    });
+
+    // Function to open your app with the specified location
+    function openAppWithLocation(lat, lng) {
+        // Replace this URL with the URL scheme for opening your app with the location
+        var url = 'yourapp://?lat=' + lat + '&lng=' + lng;
+        window.location.href = url;
+    }
+</script>

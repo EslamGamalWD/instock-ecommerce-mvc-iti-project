@@ -35,7 +35,7 @@ namespace InStockWebAppPL.Controllers
 
         [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int ? id = null)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
@@ -62,7 +62,7 @@ namespace InStockWebAppPL.Controllers
             ViewBag.TotalPages = await filter.totalCount();
 
             ViewBag.CurrentPage = (int)Math.Ceiling(await filter.totalCount() / (double)pageSize);
-
+            TempData["CategoeyID"]=id;
             var products = await filter.GetProductsForPage(1, pageSize);
             var totalcount = await filter.totalCount();
             ViewBag.TotalPages = totalcount;
@@ -70,14 +70,20 @@ namespace InStockWebAppPL.Controllers
             ViewBag.CurrentPage = 1;
 
             ViewBag.ProductCount = totalcount;
-
-            return View(products);
+            var result = products.Where(a => a.SubCategory.CategoryId ==id).ToList();
+            return View(result);
         }
 
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1, int pageSize = 6, string sortOption = "default", int? categoryId = null, string subcategoryIds = null, int minPrice = 0, int maxPrice = 1000000, string search = null)
         {
+            int? categoryid = (int?)TempData["CategoeyID"];
+            if(categoryid !=null)
+            {
+                categoryId = categoryid;
+
+            }
             var productList = await filter.GetByFilter(page, pageSize, sortOption, categoryId, subcategoryIds, minPrice, maxPrice, search);
 
             var totalProducts = await filter.totalCount();
