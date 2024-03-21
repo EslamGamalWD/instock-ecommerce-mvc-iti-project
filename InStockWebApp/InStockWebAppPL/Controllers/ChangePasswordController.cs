@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Hangfire;
-using Microsoft.AspNetCore.Hosting;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using InStockWebAppBLL.Models.ChangePasswordVM;
 
 namespace InStockWebAppPL.Controllers
@@ -38,12 +36,12 @@ namespace InStockWebAppPL.Controllers
                 HttpContext.Session.SetInt32("ChangePassword", randomNumberInRange);
 
 
-                TempData["Message"] = "saved Successfuly";
+                TempData["Message"] = "Password saved successfully";
                 var filePath = $"{webHostEnvironmen.WebRootPath}/Account/Tempelet/Email.html";
                 StreamReader str = new StreamReader(filePath);
                 var body = str.ReadToEnd();
                 str.Close();
-                body = body.Replace("[Header]", "Welcom In Instock Shopping")
+                body = body.Replace("[Header]", "Welcome to IN-STOCK")
                     .Replace("[Body]",
                         $"Welcome to InStock!We have received a request to change your password \n {randomNumberInRange}")
                     .Replace("[URL]", "/ChangePassword")
