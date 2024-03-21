@@ -14,13 +14,9 @@
             @*     <span class="navbar-toggler-icon"></span> *@
             @* </button> *@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-
-
-                </ul>
                 <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index" class="nav-link active">Home</a>
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">Shop</a>
@@ -43,56 +39,53 @@
                     {
                         <li class="nav-item">
 
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small id="cartCount" class="text-gray fw-normal">(@count)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>Cart<small id="cartCount" class="text-dark fw-normal">(@count)</small></a>
                         </li>
                     }
                     else if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is null || count == 0)
                     {
                         <li class="nav-item">
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small id="cartCount" class="text-gray fw-normal">(0)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>Cart<small id="cartCount" class="text-dark fw-normal">(0)</small></a>
                         </li>
                     }
 
-
-                    @* <li class="nav-item"> *@
-                    @*     <a class="nav-link" href="#!"> *@
-                    @*         <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"> (0)</small> *@
-                    @*     </a> *@
-                    @* </li> *@
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="/Customer/Details"> <i class="fas fa-user me-1 text-gray fw-normal"></i> Profile</a>
+                            <a class="nav-link" href="/Customer/Details"> <i class="icon-nav fas fa-user me-1 fw-normal"></i> Profile</a>
                         </li>
                     }
                     <li class="nav-item">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <a class="btn-out" href="/Account/Logout">Log Out</a>
+                            <a class="btn btn-dark" href="/Account/Logout"><i class="icon-nav fas fa-sign-out-alt me-1"></i> Log Out</a>
                         }
                         else
                         {
-                            <a class="btn-out" href="/Account/Login">Log In</a>
+                            <a class="btn btn-dark" href="/Account/Login"><i class="icon-nav fas fa-sign-in-alt me-1"></i> Log In</a>
                         }
                     </li>
 
                 </ul>
                 <div class="dropdown">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"> Language </button>
-                  <ul class="dropdown-menu">
+                    <button type="button" class="btn btn-primary border-none dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fas fa-globe me-1 text-dark"></i>
+                    </button>
+                    <ul class="dropdown-menu">
                         <li>
                             <a asp-controller="Product" asp-action="ChangeLanguage" asp-route-culture="ar" class="dropdown-item">
                                 <i class="flag-icon flag-icon-gb"></i> Arabic
                             </a>
                         </li>
-                    <li>
-                      <a asp-controller="Product" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item">
-                        <i class="flag-icon flag-icon-gb"></i> English </a>
-                    </li>
-                    
-                  </ul>
+                        <li>
+                            <a asp-controller="Product" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item">
+                                <i class="flag-icon flag-icon-gb"></i> English
+                            </a>
+                        </li>
+
+                    </ul>
                 </div>
-                            </div>
+            </div>
         </nav>
     </div>
 </header>
