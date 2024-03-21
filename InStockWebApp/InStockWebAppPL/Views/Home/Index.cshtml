@@ -1,7 +1,7 @@
 ﻿@model List<CategoryWithProductsVM>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "IN-STOCK Egypt | Best Online Shopping Mall";
     var discounts = ViewBag.Discounts as List<Discount>;
     var discountedProducts = ViewBag.DiscountedProducts as List<Product>;
     var productsByUnitsSold = ViewBag.ProductsByUnitsSold as List<Product>;
@@ -68,19 +68,16 @@
         .slider-wrapper .image-list .image-item {
           width: 360px;
           height: 500px;
-          object-fit: cover;
         }
 
         .slider-wrapper .image-list .image-item-up {
             width: 360px;
-            height: 240px;
-            object-fit: cover;
+            height: 242px;
         }
 
         .slider-wrapper .image-list .image-item-down {
             width: 360px;
-            height: 240px;
-            object-fit: cover;
+            height: 242px;
         }
 
         .container .slider-scrollbar {
@@ -211,6 +208,11 @@
             width: 305px;
             height: 330px;
             object-fit: cover;
+        }
+
+        .image-item-product {
+            width: 305px;
+            height: 330px;
         }
 
         .container .slider-scrollbar-d {
@@ -464,29 +466,25 @@
                     <ul class="image-list">
                         @{
                             int count = 1;
-                            int imgCategoryCounter = 1;
-                            string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
                         }
                         @for (int i = 0; i < Model.Count(); i++)
                         {
                             if (count == 1)
                             {
                                 <div>
-                                    <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                                    <a class="category-item" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i].Id"><div class="image-item"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
                                 </div>
                             }
                             else if (count == 2 && (i + 1) < Model.Count())
                             {
                                 <div>
-                                    <a class="category-item mb-3" href="shop.html"><img class="image-item-up" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
+                                    <a class="category-item mb-3" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i].Id"><div class="image-item-up"><img src="@Model[i].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i].Name</strong></div></a>
 
                                     @{
                                         count++;
-                                        imgCategoryCounter++;
-                                        categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
                                     }
 
-                                    <a class="category-item" href="shop.html"><img class="image-item-down" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
+                                    <a class="category-item" asp-action="Index" asp-controller="FilterProduct" asp-route-id="@Model[i+1].Id"><div class="image-item-down"><img src="@Model[i + 1].ImagePath" style="width:100%;height:100%;" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></div></a>
                                 </div>
                             }
 
@@ -494,12 +492,9 @@
                             {
                                 i++;
                                 count = 0;
-                                imgCategoryCounter = 0;
                             }
 
                             count++;
-                            imgCategoryCounter++;
-                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
                         }
                     </ul>
                     <button id="next-slide" class="slide-button material-symbols-rounded">
@@ -571,17 +566,27 @@
                         <ul class="image-list-d">
                             @{
                                 int counterDiscount = 1;
-                                int imgProductDiscountCounter = 1;
-                                string productDiscountSource = $"/customer/img/product-{imgProductDiscountCounter}.jpg";
                             }
                             @foreach (var product in discountedProducts)
                             {
+                                string imageName = product?.Images?.FirstOrDefault()?.ImagePath;
+                                string source = string.Empty;
+
+                                if (imageName != null)
+                                {
+                                    source = $"/Files/ProductImages/{imageName}";
+                                }
+                                else
+                                {
+                                    source = $"~/files/categoryimages/no_image.jpg";
+                                }
+
                                 <div>
                                     <div class="product text-center">
                                         <div class="position-relative mb-3">
                                             @{
                                                 decimal? priceAfterDiscount = null;
-                                                if (product.Discount != null && product.Discount.Percentage != null)
+                                                if (product?.Discount != null && product.Discount.Percentage != null)
                                                 {
                                                     decimal discountPercentage = (decimal)product.Discount.Percentage;
                                                     priceAfterDiscount = product.Price - (product.Price * (discountPercentage / 100));
@@ -601,11 +606,11 @@
                                                 }
                                             }
                                             <div class="@badgeClass">@badgeText</div>
-                                            <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><img class="image-item-discount" src="@productDiscountSource" alt="..."></a>
+                                            <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                             <div class="product-overlay">
                                                 <ul class="list-inline">
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a></li>
                                                     <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                                     @* <li class="list-inline-item"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> *@
                                                 </ul>
@@ -629,12 +634,9 @@
                                 if (counterDiscount == 12)
                                 {
                                     counterDiscount = 0;
-                                    imgProductDiscountCounter = 0;
                                 }
 
                                 counterDiscount++;
-                                imgProductDiscountCounter++;
-                                productDiscountSource = $"/customer/img/product-{imgProductDiscountCounter}.jpg";
                             }
                         </ul>
                         <button id="next-slide-d" class="slide-button-d material-symbols-rounded">
@@ -654,7 +656,7 @@
         @if (productsByUnitsSold?.Count() > 0)
         {
             <section class="py-5">
-                <header>
+                <header id="bestsellers">
                     <p class="small text-muted small text-uppercase mb-1">Discover timeless favorites crafted with care</p>
                     <h2 class="h5 text-uppercase mb-4">Bestsellers of All Time</h2>
                 </header>
@@ -672,8 +674,6 @@
                         }
 
                         int productsByUnitsSoldCounter = 0;
-                        int imgProductsByUnitsSoldCounter = 1;
-                        string sourceProductsByUnitsSold = $"/customer/img/product-{imgProductsByUnitsSoldCounter}.jpg";
                     }
                     @foreach (var product in productsByUnitsSold)
                     {
@@ -682,7 +682,19 @@
                             break;
                         }
 
-                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                        string imageName = product?.Images?.FirstOrDefault()?.ImagePath;
+                        string source = string.Empty;
+
+                        if (imageName != null)
+                        {
+                            source = $"/Files/ProductImages/{imageName}";
+                        }
+                        else
+                        {
+                            source = $"~/files/categoryimages/no_image.jpg";
+                        }
+
+						<div class="col-xl-3 col-lg-4 col-sm-6">
                             <div class="product text-center">
                                 <div class="position-relative mb-3">
                                     @{
@@ -712,11 +724,11 @@
                                         }
                                     }
                                     <div class="@badgeClass">@badgeText</div>
-                                    <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><img class="img-fluid w-100" src="@sourceProductsByUnitsSold" alt="..."></a>
+                                    <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
                                             <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a></li>
                                             <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                         </ul>
                                     </div>
@@ -737,8 +749,6 @@
                         </div>
 
                         productsByUnitsSoldCounter++;
-                        imgProductsByUnitsSoldCounter++;
-                        sourceProductsByUnitsSold = $"/customer/img/product-{imgProductsByUnitsSoldCounter}.jpg";
 
                         if (productsByUnitsSoldCounter == maxNumberOfProductsByUnitsSold)
                         {
@@ -768,8 +778,6 @@
             }
 
             int counter = 0;
-            int imgCounter = 1;
-            string source = $"/customer/img/product-{imgCounter}.jpg";
 
             <section class="py-5">
                 <header>
@@ -782,6 +790,18 @@
                         if (max == 0)
                         {
                             break;
+                        }
+
+                        string imageName = product?.Images?.FirstOrDefault()?.ImagePath;
+                        string source = string.Empty;
+
+                        if (imageName != null)
+                        {
+                            source = $"/Files/ProductImages/{imageName}";
+                        }
+                        else
+                        {
+                            source = $"~/files/categoryimages/no_image.jpg";
                         }
 
                         <div class="col-xl-3 col-lg-4 col-sm-6">
@@ -812,9 +832,9 @@
                                             badgeClass += "info";
                                             badgeText = "NEW";
                                         }
-                                    }
+                                    } 
                                     <div class="@badgeClass">@badgeText</div>
-                                    <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><img class="img-fluid w-100" src="@source" alt="..."></a>
+                                    <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
                                             <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
@@ -842,8 +862,6 @@
                         </div>
 
                         counter++;
-                        imgCounter++;
-                        source = $"/customer/img/product-{imgCounter}.jpg";
 
                         if (counter == max)
                         {
@@ -1154,4 +1172,5 @@
             }
         });
     </script>
+    
 }

@@ -5,127 +5,169 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
 }
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-</head>
-<body>
-    <div class="container-xl px-4 mt-4">
-    <form asp-action="Edit" asp-controller="Customer" enctype="multipart/form-data" method="post">
-    
-
-        <div class="row">
-            <div class="col-xl-4">
-
-                <div class="card mb-4 mb-xl-0">
-                    <div class="card-header">Profile Picture</div>
-                    <div class="card-body text-center">
-
-                            <img id="profileImage" style="width:100px;height:100px" class="img-account-profile rounded-circle mb-2" src="~/Files/ImageProfile/@Model.Photo" alt="Profile Image">
-
-                            <!-- File size information -->
-                            <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
-
-                            <!-- Image upload input -->
-                            <input type="file" asp-for="Image" id="imageUpload" class="form-control-file" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)" >
-                            <label for="imageUpload" class="btn btn-primary">Upload new image</label>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-xl-8">
-
-                <div class="card mb-4">
-                    <div class="card-header">Account Details</div>
-                    <div class="card-body">
-                        
-                            <input type="hidden" asp-for="Id" />
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputFirstName">First name</label>
-                                    <input class="form-control" asp-for="FirstName" id="inputFirstName" placeholder="Enter your first name">
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputLastName">Last name</label>
-                                    <input class="form-control" asp-for="LastName" id="inputLastName" placeholder="Enter your last name">
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                <input class="form-control" asp-for="Email" id="inputEmailAddress" placeholder="Enter your email address">
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
-
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputPhone">Phone number</label>
-                                    <input class="form-control" asp-for="PhoneNumber" id="inputPhone" placeholder="Enter your phone number">
-                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="validationTooltip04">Gender</label>
-                                    <select asp-for="Gender" class="form-control" id="validationTooltip04">
-                                        <option value="">Select Gender</option>
-                                        <option value="0">Male</option>
-                                        <option value="1">Female</option>
-                                    </select>
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <div class="input-group">
-
-                                        <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
-                                            <option selected disabled>Country</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <div class="input-group">
-
-                                        <select class="form-control" id="inputGroupSelectState">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <div class="input-group">
-
-                                        <select asp-for="CityId" class="form-control" id="inputGroupSelectCity">
-                                        </select>
-                                        <span asp-for="CityId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" type="submit">Save changes</button>
-                            <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Discard Edits</a>
-                          
-                     
-
-
-                    </div>
+<div class="main-content">
+    <!-- Top navbar -->
+    <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="https://www.creative-tim.com/product/argon-dashboard" target="_blank">User profile</a>
+        </div>
+    </nav>
+    <!-- Header -->
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+                <div class="col-lg-7 col-md-10">
+                    <h1 class="display-2 text-white">Hello @Model.FirstName</h1>
+                    <p class="text-white mt-0 mb-5">This is your profile page. Here, you can see all your personal information and update it at any time if you want</p>
                 </div>
             </div>
         </div>
-   
-    </form>
     </div>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript">
+    <!-- Page content -->
+    <div class="container-fluid mt--7">
+        <form asp-action="Edit" asp-controller="Customer" enctype="multipart/form-data" method="post">
+            <div class="row">
+                <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+                    <div class="card card-profile shadow">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-3 order-lg-2">
+                                <div class="card-profile-image">
+                                    <img id="profileImage" class="img-account-profile rounded-circle mb-2 rounded-circle" src="~/Files/ImageProfile/@Model.Photo" alt="A personal photo of the customer">
+                                    <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                            <div class="d-flex justify-content-between">
+                            </div>
+                        </div>
+                        <div class="card-body pt-0 pt-md-4">
+                            <div class="text-center">
+                                <input type="file" asp-for="Image" id="imageUpload" class="form-control-file" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)">
+                                <label for="imageUpload" class="btn btn-info">Change profile picture</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 order-xl-1">
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+                            <div class="row align-items-center">
+                                <div class="col-8">
+                                    <h3 class="mb-0">My account</h3>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <span class="btn-settings">USER PROFILE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
 
-    </script>
-</body>
+                            <h6 class="heading-small text-muted mb-4">User information</h6>
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <input type="hidden" asp-for="Id" />
+                                    <div class="col-lg-6">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="inputFirstName">First name</label>
+                                            <input type="text" asp-for="FirstName" class="form-control form-control-alternative" id="inputFirstName" placeholder="First name">
+                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="inputLastName">Last name</label>
+                                            <input type="text" asp-for="LastName" class="form-control form-control-alternative" id="inputLastName" placeholder="jesse@example.com">
+                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="w-100">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="inputEmailAddress">Email address</label>
+                                            <input type="email" asp-for="Email" class="form-control form-control-alternative" id="inputEmailAddress" placeholder="Last name">
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="inputPhone">Phone</label>
+                                            <input type="text" asp-for="PhoneNumber" class="form-control form-control-alternative" id="inputPhone" placeholder="Country">
+                                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group focused">
+                                            <label class="form-control-label" for="validationTooltip04">Gender</label>
+                                            <select asp-for="Gender" class="form-control form-control-alternative" id="validationTooltip04">
+                                                <option value="" disabled>Gender</option>
+                                                <option value="0">Male</option>
+                                                <option value="1">Female</option>
+                                            </select>
+                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pl-lg-4">
+                                
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="form-group focused">
+                                            <label for="inputGroupSelectCountry" class="form-control-label">Country</label>
+                                            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control" id="inputGroupSelectCountry">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group focused">
+                                            <label for="inputGroupSelectState" class="form-control-label">State</label>
+                                            <select class="form-control" id="inputGroupSelectState">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group focused">
+                                            <label for="inputGroupSelectCity" class="form-control-label">City</label>
+                                            <select asp-for="CityId" class="form-control form-control-alternative" id="inputGroupSelectCity">
+                                            </select>
+                                            <span asp-for="CityId" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-info w-100 mt-4" type="submit">Save changes</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@section CSS
+{
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="~/Customer/css/profile.css">
+}
 
 @section JS {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <partial name="~/Views/Partials/User/_UserCreateJS.cshtml" />
+    <partial name="~/Views/Partials/User/_UserCreateJS.cshtml"/>
     <script type="text/javascript">
         function handleImageUpload(event) {
             const file = event.target.files[0];
@@ -137,7 +179,6 @@
             }
 
             reader.readAsDataURL(file);
-        }
-    </script>
-   
+            }
+            </script>
 }

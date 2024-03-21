@@ -14,37 +14,37 @@ namespace InStockWebAppPL.Controllers;
 public class HomeController : Controller
 {
     private readonly ICategoryRepository _categoryRepository;
-    private readonly ISubCategoryRepository _subCategoryRepository;
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
     private readonly IDiscountRepository _discountRepository;
+    private readonly ICheckOutRepository checkOutRepository;
+    private readonly IUserRepository userRepository;
+    private readonly IGetCategoryWithProductRepository getCategoryWithProductRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public HomeController(ICategoryRepository categoryRepository,
-        ISubCategoryRepository subCategoryRepository,
+       
         IProductRepository productRepository,
         IUnitOfWork unitOfWork,
         IMapper mapper,
-        IDiscountRepository discountRepository)
+        IDiscountRepository discountRepository, ICheckOutRepository checkOutRepository,IUserRepository userRepository, IGetCategoryWithProductRepository getCategoryWithProductRepository)
     {
         _categoryRepository = categoryRepository;
-        _subCategoryRepository = subCategoryRepository;
         _productRepository = productRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _discountRepository = discountRepository;
-
+        this.checkOutRepository=checkOutRepository;
+        this.userRepository=userRepository;
+        this.getCategoryWithProductRepository=getCategoryWithProductRepository;
         _unitOfWork = unitOfWork;
-    }
-
-
 	}
     [ResponseCache(Duration = 0,NoStore =true,Location =ResponseCacheLocation.Client)]
-
     public async Task<IActionResult> Index()
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+
         if (claim is not null)
         {
             var userId = claim.Value;
@@ -53,57 +53,6 @@ public class HomeController : Controller
         }
 
         var categories = await _categoryRepository.GetAll();
-        var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
-
-        foreach (var category in categories)
-        {
-            if (category.IsDeleted == true)
-            {
-                continue;
-            }
-
-            var categoryWithProductsVM = new CategoryWithProductsVM
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-                CreatedAt = category.CreatedAt,
-                ModifiedAt = category.ModifiedAt,
-                DeletedAt = category.DeletedAt,
-                IsDeleted = category.IsDeleted,
-                SubCategories =
-                    await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
-            };
-
-            if (categoryWithProductsVM.SubCategories != null)
-            {
-                foreach (var subcategory in categoryWithProductsVM.SubCategories)
-                {
-                    if (subcategory.IsDeleted == true)
-                    {
-                        continue;
-                    }
-
-                    subcategory.Products =
-                        await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
-
-                    if (subcategory.Products != null)
-                    {
-                        categoryWithProductsVM.Products ??= new List<Product>();
-                        categoryWithProductsVM.Products.AddRange(subcategory.Products);
-                    }
-                }
-            }
-
-            if (categoryWithProductsVM.Products != null)
-            {
-                var rnd = new Random();
-                categoryWithProductsVM.Products =
-                    categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
-            }
-
-            categoriesWithProductsVMs.Add(categoryWithProductsVM);
-        }
 
         var allDiscounts = await _discountRepository.GetAll();
         var discounts = allDiscounts.Where(d => d.IsActive).ToList();
@@ -115,7 +64,7 @@ public class HomeController : Controller
         var productsOrderedByUnitsSold = await _productRepository.GetProductsOrderedByUnitsSold();
         ViewBag.ProductsByUnitsSold = productsOrderedByUnitsSold;
 
-        return View(categoriesWithProductsVMs);
+        return View(await getCategoryWithProductRepository.CategoryWithProducts(categories));
     }
 
     public async Task<IActionResult> Checkout()
@@ -126,7 +75,7 @@ public class HomeController : Controller
             return View("NotValidUser");
         //Check if the user didn't add their details before(First time To Order)
         var userId = claim.Value;
-        if (await UserDataExist(userId)) return View("PaymentView");
+        if (await userRepository.UserDataExist(userId)) return RedirectToAction("CreatePaymentSession", "Payment", new { userId=userId });
         var user =
             _mapper.Map<UserCheckoutDetailsVM>(
                 await _unitOfWork.UserRepository.GetUserById(userId));
@@ -139,7 +88,7 @@ public class HomeController : Controller
         {
             if (ModelState.IsValid)
             {
-                if (await _unitOfWork.UserRepository.CheckoutEdit(modelVM))
+                if (await checkOutRepository.CheckoutEdit(modelVM))
                 {
                     return View("PaymentView");
                 }
@@ -164,69 +113,12 @@ public class HomeController : Controller
         return View("CheckoutDetails", modelVM);
     }
 
-    private async Task<bool> UserDataExist(string userId)
-    {
-        var user = await _unitOfWork.UserRepository.GetUserById(userId);
-        if (user != null &&
-            !string.IsNullOrEmpty(user.CityName) &&
-            !string.IsNullOrEmpty(user.StateName) &&
-            !string.IsNullOrEmpty(user.LastName) &&
-            !string.IsNullOrEmpty(user.FirstName) &&
-            !string.IsNullOrEmpty(user.PhoneNumber) &&
-            !string.IsNullOrEmpty(user.Email))
-        {
-            return true;
-        }
-
-        return false;
-    }
+   
 
     public async Task<IActionResult> Test()
     {
         var categories = await _categoryRepository.GetAll();
-
-        var categoriesWithProductsVMs = new List<CategoryWithProductsVM>();
-
-        foreach (var category in categories)
-        {
-            var categoryWithProductsVM = new CategoryWithProductsVM
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Description = category.Description,
-                CreatedAt = category.CreatedAt,
-                ModifiedAt = category.ModifiedAt,
-                DeletedAt = category.DeletedAt,
-                IsDeleted = category.IsDeleted,
-                SubCategories =
-                    await _subCategoryRepository.getAllSubCategoriesByCategoryId(category.Id)
-            };
-
-            if (categoryWithProductsVM.SubCategories != null)
-            {
-                foreach (var subcategory in categoryWithProductsVM.SubCategories)
-                {
-                    subcategory.Products =
-                        await _productRepository.GetProductsBySubcategoryId(subcategory.Id);
-
-                    if (subcategory.Products != null)
-                    {
-                        categoryWithProductsVM.Products ??= new List<Product>();
-                        categoryWithProductsVM.Products.AddRange(subcategory.Products);
-                    }
-                }
-            }
-
-            if (categoryWithProductsVM.Products != null)
-            {
-                var rnd = new Random();
-                categoryWithProductsVM.Products =
-                    categoryWithProductsVM.Products.OrderBy(p => rnd.Next()).ToList();
-            }
-
-            categoriesWithProductsVMs.Add(categoryWithProductsVM);
-        }
-
-        return View(categoriesWithProductsVMs);
+        return View(await getCategoryWithProductRepository.CategoryWithProducts(categories));
     }
+
 }

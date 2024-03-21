@@ -19,5 +19,7 @@ namespace InStockWebAppBLL.Features.Interfaces.Domain
         Task<IEnumerable<Product>> GetProductsWithActiveDiscount();
         Task<IEnumerable<Product>> GetProductsOrderedByUnitsSold();
         Task<Product?> GetProductWithSubcategoryById(int id);
+
+        Task<int> GetAllProductSold();
     }
 }

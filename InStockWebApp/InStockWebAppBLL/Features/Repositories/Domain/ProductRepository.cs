@@ -1,9 +1,11 @@
 ﻿
 using AutoMapper;
+using Azure;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
@@ -63,7 +65,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     CreatedAt = DBProduct.CreatedAt,
                     IsDeleted = DBProduct.IsDeleted,
                     SubCategoryName = DBProduct.SubCategory.Name,
-                    DiscountName = DBProduct.Discount.Name,
+                    DiscountName = DBProduct.Discount?.Name??"",
                     ProductReviews = DBProduct.Reviews
                 };
                 foreach(var img in DBProduct.Images)
@@ -86,7 +88,24 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var DBProduct = await _applicationDbContext.Products
                     .Include(P => P.SubCategory).Include(P => P.Discount).Include(P => P.Images).FirstOrDefaultAsync(P => P.Id == id);
-                return _mapper.Map<AlterProductVM>(DBProduct);
+                AlterProductVM AlterProductsVM = new AlterProductVM()
+                {
+                    Id = DBProduct.Id,
+                    Name = DBProduct.Name,
+                    Description = DBProduct.Description,
+                    Price = DBProduct.Price,
+                    InStock = DBProduct.InStock,
+                    SubCategoryId = DBProduct.SubCategory.Id,
+                    DiscountId= DBProduct.Discount?.Id
+                };
+                AlterProductsVM.Images = new();
+                for (int i = 0; i < DBProduct.Images.Count; i++)
+                {
+                    ProductImage? img = DBProduct.Images[i];
+                    AlterProductsVM?.Images.Add(img);
+                }
+                // return _mapper.Map<AlterProductVM>(DBProduct);
+                return AlterProductsVM;
 
             }
             catch (Exception)
@@ -100,7 +119,30 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var DbProducts= await _applicationDbContext.Products
                     .Include(P=>P.SubCategory).Include(P=>P.Discount).Include(P => P.Images).ToListAsync();
-                var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
+                //var ShowProducts=_mapper.Map<IEnumerable<GetProductsVM>>(DbProducts);
+                List<GetProductsVM> ShowProducts= new List<GetProductsVM>() { };
+                foreach (var DBProduct in DbProducts)
+                {
+                    GetProductsVM getProductsVM = new GetProductsVM()
+                    {
+                        Id = DBProduct.Id,
+                        Name = DBProduct.Name,
+                        Description = DBProduct.Description,
+                        Price = DBProduct.Price,
+                        InStock = DBProduct.InStock,
+                        AvgRating = DBProduct.AvgRating,
+                        CreatedAt = DBProduct.CreatedAt,
+                        IsDeleted = DBProduct.IsDeleted,
+                        SubCategoryName = DBProduct.SubCategory.Name,
+                        DiscountName = DBProduct.Discount?.Name??"",
+                        ProductReviews = DBProduct?.Reviews
+                    };
+                    foreach (var img in DBProduct.Images)
+                    {
+                        getProductsVM.ImagePaths.Add(img.ImagePath);
+                    }
+                    ShowProducts.Add(getProductsVM);
+                }
                 return ShowProducts;
             }catch(Exception) 
             { 
@@ -225,6 +267,15 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public async Task<Product?> GetById(int id) =>
             await _applicationDbContext.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Discount)
+                .Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.Id == id);
+
+        public async Task<int> GetAllProductSold()
+        {
+            var count =await _applicationDbContext.Products.Where(p => p.InStock==0).CountAsync();
+            return count;
+        }
     }
 }

@@ -39,7 +39,7 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
     public async Task<Cart> GetCart(string userId)
     {
         var cart = await _applicationDbContext.Carts
-            .Where(c => string.Equals(c.UserId, userId) && !c.IsDeleted)
+            .Where(c => string.Equals(c.UserId, userId) && !c.IsDeleted).Include(a => a.User)
             .Include(c => c.Items.Where(i => !i.IsDeleted))
             .ThenInclude(i => i.Product)
             .FirstOrDefaultAsync();
@@ -60,4 +60,27 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
 
     public decimal CalculateCartTotalPrice(Cart cart) =>
         cart.Items.Sum(i => i.TotalPrice);
+
+    public async Task<bool> EmptyCart(int id)
+    {
+        try
+        {
+            var cart = await _applicationDbContext.Carts.Where(a => a.Id == id).Include(a => a.Items).FirstOrDefaultAsync();
+            foreach (var item in cart.Items)
+            {
+                item.IsSelected = false;
+                item.IsDeleted = true;
+            }
+            cart.TotalPrice =0;
+            await _applicationDbContext.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+
+            return false;
+        }
+
+
+    }
 }

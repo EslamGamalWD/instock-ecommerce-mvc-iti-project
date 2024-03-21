@@ -1,0 +1,143 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager
+@inject UserManager<User> userManager;
+@model IEnumerable<ContactMessage>
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+    dynamic user = null;
+    @if (signInManager.IsSignedIn(User))
+    {
+        user =await userManager.FindByNameAsync(User.Identity.Name);
+    }
+}
+<partial name="~/views/contact/_CSS.cshtml" />
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row container d-flex justify-content-center">
+            <div class="col-md-10">
+                <div class="card card-bordered">
+                    <div class="card-header">
+                        <h4 class="card-title"><strong>Chat</strong></h4>
+                    </div>
+                    <div  class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
+                        
+                           @foreach (var item in Model)
+                            {
+                                if(item.ReceiverId == null)
+                                {
+                                <div class="media media-chat">
+                                    <img class="avatar" src="~/Files/ImageProfile/@item.Photo" alt="...">
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                        <p>@item.Message</p>
+
+                                    </div>
+                                    </div>
+                                </div>
+                                }
+                                else
+                                {
+                                    <div class="media media-chat media-chat-reverse">
+                                        <div class="sent_msg">
+                                            <p>@item.Message</p>
+                                           
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        <div id="SenderMessage">
+
+                            </div>
+                        
+                    </div>
+                    <form id="userForm" class="p-4">
+                        <div class="publisher bt-1 border-light">
+                            <input type="hidden" id="ReciverId" value="@Model?.FirstOrDefault()?.UserID" />
+                            <input type="hidden" id="SenderId" value="@user.Id" />
+                            <input type="hidden" id="email" value="@Model?.FirstOrDefault()?.Email" />
+                            <input class="publisher-input" type="text" id="Message" placeholder="Write something">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section JS {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- SignalR CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/Hubs/ChatHub")
+                .build();
+
+            connection.start()
+                .then(() => console.log("SignalR connection established"))
+                .catch(err => console.error("Error starting connection:", err));
+
+            $('#userForm').submit(function (event) {
+                event.preventDefault();
+
+                // Validate form fields
+                const ReciverId = $('#ReciverId').val().trim();
+               
+                const Message = $('#Message').val().trim();
+
+                const SenderId = $('#SenderId').val().trim();
+                const email = $('#email').val().trim();
+
+
+                // Invoke server method with form data
+                connection.invoke("SendMessage", ReciverId, Message, SenderId, email)
+                    .then(() => {
+                        Toastify({
+                            text: "You send Your Problem Thank You",
+                            className: "info",
+                            style: {
+                                background: "linear-gradient(to right, #dcb14a, #dcb14a)"
+                            },
+                            preventDuplicates: false
+                        }).showToast();
+
+                        var div = `<div class="media media-chat media-chat-reverse">
+                        <div class="sent_msg">
+                            <p>${Message}</p>
+                        </div>
+                    </div>`;
+
+                        $('#SenderMessage').append(div);
+                        $('#Message').val('');
+                    })
+                    .catch(err => console.error("Error sending form data:", err));
+            });
+
+            connection.on("ReceiveFormFromUser", function (Id, firstName, lastName, email, phone, message, image) {
+                var messageHTML = `
+                                <div class="media media-chat">
+                                    <img class="avatar" src="/Files/ImageProfile/${image}" alt="...">
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                            <p>${message}</p>
+                                        </div>
+                                    </div>
+                                </div>`;
+                $('#SenderMessage').append(messageHTML);
+            });
+        });
+    </script>
+
+   
+
+  
+
+}
+

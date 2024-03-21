@@ -20,7 +20,7 @@ namespace InStockWebAppDAL.Entities
         public DateTime? ModifiedAt { get; set; }
         public string? Photo { get; set; }
 
-        // public string? AddressLine { get; set; }
+        public string? AddressLine { get; set; }
 
         //Navigation Property
         public int? CityId { get; set; }
@@ -29,5 +29,7 @@ namespace InStockWebAppDAL.Entities
         
         public virtual Cart? Cart { get; set; }
         public virtual IEnumerable<UserPayment>? UserPayment { get; set; }
+
+        public virtual ICollection<ContactMessage> ?ContactMessages { get; set; }
     }
 }

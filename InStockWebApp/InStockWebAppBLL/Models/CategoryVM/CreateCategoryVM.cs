@@ -1,4 +1,5 @@
 ﻿using InStockWebAppBLL.Models.Custom_Validation_Attributes;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +21,10 @@ namespace InStockWebAppBLL.Models.CategoryVM
         [Required(ErrorMessage = "DESCRIPTION IS REQUIRED!!!")]
         [MaxLength(2000, ErrorMessage = "DESCRIPTION IS TOO LONG!!!!")]
         public string Description { get; set; }
+
+        [DisplayName("Image")]
+        [ValidateNever]
+        public string ImagePath {  get; set; }
 
         public string? Message { get; set; } = null;
     }

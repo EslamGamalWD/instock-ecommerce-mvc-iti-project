@@ -20,7 +20,7 @@
                 </ul>
                 <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index" class="nav-link active">Home</a>
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">Shop</a>
@@ -30,7 +30,9 @@
                         <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
                             <a href="#categories" class="dropdown-item border-0 transition-link">Categories</a>
                             <a href="#discounts" class="dropdown-item border-0 transition-link">Discounts</a>
+                            <a href="#bestsellers" class="dropdown-item border-0 transition-link">Best-Sellers</a>
                             <a href="#trending" class="dropdown-item border-0 transition-link">Trending</a>
+                            <a asp-action="Admin" asp-controller="Contact" class="dropdown-item border-0 transition-link">Contact</a>
                         </div>
                     </li>
                     @{
@@ -75,7 +77,22 @@
                     </li>
 
                 </ul>
-            </div>
+                <div class="dropdown">
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"> Language </button>
+                  <ul class="dropdown-menu">
+                        <li>
+                            <a asp-controller="Product" asp-action="ChangeLanguage" asp-route-culture="ar" class="dropdown-item">
+                                <i class="flag-icon flag-icon-gb"></i> Arabic
+                            </a>
+                        </li>
+                    <li>
+                      <a asp-controller="Product" asp-action="ChangeLanguage" asp-route-culture="en-US" class="dropdown-item">
+                        <i class="flag-icon flag-icon-gb"></i> English </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+                            </div>
         </nav>
     </div>
 </header>

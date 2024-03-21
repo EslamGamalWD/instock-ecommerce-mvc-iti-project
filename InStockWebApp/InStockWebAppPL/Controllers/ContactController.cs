@@ -1,18 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize]
     public class ContactController : Controller
     {
-        public IActionResult Index()
+        private readonly IContactMessageRepository contactMessage;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+
+        public ContactController(IContactMessageRepository contactMessage, UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            return View();
+            this.contactMessage=contactMessage;
+            this.userManager=userManager;
+            this.signInManager=signInManager;
+        }
+        public async Task< IActionResult> Index()
+        {
+
+            var Message =await contactMessage?.GetAll();
+            return View(Message);
         }
 
 
-        public IActionResult Admin()
+        public async Task<IActionResult>  Admin()
         {
-            return View();
+
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            return View(await contactMessage.GetBySenderID(user.Id));
         }
+
+
+        public async Task<IActionResult> Contact(string Id)
+        {
+
+            return View(await contactMessage.GetBySenderID(Id));
+
+        }
+
+
+        
     }
 }

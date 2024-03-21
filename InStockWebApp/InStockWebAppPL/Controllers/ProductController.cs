@@ -4,9 +4,11 @@
 //using CloudinaryDotNet;
 //using CloudinaryDotNet.Actions;
 using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Helpers.LocalizationService;
 using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppBLL.Models.ProductVM;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,20 +22,22 @@ namespace InStockWebAppPL.Controllers
         private readonly ISubCategoryRepository _subCategoryRepository;
         private readonly IDiscountRepository _discountRepository;
         private readonly IProductImageRepository _imageRepository;
-
+        private LanguageService _localization;
 
         //private readonly Cloudinary _cloudinary;
 
-        
+
 
         public ProductController(IProductRepository productRepository,
-            ISubCategoryRepository subCategoryRepository,IProductImageRepository imageRepository,IDiscountRepository discountRepository)
+            ISubCategoryRepository subCategoryRepository,IProductImageRepository imageRepository,
+            IDiscountRepository discountRepository, LanguageService localization)
         {
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
 
             _discountRepository = discountRepository;
+            _localization = localization;
 
             //Account account = new()
             //{
@@ -44,7 +48,16 @@ namespace InStockWebAppPL.Controllers
             //_cloudinary = new Cloudinary(account);
 
         }
-
+        #region Localization
+        public IActionResult ChangeLanguage(string culture)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions()
+            {
+                Expires = DateTimeOffset.UtcNow.AddYears(1)
+            });
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        #endregion
         // GET: ProductController
         public async Task<IActionResult> Index()
         {
@@ -113,13 +126,17 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var emptyOption = new SelectListItem() { Value = "", Text = "No Discount" };
+            var selectList = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var finalList = new List<SelectListItem> { emptyOption };
+            finalList.AddRange(selectList);
+            ViewData["DiscountId"] = finalList;
             return View();
         }
 
         // POST: ProductController/Create
         [HttpPost]
-        public async Task<IActionResult> Create(AlterProductVM entityVM)
+        public async Task<IActionResult> Create(AlterProductVM entityVM, List<IFormFile>? ImageFiles)
         {
             try
             {
@@ -130,12 +147,16 @@ namespace InStockWebAppPL.Controllers
                     int createdId=await _productRepository.Add(entityVM);
                     if (createdId != -1)
                     {
-                        await _imageRepository.add(entityVM.ImageFiles,createdId);
+                        await _imageRepository.add(ImageFiles,createdId);
                         return RedirectToAction(nameof(Index));
                     }
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-                ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+                var emptyOption = new SelectListItem() { Value = "", Text = "No Discount" };
+                var selectList = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+                var finalList = new List<SelectListItem> { emptyOption };
+                finalList.AddRange(selectList);
+                ViewData["DiscountId"] = finalList;
                 return View(entityVM);
             }
             catch
@@ -150,24 +171,35 @@ namespace InStockWebAppPL.Controllers
             var product = await _productRepository.EditDetails(id);
             if(product==null)return NotFound();
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var emptyOption = new SelectListItem() { Value = "", Text = "No Discount" };
+            var selectList = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var finalList = new List<SelectListItem> { emptyOption };
+            finalList.AddRange(selectList);
+            ViewData["DiscountId"] = finalList;
             return View(product);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, AlterProductVM entityVM)
+        public async Task<IActionResult> Edit(int id, AlterProductVM entityVM,List<IFormFile>? ImageFiles)
         {
             try
             {
                 ModelState["ImageFiles"].ValidationState= ModelValidationState.Valid;
                 if (ModelState.IsValid) { 
+                    var oldProduct=await _productRepository.GetById(id);
                     await _productRepository.Update(id,entityVM);
-                    await _imageRepository.add(entityVM.ImageFiles, id);
+                    //Delete Images if no other product is referring to it.
+                    await _imageRepository.remove(oldProduct.Images, id);
+                    await _imageRepository.add(ImageFiles, id);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-                ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+                var emptyOption = new SelectListItem() { Value = "", Text = "No Discount" };
+                var selectList = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+                var finalList = new List<SelectListItem>{ emptyOption};
+                finalList.AddRange(selectList);
+                ViewData["DiscountId"] = finalList;
                 return View(entityVM);
             }
             catch

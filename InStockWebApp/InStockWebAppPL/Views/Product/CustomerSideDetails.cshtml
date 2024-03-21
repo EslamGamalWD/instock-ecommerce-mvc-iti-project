@@ -1,5 +1,7 @@
 ﻿@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
-
+@using InStockWebAppBLL.Helpers.LocalizationService
+@using Microsoft.AspNetCore.Localization
+@inject LanguageService _localization
 @using Microsoft.AspNetCore.Identity;
 @using InStockWebAppDAL.Entities
 @inject SignInManager<User> signInManager
@@ -46,7 +48,7 @@
                                         @{
                                             int i = 0;
                                         }
-                                        @foreach (var imagePath in Model.ImagePaths)
+                                        @foreach (var imagePath in Model?.ImagePaths)
                                         {   
                                             @if(i==5){ break; }
                                             i++;
@@ -59,7 +61,7 @@
                                 <div class="swiper product-slider">
                                     <div class="swiper-wrapper">
                                         @{i=0;}
-                                        @foreach (var imagePath in Model.ImagePaths)
+                                        @foreach (var imagePath in Model?.ImagePaths)
                                         {
                                             @if (i == 5) { break; }
                                             i++;
@@ -80,7 +82,7 @@
                             <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
                             <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
                             <li class="list-inline-item mr-5 4"><i class="fas fa-star small text-warning"></i></li>
-                            <li class="list-inline-item m-0">@Model.AvgRating</li>
+                            <li class="list-inline-item m-0">@Model?.AvgRating</li>
                         </ul>
                         <h1>@Model.Name</h1>
                         <p class="text-muted lead">$@Model.Price</p>
@@ -90,7 +92,7 @@
                                
                                 <div class="col-sm-5 pr-sm-0">
                                     <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
-                                        <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
+                                        <span class="small text-uppercase text-gray mr-4 no-select">@_localization.Getkey("Quantity")</span>
                                         <div class="quantity">
                                             <input type="hidden" name="productId" value="@Model.Id" />
                                             <button type="button" class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
@@ -100,17 +102,19 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 pl-sm-0">
-                                    <button type="button" id="addToCartBtn" class="h-100 d-inline-block align-items-center justify-content-center text-uppercase atc-btn">Add to cart</button>
+                                    <button type="button" id="addToCartBtn" data-item-id="@Model.Id" class="h-100 d-inline-block align-items-center justify-content-center text-uppercase atc-btn">Add to cart</button>
+
+                                
                                 </div>
                             </div>
                         </form>
                         <br>
                         <ul class="list-unstyled small d-inline-block">
-                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">Instock:</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
-                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">SubCategory:</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
+                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">@_localization.Getkey("Instock"):</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
+                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("SubCategory"):</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
                             @if (Model.DiscountName != null)
                             {
-                                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Discounts:</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
+                                <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("Discounts"):</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
                             }
                         </ul>
                     </div>
@@ -119,15 +123,15 @@
                 <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
                     @if (signInManager.IsSignedIn(User))
                             {
-                        <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">@_localization.Getkey("Description")</a></li>
 
-                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">@_localization.Getkey("Reviews")</a></li>
                     }else
                     {
-                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">@_localization.Getkey("Reviews")</a></li>
 
                     }
-
+                     
                 </ul>
                 <div class="tab-content mb-5" id="myTabContent">
                     <!--Description Tab-->
@@ -164,7 +168,7 @@
 
                                 }
                             }else{
-                            <h6 class="text-uppercase">Product description </h6>
+                                <h6 class="text-uppercase">@_localization.Getkey("Product") @_localization.Getkey("Description") </h6>
                             <p class="text-muted text-sm mb-0">@Model.Description</p>
                             }
                         </div>
@@ -254,7 +258,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- RELATED PRODUCTS-->
                 @if (relatedProducts?.Count() > 0)
                 {
@@ -266,11 +269,21 @@
                             @{
                                 int max = 4;
                                 int counter = 0;
-                                int imgCounter = 1;
-                                string source = $"/customer/img/product-{imgCounter}.jpg";
                             }
                             @foreach (var product in relatedProducts)
                             {
+                                string imageName = product?.Images?.FirstOrDefault()?.ImagePath;
+                                string source = string.Empty;
+
+                                if (imageName != null)
+                                {
+                                    source = $"/Files/ProductImages/{imageName}";
+                                }
+                                else
+                                {
+                                    source = $"~/files/categoryimages/no_image.jpg";
+                                }
+
                                 <div class="col-xl-3 col-lg-4 col-sm-6">
                                     <div class="product text-center">
                                         <div class="position-relative mb-3">
@@ -301,11 +314,14 @@
                                                 }
                                             }
                                             <div class="@badgeClass">@badgeText</div>
-                                            <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><img class="img-fluid w-100" src="@source" alt="..."></a>
+                                            <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div style="width: 305px;height: 330px;"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                             <div class="product-overlay">
                                                 <ul class="mb-0 list-inline">
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li>
+                                                    @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
+                                                    <li class="list-inline-item m-0 p-0">
+                                                        <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
+                                                    </li>
                                                     <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
                                                 </ul>
                                             </div>
@@ -326,8 +342,6 @@
                                 </div>
 
                                 counter++;
-                                imgCounter++;
-                                source = $"/customer/img/product-{imgCounter}.jpg";
 
                                 if (counter == max)
                                 {
@@ -338,8 +352,7 @@
                     </section>
                 }
 
-            </div>
-        </section>
+                <input type="hidden" id="productId" value="@Model.Id" />
         @section JS {
             <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
 
@@ -430,7 +443,7 @@
                                                                     `);
 
 
-                            if (userId === '@user.Id') {
+                            if (userId === '@user?.Id') {
                                 $('#reviewComment').hide();
                             }
                         }
@@ -447,8 +460,18 @@
                             data: { productId: productId, quantity: quantity },
                             success: function (response) {
                                 if (response.success) {
-                                    console.log('Item added to cart successfully');
+                                    console.log('Item added to cart successfully'); 
                                     console.log(response.cartCount);
+                                            Toastify({
+                                                text: "item is Added",
+                                                className: "info",
+                                                style: {
+                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                   
+                                                },
+
+                                                preventDuplicates: false
+                                            }).showToast();
                                     updateCartCount(response.cartCount); 
                                 } else {
                                     console.error('Error adding item to cart:', response.errorMessage);
@@ -494,7 +517,56 @@
 
               
             </script>
+                    <script>
+                        $(document).ready(function () {
+                            $('.addToCartBtnProduct').click(function (e) {
+                                e.preventDefault();
+                                var quantity = 1;
+                                var productId = $(this).data('item-id');
+                                console.log(productId);
 
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/Cart/AddToCart/',
+                                    data: { productId: productId, quantity: quantity },
+                                    success: function (response) {
+                                        if (response.success) {
+
+                                            Toastify({
+                                                text: "item is Added",
+                                                className: "info",
+                                                style: {
+                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                },
+
+                                                preventDuplicates: false
+                                            }).showToast();
+                                            updateCartCount(response.cartCount);
+
+                                        } else {
+                                            Toastify({
+                                                text: "Quantity cannot exceed available stock",
+                                                className: "toastify-danger",
+                                                style: {
+                                                    background: "linear-gradient(to right,#f53b5a, #eb1919)",
+                                                },
+                                                position: "center",
+                                                preventDuplicates: false,
+                                                duration: 3000
+                                            }).showToast();
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error('Error adding item to cart:', error);
+                                    }
+                                });
+                            });
+
+                            function updateCartCount(count) {
+                                $('#cartCount').text('(' + count + ')');
+                            }
+                        });
+                    </script>
             
           <!-- SweetAlert2 CDN -->
             <script src="~/sweatalert/sweetalert2/sweetalert2.min.js"></script>
