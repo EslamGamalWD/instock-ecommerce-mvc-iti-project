@@ -120,8 +120,17 @@
   <data name="Add" xml:space="preserve">
     <value>اضافة</value>
   </data>
+  <data name="Best-Sellers" xml:space="preserve">
+    <value>الافضل مبيعا</value>
+  </data>
   <data name="cart" xml:space="preserve">
     <value>العربة</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>فئات</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>تواصل</value>
   </data>
   <data name="CustomerSideDetails" xml:space="preserve">
     <value>CustomerSideDetails</value>
@@ -144,6 +153,12 @@
   <data name="List" xml:space="preserve">
     <value>قائمة</value>
   </data>
+  <data name="Log In" xml:space="preserve">
+    <value>تسجيل دخول</value>
+  </data>
+  <data name="Log Out" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
   <data name="Product" xml:space="preserve">
     <value>منتج</value>
   </data>
@@ -153,10 +168,19 @@
   <data name="Reviews" xml:space="preserve">
     <value>تقييمات</value>
   </data>
+  <data name="Sections" xml:space="preserve">
+    <value>اقسام</value>
+  </data>
+  <data name="Shop" xml:space="preserve">
+    <value>تسوق</value>
+  </data>
   <data name="SubCategory" xml:space="preserve">
     <value>تصنيف فرعي</value>
   </data>
   <data name="to" xml:space="preserve">
     <value>الى</value>
+  </data>
+  <data name="Trending" xml:space="preserve">
+    <value>الافضل تداولا</value>
   </data>
 </root>

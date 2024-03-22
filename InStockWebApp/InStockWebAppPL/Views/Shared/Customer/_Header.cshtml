@@ -2,7 +2,14 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject IHttpContextAccessor HttpContextAccessor
+@using InStockWebAppPL.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> SharedLocalizer
+@{
 
+    var Culture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+
+}
 
 <header class="header bg-white">
     <div class="container px-lg-3">
@@ -16,19 +23,22 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">@SharedLocalizer["Home"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">Shop</a>
+                        <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">@SharedLocalizer["Shop"]</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sections</a>
+                        <a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@SharedLocalizer["Sections"]</a>
                         <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                            <a href="#categories" class="dropdown-item border-0 transition-link">Categories</a>
-                            <a href="#discounts" class="dropdown-item border-0 transition-link">Discounts</a>
-                            <a href="#bestsellers" class="dropdown-item border-0 transition-link">Best-Sellers</a>
-                            <a href="#trending" class="dropdown-item border-0 transition-link">Trending</a>
-                            <a asp-action="Admin" asp-controller="Contact" class="dropdown-item border-0 transition-link">Contact</a>
+                            <a href="#categories" class="dropdown-item border-0 transition-link">@SharedLocalizer["Categories"]</a>
+                            <a href="#discounts" class="dropdown-item border-0 transition-link">
+                                @SharedLocalizer["Discounts"]</a>
+                            <a href="#bestsellers" class="dropdown-item border-0 transition-link">
+                                @SharedLocalizer["Best-Sellers"]</a>
+                            <a href="#trending" class="dropdown-item border-0 transition-link">
+                                @SharedLocalizer["Trending"]</a>
+                            <a asp-action="Admin" asp-controller="Contact" class="dropdown-item border-0 transition-link">@SharedLocalizer["Contact"]</a>
                         </div>
                     </li>
                     @{
@@ -39,13 +49,13 @@
                     {
                         <li class="nav-item">
 
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>Cart<small id="cartCount" class="text-dark fw-normal">(@count)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(@count)</small></a>
                         </li>
                     }
                     else if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is null || count == 0)
                     {
                         <li class="nav-item">
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>Cart<small id="cartCount" class="text-dark fw-normal">(0)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(0)</small></a>
                         </li>
                     }
 
@@ -58,19 +68,17 @@
                     <li class="nav-item">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <a class="btn btn-dark" href="/Account/Logout"><i class="icon-nav fas fa-sign-out-alt me-1"></i> Log Out</a>
+                            <a class="btn btn-dark" href="/Account/Logout"><i class="icon-nav fas fa-sign-out-alt me-1"></i>@SharedLocalizer["Log Out"] </a>
                         }
                         else
                         {
-                            <a class="btn btn-dark" href="/Account/Login"><i class="icon-nav fas fa-sign-in-alt me-1"></i> Log In</a>
+                            <a class="btn btn-dark" href="/Account/Login"><i class="icon-nav fas fa-sign-in-alt me-1"></i> @SharedLocalizer["Log In"]</a>
                         }
                     </li>
 
                 </ul>
-                @if(@ViewData["Title"]=="CustomerSideDetails"){
                     <partial name="~/Views/Shared/Customer/_SetLanguage.cshtml" />
-                    
-                }
+              
             </div>
         </nav>
     </div>
