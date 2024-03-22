@@ -77,6 +77,10 @@
     box-shadow: 0 0 0 0.8rem rgba(220, 177, 74, 0.6);
 }
 
+html {
+    overflow-x: hidden;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     :root {
         scroll-behavior: smooth;

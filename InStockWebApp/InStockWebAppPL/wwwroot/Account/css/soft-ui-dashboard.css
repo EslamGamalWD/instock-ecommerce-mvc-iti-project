@@ -26722,4 +26722,15 @@ pre[class*="language-"] {
     visibility: hidden;
 }
 
+.logo-stock {
+    color: #fff !important;
+    text-transform: uppercase;
+    font-weight: 700 !important;
+    font-size: 2rem;
+    background-color: #000;
+    padding: 4px 12px;
+    letter-spacing: 0.1em;
+    /*border-radius: 8px;*/
+}
+
 /*# sourceMappingURL=dashboard-free.css.map */

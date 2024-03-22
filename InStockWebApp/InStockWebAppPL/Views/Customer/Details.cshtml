@@ -24,7 +24,7 @@
                     <h1 class="display-2 text-white">Hello @Model.FirstName</h1>
                     <p class="text-white mt-0 mb-5">This is your profile page. Here, you can see all your personal information and update it at any time if you want</p>
                     <a href="Edit" class="btn btn-info">Edit profile</a>
-                    <a asp-action="Index" asp-controller="ChangePassword" class="btn btn-info">Change password</a>
+
                 </div>
             </div>
         </div>
@@ -65,7 +65,10 @@
                                 <i class="ni business_briefcase-24 mr-2"></i>@Model.UserType | IN-STOCK
                             </div>
                             <hr class="my-4">
-                            <p class="text-center">Work Hard | Have Fun | Make History</p>
+                            <div>
+                                <a asp-action="Index" asp-controller="ChangePassword" class="btn btn-info">Change password</a>
+                                <a asp-action="Index" asp-controller="Order" class="btn btn-info">Purchase history</a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,64 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
 }
 
-@section CSS{
-    <style>
-        .height-100 {
-            height: 50vh;
-        }
 
-        .card {
-            width: 600px;
-            border: none;
-            box-shadow: 3px 3px 5px 9px #eee;
-        }
-
-        .form-control {
-            height: 50px;
-            border: 2px solid #eee;
-        }
-
-            .form-control:focus {
-                box-shadow: none;
-                border: 2px solid #000;
-            }
-
-        .btn-dark {
-            height: 50px;
-            font-size: 11px;
-            padding:10px;
-            width:100px;
-            background-color: #000
-        }
-    </style>
-}
-
-<div class="container-fluid height-100 m-0 d-flex justify-content-center align-items-center">
-
-    <div class="card p-1 py-4">
-
-
-        <div class="d-flex flex-row">
-            <div class="d-flex flex-column ms-1">
-                <h5 class="mb-0">to change your password</h5>
-                <div class="text-left">
-                    <span>we will send only code deals reach you inbox</span>
+<div class="main-content">
+    <!-- Top navbar -->
+    <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <p class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block">User profile</p>
+        </div>
+    </nav>
+    <!-- Header -->
+    <div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="padding-left: 150px">
+        <!-- Mask -->
+        <span class="mask bg-gradient-default opacity-8"></span>
+        <!-- Header container -->
+        <div class="container-fluid d-flex align-items-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="display-2 text-white">Change password</h1>
+                    <p class="text-white mt-0 mb-5">We sent a confirmation code to your e-mail.<br/>Please, check your inbox.</p>
                 </div>
             </div>
         </div>
-
-        <form asp-action="ChangePassword" asp-controller="ChangePassword">
-
-            <div class="px-1 d-flex flex-row gap-2 align-items-center m-1">
-                <input name="code" class="form-control" placeholder="Enter Code">
-                <button class="btn btn-dark">Send </button>
-            </div>
-
-        </form>
-
-
     </div>
-
+    <!-- Page content -->
+    <div class="container-fluid mt--7">
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <div class="card bg-secondary shadow w-75">
+                    <div class="card-header bg-white border-0">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0">Confirmation code</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="ChangePassword" asp-controller="ChangePassword">
+                            <div class="pl-lg-4">
+                                <div class="row">
+                                    <div class="form-group focused d-flex">
+                                        <input type="text" class="form-control form-control-alternative w-85" placeholder="Enter your confirmation code...">
+                                        <button class="btn btn-info w-75">
+                                            <i class="icon-nav far fa-envelope me-1"></i> Send
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section CSS
+{
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="~/Customer/css/profile.css">
+}
+
+@section Js
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+}
