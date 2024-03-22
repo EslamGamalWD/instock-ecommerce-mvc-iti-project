@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@inject IViewLocalizer Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+    .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName }).ToList();
+}
+<div>
+    <form asp-controller="Culture"
+          asp-action="SetLanguage"
+          asp-route-returnUrl="@Context.Request.Path"
+          method="post">
+          <select name="culture" 
+              onchange="this.form.submit();"
+              asp-for="@requestCulture.RequestCulture.UICulture.Name"
+              asp-items="cultureItems">
+
+          </select>
+      </form>
+</div>
+@* <div class="dropdown">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"> Language </button>
+    <ul class="dropdown-menu">
+        <li>
+            <a asp-controller="Culture" asp-action="SetLanguage" asp-route-culture="ar"  asp-route-returnUrl="@Context.Request.Path" class="dropdown-item">
+                <i class="flag-icon flag-icon-gb"></i> Arabic
+            </a>
+        </li>
+        <li>
+            <a asp-controller="Culture" asp-action="ChangeLanguage" asp-route-culture="en-US" asp-route-returnUrl="@Context.Request.Path" class="dropdown-item">
+                <i class="flag-icon flag-icon-gb"></i> English
+            </a>
+        </li>
+
+    </ul>
+</div> *@

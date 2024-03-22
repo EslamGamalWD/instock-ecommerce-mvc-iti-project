@@ -1,7 +1,8 @@
 ﻿@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
-@using InStockWebAppBLL.Helpers.LocalizationService
-@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using InStockWebAppPL.Resources
 @inject LanguageService _localization
+@inject IViewLocalizer ViewLocalizer
 @using Microsoft.AspNetCore.Identity;
 @using InStockWebAppDAL.Entities
 @inject SignInManager<User> signInManager
@@ -17,6 +18,9 @@
     }
 
     bool IsComment = false;
+    // Calculate the number of stars based on AvgRating rounded up
+    int numberOfStars = (int)Math.Ceiling(Model?.AvgRating ?? 0);
+    int i = 0;
 }
     
 
@@ -33,6 +37,7 @@
         <partial name="~/Views/Partials/Shared/_CSS.cshtml" />
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     }
+   
 </head>
 <body>
     <div class="page-holder bg-light">
@@ -40,48 +45,59 @@
             <div class="container">
                 <div class="row mb-5">
                     <div class="col-lg-6">
-                        <!-- PRODUCT SLIDER-->
-                        <div class="row m-sm-0">
-                            <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
-                                <div class="swiper product-slider-thumbs">
-                                    <div class="swiper-wrapper">
-                                        @{
-                                            int i = 0;
-                                        }
-                                        @foreach (var imagePath in Model?.ImagePaths)
-                                        {   
-                                            @if(i==5){ break; }
-                                            i++;
-                                            <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="~/Files/ProductImages/@imagePath" alt="..."></div>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-10 order-1 order-sm-2">
-                                <div class="swiper product-slider">
-                                    <div class="swiper-wrapper">
-                                        @{i=0;}
-                                        @foreach (var imagePath in Model?.ImagePaths)
-                                        {
-                                            @if (i == 5) { break; }
-                                            i++;
-                                            <div class="swiper-slide h-auto"><a class="glightbox product-view" href="~/Files/ProductImages/@imagePath" data-gallery="gallery2" data-glightbox="Product item"><img class="img-fluid" src="@imagePath" alt="..."></a></div>
-                                        }
-                                    </div>
+
+                     <!-- PRODUCT SLIDER-->
+                    <div class="row m-sm-0">
+                        <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
+                            <div class="swiper product-slider-thumbs">
+                                <div class="swiper-wrapper">
+                                    @{
+                                       i = 0;
+                                    }
+                                    @foreach (var imagePath in Model?.ImagePaths)
+                                    {
+                                        @if (i == 5) { break; }
+                                        i++;
+                                        <div class="swiper-slide h-auto swiper-thumb-item mb-3">
+                                            <img class="w-100" src="~/Files/ProductImages/@imagePath" alt="...">
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
-
+                        <div class="col-sm-10 order-1 order-sm-2">
+                            <div class="swiper product-slider">
+                                <div class="swiper-wrapper">
+                                    @{
+                                        i = 0;
+                                    }
+                                    @foreach (var imagePath in Model?.ImagePaths)
+                                    {
+                                        @if (i == 5) { break; }
+                                            i++;
+                                        <div class="swiper-slide h-auto">
+                                            <a class="glightbox product-view" href="~/Files/ProductImages/@imagePath" data-gallery="gallery2" data-glightbox="Product item @(i + 1)">
+                                                <img class="img-fluid" src="~/Files/ProductImages/@imagePath" alt="...">
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                     <!-- PRODUCT DETAILS-->
                     <div class="col-lg-6">
                         <!--Stars Shapes-->
                         <ul class="list-inline mb-2 text-sm">
-                            <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                            <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
-                            <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
-                            <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
-                            <li class="list-inline-item mr-5 4"><i class="fas fa-star small text-warning"></i></li>
+                            @for (i = 0; i < numberOfStars; i++)
+                            {
+                                <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
+                            }
+                            @for (i = numberOfStars; i < 5; i++)
+                            {
+                                <li class="list-inline-item m-0"><i class="far fa-star small text-warning"></i></li>
+                            }
                             <li class="list-inline-item m-0">@Model?.AvgRating</li>
                         </ul>
                         <h1>@Model.Name</h1>
@@ -110,9 +126,11 @@
                         </form>
                         <br>
                         <ul class="list-unstyled small d-inline-block">
-                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">@_localization.Getkey("Instock"):</strong><span class="ms-2 text-muted">@Model.InStock</span></li>
-                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("SubCategory"):</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
-                            @if (Model.DiscountName != null)
+                            <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">
+                                @ViewLocalizer["Instock"]:
+                                </strong><span class="ms-2 text-muted">@Model.InStock</span></li>
+                            <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@ViewLocalizer["SubCategory"]:</strong><a class="reset-anchor ms-2" href="#!">@Model.SubCategoryName</a></li>
+                            @if (Model.DiscountName != null&&Model.DiscountName != "")
                             {
                                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">@_localization.Getkey("Discounts"):</strong><a class="reset-anchor ms-2" href="#!">@Model.DiscountName</a></li>
                             }

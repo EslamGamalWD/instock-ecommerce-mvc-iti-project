@@ -1,12 +1,8 @@
-
-﻿using InStockWebAppBLL.Features.Interfaces.Domain;
-﻿
-//using CloudinaryDotNet;
-//using CloudinaryDotNet.Actions;
 using InStockWebAppBLL.Features.Interfaces.Domain;
-using InStockWebAppBLL.Helpers.LocalizationService;
+
 using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppBLL.Models.ProductVM;
+using InStockWebAppPL.Resources;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,49 +11,30 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InStockWebAppPL.Controllers
 {
-    
+
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
         private readonly IDiscountRepository _discountRepository;
         private readonly IProductImageRepository _imageRepository;
-        private LanguageService _localization;
+        
 
-        //private readonly Cloudinary _cloudinary;
 
 
 
         public ProductController(IProductRepository productRepository,
             ISubCategoryRepository subCategoryRepository,IProductImageRepository imageRepository,
-            IDiscountRepository discountRepository, LanguageService localization)
+            IDiscountRepository discountRepository)
         {
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
 
             _discountRepository = discountRepository;
-            _localization = localization;
-
-            //Account account = new()
-            //{
-            //    Cloud=cloudinary.Value.Cloud,
-            //    ApiKey = cloudinary.Value.ApiKey,
-            //    ApiSecret = cloudinary.Value.ApiSecret
-            //};
-            //_cloudinary = new Cloudinary(account);
 
         }
-        #region Localization
-        public IActionResult ChangeLanguage(string culture)
-        {
-            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions()
-            {
-                Expires = DateTimeOffset.UtcNow.AddYears(1)
-            });
-            return Redirect(Request.Headers["Referer"].ToString());
-        }
-        #endregion
+        
         // GET: ProductController
         public async Task<IActionResult> Index()
         {

@@ -5,7 +5,7 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
-using InStockWebAppBLL.Helpers.LocalizationService;
+using InStockWebAppPL.Resources;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
 using InStockWebAppPL.Hubs;
@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Reflection;
@@ -35,13 +37,12 @@ builder.Services.AddScoped<IDiscountRepository, DiscountRepository>();
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer("name=DefaultConnection"));
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddSingleton<LanguageService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-builder.Services.AddMvc().AddViewLocalization().AddDataAnnotationsLocalization(options => {
+builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization(options => {
     options.DataAnnotationLocalizerProvider = (type, factory) => {
-        var assemblyName = new AssemblyName(typeof(SharedResource).GetTypeInfo().Assembly.FullName);
+        var assemblyName = new AssemblyName(typeof(SharedResources).GetTypeInfo().Assembly.FullName);
         return factory.Create("ShareResource", assemblyName.Name);
     };
 });
@@ -130,12 +131,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
     // Add localization middleware
     app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+//var requestlocalizationOptions = app.Services.GetServices<IOptions<RequestLocalizationOptions>>();
 app.UseResponseCaching();
 app.UseAuthentication();
 app.UseSession();

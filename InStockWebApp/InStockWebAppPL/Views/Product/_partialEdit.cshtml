@@ -116,45 +116,37 @@ else
                     <button type="submit" class="btn btn-primary ">Add Product</button>
                 
             }
+            
             else
             {
-                //Add the existing images here to allow edit them
-                
-                    <button type="submit" class="btn btn-primary ">Edit Product</button>
-               
-            }
-            
-                <button type="reset" class="btn btn-danger m-1">Reset</button>
-                <a asp-action="Index" class="btn btn-dark">Back to List</a>
-            </div>
-        }
-        else
-        {
-            <input type="hidden" asp-for="Images" />
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Images</label>
-                    @foreach (var image in Model.Images)
-                    {
-                        <div class="image-container">
-                            <img src="~/Files/productImages/@image.ImagePath" class="img-fluid rounded avatar-50 mr-3" alt="image">
-                            <input type="file" accept="image/*" class="image-input" name="ImageFiles" onchange="updateImagePreview(this)" >
-                            <!--<input type="hidden" asp-for="Images" />-->
+                <input type="hidden" asp-for="Images" />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Images</label>
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="image-container">
+                                <img src="~/Files/productImages/@image.ImagePath" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                    <input type="file" accept="image/*" class="image-input" name="ImageFiles" onchange="updateImagePreview(this)" value="@image.ImagePath">
+                                <!--<input type="hidden" asp-for="Images" />-->
+                                <br />
+                            </div>
+                                <button type="button" onclick="deleteImage(this)">Delete</button>
                             <br />
-                        </div>
-                            <button type="button" onclick="deleteImage(this)">Delete</button>
-                        <br />
                         
-                    }
-                    <span asp-validation-for="Images" class="text-danger"></span>
+                        }
+                        <span asp-validation-for="Images" class="text-danger"></span>
+                    </div>
                 </div>
+                <div>
+                    <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
+                </div>
+            }
             </div>
-            <div>
-                <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
-            </div>
-        }
+       
         <div>
             <button type="reset" class="btn btn-danger">Reset</button>
+                <a asp-action="Index" class="btn btn-dark">Back to List</a>
         </div>
        
     </form>
@@ -188,10 +180,10 @@ else
             var imageContainer = input.parentElement;
             var img = imageContainer.querySelector('img');
             var file = input.files[0];
-            var hiddenInput = imageContainer.querySelector('input[type="hidden"]');
+            // var hiddenInput = imageContainer.querySelector('input[type="hidden"]');
 
-            // Clear the hidden input field's value
-            hiddenInput.value = "";
+            // // Clear the hidden input field's value
+            // hiddenInput.value = "";
             if (file) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
