@@ -3,6 +3,7 @@ using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
 using InStockWebAppBLL.Models.CategoryVM;
+using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,8 +73,31 @@ namespace InStockWebAppPL.Controllers
         {
             TempData["Message"] = null;
 
-            return PartialView("_Create");
+            //return PartialView("_Create");
+            return View();
         }
+
+        //public async Task<IActionResult> Create(SubcategoryVM subcategoryVm)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            TempData["message"] =
+        //                $"{subcategoryVm.Name} subcategory has been created successfully";
+        //            var subcategory = _mapper.Map<SubCategory>(subcategoryVm);
+        //            await _unitOfWork.SubcategoryRepository.Add(subcategory);
+        //            await _unitOfWork.Save();
+        //            return RedirectToAction("Index");
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // ignored
+        //    }
+
+        //    return View(subcategoryVm);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryVM model, IFormFile? imageFormFile)
@@ -82,6 +106,9 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    TempData["message"] =
+                        $"{model.Name} Category Added Successfully!";
+
                     var category = _mapper.Map<Category>(model);
 
                     if (imageFormFile != null)
@@ -107,17 +134,17 @@ namespace InStockWebAppPL.Controllers
                     {
                         await _unitOfWork.Save();
 
-                        TempData["Message"] = "Category Added Successfully!";
+                        //TempData["Message"] = "Category Added Successfully!";
 
                         return RedirectToAction("Index", "Category");
                     }
-                    else
-                    {
-                        TempData["Message"] = null;
-                        model.Message = "Error: Category Already Exists!";
+                    //else
+                    //{
+                    //    TempData["Message"] = null;
+                    //    model.Message = "Error: Category Already Exists!";
 
-                        return PartialView("_Create", model);
-                    }
+                    //    return PartialView("_Create", model);
+                    //}
                 }
             }
             catch (Exception)
@@ -125,12 +152,14 @@ namespace InStockWebAppPL.Controllers
                 TempData["Message"] = null;
                 model.Message = "Error: Enter Your Data Again!";
 
-                return PartialView("_Create", model);
+                //return PartialView("_Create", model);
+                return View(model);
             }
 
             TempData["Message"] = null;
 
-            return PartialView("_Create", model);
+            //return PartialView("_Create", model);
+            return View(model);
         }
 
         [HttpGet]
@@ -149,7 +178,8 @@ namespace InStockWebAppPL.Controllers
 
             TempData["Message"] = null;
 
-            return PartialView("_Edit", categoryViewModel);
+            //return PartialView("_Edit", categoryViewModel);
+            return View(categoryViewModel);
         }
 
         [HttpPost]
@@ -208,9 +238,12 @@ namespace InStockWebAppPL.Controllers
             catch (Exception)
             {
                 TempData["Message"] = "Error: Failed To Update Category!";
+
+                return View(model);
             }
 
-            return PartialView("_Edit", model);
+            //return PartialView("_Edit", model);
+            return View(model);
         }
 
         [HttpPost]

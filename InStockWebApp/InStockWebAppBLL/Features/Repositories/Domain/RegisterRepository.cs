@@ -33,36 +33,60 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public async Task<User> Register(RegisterVM model)
         {
-            try
+            var user = mapper.Map<User>(model);
+
+            user.UserType = UserType.Customer;
+            user.CreatedAt = DateTime.Now;
+            user.Photo = (user.Gender == 0 ? "user-1.jpg" : "11.png");
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                var user = mapper.Map<User>(model);
+                var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
 
-                user.UserType = UserType.Customer;
-                user.CreatedAt = DateTime.Now;
-                user.Photo=(user.Gender ==0 ? "user-1.jpg" : "11.png");
-
-                var result = await userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
-
-                    return user;
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine(error);
-                    }
-                }
+                return user;
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error registering user: {ex.Message}");
+                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"Failed to register user: {errorMessage}");
             }
-
-            return null;
         }
+
+
+        //public async Task<User> Register(RegisterVM model)
+        //{
+        //    try
+        //    {
+        //        var user = mapper.Map<User>(model);
+
+        //        user.UserType = UserType.Customer;
+        //        user.CreatedAt = DateTime.Now;
+        //        user.Photo=(user.Gender ==0 ? "user-1.jpg" : "11.png");
+
+        //        var result = await userManager.CreateAsync(user, model.Password);
+
+        //        if (result.Succeeded)
+        //        {
+        //            var resultrole = await userManager.AddToRoleAsync(user, AppRoles.Customer);
+
+        //            return user;
+        //        }
+        //        else
+        //        {
+        //            foreach (var error in result.Errors)
+        //            {
+        //                Console.WriteLine(error);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error registering user: {ex.Message}");
+        //    }
+
+        //    return null;
+        //}
     }
 }

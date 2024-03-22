@@ -1,0 +1,27 @@
+﻿@model CreateCategoryVM
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">New Category</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Category" asp-action="Create" class="form-group" enctype="multipart/form-data">
+            <partial name="~/Views/Category/_Form.cshtml" />
+
+        </form>
+    </div>
+</div>
+
+@section JqueryValidation
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
