@@ -10,6 +10,25 @@ else
 {
     actiony = "Edit";
 }
+<head>
+        <style>
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        </style>
+ </head>
 <div class="card-body">
     <form action="@actiony" data-toggle="validator" method="post" enctype="multipart/form-data">
         <div class="row">
@@ -30,7 +49,7 @@ else
                     <label>Dicount Code</label>
 
                     @*   asp-items="ViewBag.DiscountId" *@
-                    @Html.DropDownListFor(model => model.DiscountId, (SelectList)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
+                    @Html.DropDownListFor(model => model.DiscountId, (List<SelectListItem>)ViewBag.DiscountId, new { @class = "selectpicker form-control", data_style = "py-0" })
 
                     @* <select asp-for="DiscountId" asp-items="@ViewBag.DiscountId" name="type" class="selectpicker form-control" data-style="py-0"></select> *@
 
@@ -108,7 +127,34 @@ else
                 <button type="reset" class="btn btn-danger m-1">Reset</button>
                 <a asp-action="Index" class="btn btn-dark">Back to List</a>
             </div>
-           
+        }
+        else
+        {
+            <input type="hidden" asp-for="Images" />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Images</label>
+                    @foreach (var image in Model.Images)
+                    {
+                        <div class="image-container">
+                            <img src="~/Files/productImages/@image.ImagePath" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                            <input type="file" accept="image/*" class="image-input" name="ImageFiles" onchange="updateImagePreview(this)" >
+                            <!--<input type="hidden" asp-for="Images" />-->
+                            <br />
+                        </div>
+                            <button type="button" onclick="deleteImage(this)">Delete</button>
+                        <br />
+                        
+                    }
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary mr-2">Edit Product</button>
+            </div>
+        }
+        <div>
+            <button type="reset" class="btn btn-danger">Reset</button>
         </div>
        
     </form>
@@ -138,6 +184,38 @@ else
                 index--;
             }
         }
+        function updateImagePreview(input) {
+            var imageContainer = input.parentElement;
+            var img = imageContainer.querySelector('img');
+            var file = input.files[0];
+            var hiddenInput = imageContainer.querySelector('input[type="hidden"]');
+
+            // Clear the hidden input field's value
+            hiddenInput.value = "";
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        function deleteImage(button) {
+            var imageContainer = button.parentElement;
+            var hiddenInput = imageContainer.querySelector('input[type="hidden"]');
+            var imagePreview = imageContainer.querySelector('img');
+
+            // Clear the hidden input field's value
+            hiddenInput.value = "";
+
+            // Hide the image preview
+            imagePreview.style.display = 'none';
+
+            // Hide the delete button
+            button.style.display = 'none';
+        }
+
     </script>
+
 
 </div>

@@ -65,7 +65,7 @@
                                         {
                                             @if (i == 5) { break; }
                                             i++;
-                                            <div class="swiper-slide h-auto"><a class="glightbox product-view" href="~/Files/ProductImages/@imagePath" data-gallery="gallery2" data-glightbox="Product item"><img class="img-fluid" src="@imagePath" alt="..."></a></div>
+                                            <div class="swiper-slide h-auto"><a class="glightbox product-view" href="~/Files/ProductImages/@imagePath" data-gallery="gallery2" data-glightbox="Product item"><img class="img-fluid" src="~/Files/ProductImages/@imagePath" alt="..."></a></div>
                                         }
                                     </div>
                                 </div>
@@ -133,7 +133,7 @@
                     }
                      
                 </ul>
-                <div class="tab-content mb-5" id="myTabContent">
+                <div class="tab-content mb-5 section section-@ViewBag.ID" id="myTabContent">
                     <!--Description Tab-->
                     <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                         <div class="p-4 p-lg-5 bg-white">
@@ -182,7 +182,8 @@
                        @foreach (var item in Model.ProductReviews)
                        {
                             <div class="d-flex mb-3">
-                                <div class="flex-shrink-0"><img class="rounded-circle" src="~/Files/ImageProfile/@item.User.Photo" alt="" width="50"></div>
+                                <div class="flex-shrink-0">
+                                    <img class="rounded-circle" src="~/Files/ImageProfile/@item.User.Photo" alt="" width="50"></div>
                                 <div class="ms-3 flex-shrink-1">
                                             <h6 class="mb-0 text-uppercase">@item.User.FirstName @item.User.LastName</h6>
                                             <p class="small text-muted mb-0 text-uppercase">@item.CreatedAt.ToString("MMMM dd, yyyy")</p>
@@ -443,7 +444,7 @@
                                                                     `);
 
 
-                            if (userId === '@user.Id') {
+                            if (userId === '@user?.Id') {
                                 $('#reviewComment').hide();
                             }
                         }
@@ -466,7 +467,7 @@
                                                 text: "item is Added",
                                                 className: "info",
                                                 style: {
-                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                    background: "linear-gradient(to right, #dcb15a, #dcb14a)",
                                                    
                                                 },
 
@@ -536,7 +537,7 @@
                                                 text: "item is Added",
                                                 className: "info",
                                                 style: {
-                                                    background: "linear-gradient(to right, #dcb14a, #dcb14a)",
+                                                    background: "linear-gradient(to right, #dcb13a, #dcb14a)",
                                                 },
 
                                                 preventDuplicates: false
@@ -548,7 +549,7 @@
                                                 text: "Quantity cannot exceed available stock",
                                                 className: "toastify-danger",
                                                 style: {
-                                                    background: "linear-gradient(to right,#f53b5a, #eb1919)",
+                                                    background: "linear-gradient(to right,red, #eb1919)",
                                                 },
                                                 position: "center",
                                                 preventDuplicates: false,
@@ -565,6 +566,12 @@
                             function updateCartCount(count) {
                                 $('#cartCount').text('(' + count + ')');
                             }
+                            var sectionID = '@ViewBag.ID';
+
+                            // Scroll to the specified section/div
+                            $('html, body').animate({
+                                scrollTop: $('.section-' + sectionID).offset().top
+                            }, 100);
                         });
                     </script>
             

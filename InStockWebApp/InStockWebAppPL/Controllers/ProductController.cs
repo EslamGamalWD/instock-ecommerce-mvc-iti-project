@@ -51,6 +51,7 @@ namespace InStockWebAppPL.Controllers
         #region Localization
         public IActionResult ChangeLanguage(string culture)
         {
+
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions()
             {
                 Expires = DateTimeOffset.UtcNow.AddYears(1)
@@ -70,9 +71,20 @@ namespace InStockWebAppPL.Controllers
             return View(await _productRepository.Details(id));
         }
 
+
+        public async Task<IActionResult> ProductDetailes(int? id)
+        {
+            var details = await _productRepository.Details(id);
+
+            return PartialView("_ProductDetailes", details);
+        }
+
+
+
         // GET: ProductController/Details/5
         public async Task<IActionResult> CustomerSideDetails(int id)
         {
+            ViewBag.ID = id;
             var details = await _productRepository.Details(id);
 
             var product = await _productRepository.GetProductWithSubcategoryById(id);
@@ -126,13 +138,17 @@ namespace InStockWebAppPL.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");
-            ViewData["DiscountId"] = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var emptyOption = new SelectListItem() { Value = "", Text = "No Discount" };
+            var selectList = new SelectList(await _discountRepository.GetAll(), "Id", "Name");
+            var finalList = new List<SelectListItem> { emptyOption };
+            finalList.AddRange(selectList);
+            ViewData["DiscountId"] = finalList;
             return View();
         }
 
         // POST: ProductController/Create
         [HttpPost]
-        public async Task<IActionResult> Create(AlterProductVM entityVM)
+        public async Task<IActionResult> Create(AlterProductVM entityVM, List<IFormFile>? ImageFiles)
         {
             try
             {
@@ -143,7 +159,7 @@ namespace InStockWebAppPL.Controllers
                     int createdId=await _productRepository.Add(entityVM);
                     if (createdId != -1)
                     {
-                        await _imageRepository.add(entityVM.ImageFiles,createdId);
+                        await _imageRepository.add(ImageFiles,createdId);
                         return RedirectToAction(nameof(Index));
                     }
                 }
@@ -177,14 +193,17 @@ namespace InStockWebAppPL.Controllers
 
         // POST: ProductController/Edit/5
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, AlterProductVM entityVM)
+        public async Task<IActionResult> Edit(int id, AlterProductVM entityVM,List<IFormFile>? ImageFiles)
         {
             try
             {
                 ModelState["ImageFiles"].ValidationState= ModelValidationState.Valid;
                 if (ModelState.IsValid) { 
+                    var oldProduct=await _productRepository.GetById(id);
                     await _productRepository.Update(id,entityVM);
-                    await _imageRepository.add(entityVM.ImageFiles, id);
+                    //Delete Images if no other product is referring to it.
+                    await _imageRepository.remove(oldProduct.Images, id);
+                    await _imageRepository.add(ImageFiles, id);
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["SubCategoryId"] = new SelectList(await _subCategoryRepository.GetAll(), "Id", "Name");

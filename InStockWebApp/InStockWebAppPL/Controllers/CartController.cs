@@ -4,6 +4,7 @@ using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Models.CartVM;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 
@@ -14,11 +15,15 @@ public class CartController : Controller
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly SignInManager<User> signInManager;
+    private readonly UserManager<User> userManager;
 
-    public CartController(IMapper mapper, IUnitOfWork unitOfWork)
+    public CartController(IMapper mapper, IUnitOfWork unitOfWork, SignInManager<User> signInManager, UserManager<User> userManager)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        this.signInManager=signInManager;
+        this.userManager=userManager;
     }
     [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
@@ -40,12 +45,13 @@ public class CartController : Controller
         var cartViewModel = _mapper.Map<CartVM?>(cart);
         return View(cartViewModel);
     }
+    [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
     public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
     {
         if (ModelState.IsValid)
         {
-            var userId = GetUserId();
+            var userId = await GetUserId();
             var user = await _unitOfWork.UserRepository.GetUser(userId);
             var cart = await _unitOfWork.CartRepository.GetCart(userId);
 
@@ -111,11 +117,12 @@ public class CartController : Controller
         return RedirectToAction("Index", "FilterProduct");
     }
 
+    [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
     [HttpPost]
     public async Task<IActionResult> IncreaseItemCount(string itemId)
     {
-        var userId = GetUserId();
+        var userId = await GetUserId();
         var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id == int.Parse(itemId) &&
             !i.IsDeleted, i => i.Product);
 
@@ -134,6 +141,7 @@ public class CartController : Controller
         return Json(new { success = true, TotalPrice = item.TotalPrice, Quantity = item.Quantity, total = totalcount, instock = product.InStock, cardPrice = cart.TotalPrice });
     }
 
+    [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
     [HttpPost]
     public async Task<IActionResult> DecreaseItemCount(string itemId)
@@ -147,7 +155,7 @@ public class CartController : Controller
             return Json(new { success = false, error = "Item not found" });
         }
 
-        var userId = GetUserId();
+        var userId =await GetUserId();
         var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
 
         if (item.Quantity == 1)
@@ -172,13 +180,15 @@ public class CartController : Controller
 
         return Json(new { success = true, TotalPrice = item.TotalPrice, instock = product.InStock, Quantity = item.Quantity, total = totalcount, IsDeleted = item.IsDeleted, cardPrice = cart.TotalPrice });
     }
+    [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
+
     [HttpPost]
     //[ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteItem(string itemId)
     {
         var item = await _unitOfWork.ItemRepository.GetFirstOrDefault(i => i.Id ==  int.Parse(itemId) &&
             !i.IsDeleted, i => i.Product);
-        var userId = GetUserId();
+        var userId = await GetUserId();
         var count = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
         HttpContext.Session.SetInt32("shoppingCartSession", count - item.Quantity);
 
@@ -196,11 +206,11 @@ public class CartController : Controller
         return Json(new { success = true, cardPrice = cart.TotalPrice, total = totalcount });
     }
 
-    private string GetUserId()
+    private async Task<string>  GetUserId()
     {
-        var claimsIdentity = (ClaimsIdentity)User.Identity;
-        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
-        return claim.Value;
+        var user = await userManager.FindByNameAsync(User.Identity.Name);
+
+        return user.Id;
     }
 
     private decimal CalculateCartTotalPrice(Cart cart) =>

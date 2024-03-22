@@ -22,7 +22,7 @@ public class ItemRepository : GenericRepository<Item>, IItemRepository
     {
         throw new NotImplementedException();
     }
-    public async Task<bool> DecreaseUnitStock(int cardId)
+    public async Task<bool> DecreaseUnitStock(int cardId, int? orderId)
     {
         try
         {
@@ -31,6 +31,7 @@ public class ItemRepository : GenericRepository<Item>, IItemRepository
             {
                 var Product = await _applicationDbContext.Products.Where(a => a.Id ==item.ProductId).FirstOrDefaultAsync();
                 Product.InStock -= item.Quantity;
+                item.OrderId = orderId;
                 await _applicationDbContext.SaveChangesAsync();
             }
             return true;

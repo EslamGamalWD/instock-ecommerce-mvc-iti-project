@@ -65,7 +65,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                     CreatedAt = DBProduct.CreatedAt,
                     IsDeleted = DBProduct.IsDeleted,
                     SubCategoryName = DBProduct.SubCategory.Name,
-                    DiscountName = DBProduct.Discount.Name,
+                    DiscountName = DBProduct.Discount?.Name??"",
                     ProductReviews = DBProduct.Reviews
                 };
                 foreach(var img in DBProduct.Images)
@@ -88,7 +88,24 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             {
                 var DBProduct = await _applicationDbContext.Products
                     .Include(P => P.SubCategory).Include(P => P.Discount).Include(P => P.Images).FirstOrDefaultAsync(P => P.Id == id);
-                return _mapper.Map<AlterProductVM>(DBProduct);
+                AlterProductVM AlterProductsVM = new AlterProductVM()
+                {
+                    Id = DBProduct.Id,
+                    Name = DBProduct.Name,
+                    Description = DBProduct.Description,
+                    Price = DBProduct.Price,
+                    InStock = DBProduct.InStock,
+                    SubCategoryId = DBProduct.SubCategory.Id,
+                    DiscountId= DBProduct.Discount?.Id
+                };
+                AlterProductsVM.Images = new();
+                for (int i = 0; i < DBProduct.Images.Count; i++)
+                {
+                    ProductImage? img = DBProduct.Images[i];
+                    AlterProductsVM?.Images.Add(img);
+                }
+                // return _mapper.Map<AlterProductVM>(DBProduct);
+                return AlterProductsVM;
 
             }
             catch (Exception)
@@ -117,8 +134,8 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
                         CreatedAt = DBProduct.CreatedAt,
                         IsDeleted = DBProduct.IsDeleted,
                         SubCategoryName = DBProduct.SubCategory.Name,
-                        DiscountName = DBProduct.Discount.Name,
-                        ProductReviews = DBProduct.Reviews
+                        DiscountName = DBProduct.Discount?.Name??"",
+                        ProductReviews = DBProduct?.Reviews
                     };
                     foreach (var img in DBProduct.Images)
                     {
@@ -250,6 +267,9 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
 
         public async Task<Product?> GetById(int id) =>
             await _applicationDbContext.Products
+                .Include(p => p.SubCategory)
+                .Include(p => p.Discount)
+                .Include(p => p.Images)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
         public async Task<int> GetAllProductSold()

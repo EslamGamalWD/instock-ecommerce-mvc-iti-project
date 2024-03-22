@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- bootstrap-->
-	<link href="~/customer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/customer/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <!-- gLightbox gallery-->
     <link rel="stylesheet" href="~/Customer/vendor/glightbox/css/glightbox.min.css">
     <!-- Range slider-->
@@ -30,12 +30,19 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="~/favicon.ico">
     <!-- Google Fonts Link For Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    @await RenderSectionAsync("CSS",required:false)
+    @await RenderSectionAsync("CSS", required: false)
 </head>
 <body>
+
+<div class="spinner-wrapper">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <partial name="~/Views/Shared/Customer/_Header.cshtml"/>
 
 <div>
@@ -45,11 +52,9 @@
 
 <partial name="~/Views/Shared/Customer/_Footer.cshtml"/>
 
-
-
 @await RenderSectionAsync("scripts", required: false)
 
-@await RenderSectionAsync("Js", required: false)
+@await RenderSectionAsync("JS", required: false)
 
 <script src="~/Customer/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="~/Customer/vendor/glightbox/js/glightbox.min.js"></script>
@@ -58,7 +63,7 @@
 <script src="~/Customer/vendor/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="~/Customer/js/front.js"></script>
 
- 
+
 <script>
       
         //   https://css-tricks.com/ajaxing-svg-sprite/
@@ -82,15 +87,20 @@
         injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg'); 
         
       </script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- SignalR CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<!-- SignalR CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <script>
+<script>
+        const spinnerWrapperEl = document.querySelector(".spinner-wrapper");
+            
+            window.addEventListener("load", () => {
+                spinnerWrapperEl.classList.add('fade-out-animation');
+            });
 
         $(document).ready(function () {
             const connection = new signalR.HubConnectionBuilder()
