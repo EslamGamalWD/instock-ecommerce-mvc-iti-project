@@ -72,7 +72,7 @@
     box-sizing: border-box;
 }
 
-*:focus {
+*:focus-visible {
     outline: none;
     box-shadow: 0 0 0 0.8rem rgba(220, 177, 74, 0.6);
 }
@@ -94,6 +94,10 @@ body {
     background-color: var(--bs-body-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.icon-nav {
+    color: #dcb14a;
 }
 
 hr {
@@ -3446,8 +3450,8 @@ fieldset:disabled .btn {
 
 .btn-dark:hover {
     color: #fff;
-    background-color: black;
-    border-color: black;
+    background-color: #333;
+    border-color: #333;
 }
 
 .btn-check:focus + .btn-dark, .btn-dark:focus {
@@ -4318,7 +4322,7 @@ fieldset:disabled .btn {
     border-color: #000;
 }
 
-.btn-out {
+.btn-account {
     color: #000;
     border: #dcb14a solid 2px;
     font-size: 1.1rem;
@@ -4327,7 +4331,7 @@ fieldset:disabled .btn {
     transition: all 0.3s;
 }
 
-.btn-out:hover {
+.btn-account:hover {
     color: #000;
     background-color: rgba(220, 177, 74, 0.8);
 }
@@ -13385,4 +13389,29 @@ STYLE SWITCHER FOR DEMO
 
 #style-switch h4, #style-switch .h4 {
     color: #495057;
+}
+
+.spinner-wrapper {
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.4s ease;
+}
+
+.spinner-border {
+    height: 60px;
+    width: 60px;
+    color: #dcb14a;
+}
+
+.fade-out-animation {
+    opacity: 0;
+    visibility: hidden;
 }

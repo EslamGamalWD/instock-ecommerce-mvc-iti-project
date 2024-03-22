@@ -1,0 +1,28 @@
+﻿@model EditCategoryVM
+
+@{
+    ViewBag.Title = "Edit Subcategory";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+            <h4 class="card-title">Edit Category</h4>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" asp-controller="Category" class="form-group" data-toggle="validator" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ID" />
+            <partial name="~/Views/Category/_Edit.cshtml" />
+
+        </form>
+    </div>
+</div>
+
+@section JqueryValidation
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

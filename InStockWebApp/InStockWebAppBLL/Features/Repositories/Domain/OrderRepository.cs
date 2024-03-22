@@ -3,6 +3,7 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Models.OrderVM;
 using InStockWebAppDAL.Context;
 using InStockWebAppDAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,20 +22,33 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
             this.applicationDbContext=applicationDbContext;
             this.mapper=mapper;
         }
-        public async Task<bool> Add(AddOrderVM addOrderVM)
+        public async Task<int?> Add(AddOrderVM addOrderVM)
         {
             try
             {
                 var result = mapper.Map<Order>(addOrderVM);
                 await applicationDbContext.Orders.AddAsync(result);
                 await applicationDbContext.SaveChangesAsync();
-                return true;
+                return result.Id;
             }
             catch (Exception)
             {
 
-                return false;
+                return null;
             }
+        }
+
+        public async Task<IEnumerable<GetAllOrderVM>> GetAllOrders(string userId)
+        {
+            var orders = await applicationDbContext.Orders
+                .Include(p => p.PaymentDetails)
+                .Include(i=>i.Items)
+                .ThenInclude(p=>p.Product)
+                .ThenInclude(p => p.Images)
+                .Where(a => a.UserId==userId)
+                .ToListAsync();
+            var result = mapper.Map<IEnumerable<GetAllOrderVM> >(orders);
+            return result;
         }
     }
 }

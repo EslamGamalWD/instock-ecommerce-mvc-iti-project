@@ -47,9 +47,20 @@ namespace InStockWebAppPL.Controllers
             return View(await _productRepository.Details(id));
         }
 
+
+        public async Task<IActionResult> ProductDetailes(int? id)
+        {
+            var details = await _productRepository.Details(id);
+
+            return PartialView("_ProductDetailes", details);
+        }
+
+
+
         // GET: ProductController/Details/5
         public async Task<IActionResult> CustomerSideDetails(int id)
         {
+            ViewBag.ID = id;
             var details = await _productRepository.Details(id);
 
             var product = await _productRepository.GetProductWithSubcategoryById(id);

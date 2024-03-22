@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InStockWebAppBLL.Models.CategoryVM
 {
-    public class CategoryDetailsVM
+    public record CategoryDetailsVM
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

@@ -110,6 +110,7 @@ namespace InStockWebAppBLL.Mapper
 
             CreateMap<PaymentDetails, AddPaymentDetailesVM>().ReverseMap();
             CreateMap<Order, AddOrderVM>().ReverseMap();
+            CreateMap<Order, GetAllOrderVM>().ReverseMap();
 
         }
     }

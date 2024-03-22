@@ -1,20 +1,22 @@
-﻿@model IEnumerable<GetAllCategoriesVM>
+@model IEnumerable<GetAllCategoriesVM>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
-<div class="container-fluid">
+
 <div class="row">
-   
-        <div class="col-lg-12">
-            <div class="d-flex flex-wrap flex-wrap align-items-center justify-content-between mb-4">
-                <div>
-                    <h4 class="mb-3">Category List</h4>
-                    <p class="mb-0">Here are all the categories in the system</p>
-                </div>
-                <a href="javascript:" data-title="Add Category" data-url="/Category/Create" class="btn btn-primary js-render-modal add-list"><i class="las la-plus mr-3"></i>Add Category</a>
+    <div class="col-lg-12">
+        <div class="d-flex  flex-wrap flex-wrap align-items-center justify-content-between mb-4">
+            @* <a href="javascript:" data-title="Add Category" data-url="/Category/Create" class="btn border add-btn shadow-none mx-2  d-md-block  js-render-modal add-list">
+                <i class="las la-plus mr-3"></i>Add Category
+            </a> *@
+            <div>
+                <h4 class="mb-3">Category List</h4>
+                <p class="mb-0">Here are all the Categories in the system</p>
             </div>
+            <a asp-controller="Category" asp-action="Create" class="btn btn-primary js-render-modal add-list"><i class="las la-plus mr-3"></i>Add Category</a>
         </div>
+    </div>
     <div class="col-lg-12">
         <div class="table-responsive rounded mb-3">
             <table class="data-tables table mb-0 tbl-server-info text-center">
@@ -40,11 +42,15 @@
                             <td>
                                 <div class="d-flex align-items-center justify-content-center list-action">
                                     <a class="badge badge-info mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="View"
-                                    href="/Category/Details/@item.Id">
+                                       href="/Category/Details/@item.Id">
                                         <i class="ri-eye-line mr-0"></i>
                                     </a>
 
-                                    <a href="javascript:" class="badge bg-success mr-2 js-render-modal" data-toggle="tooltip" data-placement="top" data-title="Edit Category" data-original-title="Edit" data-url="/Category/Edit/@item.Id">
+                                    @* <a href="javascript:" class="badge bg-success mr-2 js-render-modal" data-toggle="tooltip" data-placement="top" data-title="Edit Category" data-original-title="Edit" data-url="/Category/Edit/@item.Id">
+                                        <i class="ri-pencil-line mr-0"></i>
+                                    </a> *@
+
+                                    <a class="badge bg-success mr-2 js-render-modal" data-toggle="tooltip" data-placement="top" data-title="Edit Category" data-original-title="Edit" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id">
                                         <i class="ri-pencil-line mr-0"></i>
                                     </a>
 
@@ -60,13 +66,13 @@
     </div>
 </div>
 
-</div>
+
 @section JS {
 
     <script src="~/lib/bootbox.js/bootbox.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
 
-    <script>
+    @* <script>
         $(document).ready(function () {
             $('body').delegate('.js-render-modal', 'click', function () {
                 var btn = $(this);
@@ -93,7 +99,60 @@
                 modal.modal('show');
             });
         });
+    </script> *@
+
+    <script>
+        $(document).ready(function () {
+            $('body').delegate('.js-render-modal', 'click', function () {
+                var btn = $(this);
+                var modal = $('#Modal');
+
+                modal.find('#ModalLabel').text(btn.data('title'));
+
+                if (btn.data('update') !== undefined) {
+                    updatedRow = btn.parents('tr');
+                    console.log(updatedRow);
+                }
+
+                $.get({
+                    url: btn.data('url'),
+                    success: function (form) {
+                        modal.find('.modal-body').html(form);
+                        $.validator.unobtrusive.parse(modal);
+
+                        // Bind form submission to handle it via AJAX
+                        modal.find('#createCategoryForm').submit(function (e) {
+                            e.preventDefault(); // Prevent the form from submitting normally
+
+                            $.ajax({
+                                url: $(this).attr('action'),
+                                type: 'POST',
+                                data: new FormData(this),
+                                processData: false,
+                                contentType: false,
+                                success: function (data) {
+                                    // Check if the response contains a partial view (validation errors)
+                                    if ($(data).find('#createCategoryForm').length > 0) {
+                                        modal.find('.modal-body').html(data); // Update modal content with validation errors
+                                    } else {
+                                        // Close modal upon successful form submission
+                                        modal.modal('hide');
+                                        // Additional logic here
+                                    }
+                                }
+                            });
+                        });
+                    },
+                    error: function () {
+                        showErrorMessage();
+                    }
+                });
+
+                modal.modal('show');
+            });
+        });
     </script>
+
 
     <script>
         $(document).ready(function () {

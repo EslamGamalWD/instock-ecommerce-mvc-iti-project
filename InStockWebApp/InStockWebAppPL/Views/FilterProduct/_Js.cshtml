@@ -63,128 +63,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 
-
-    
-    // (function () {
-    //     var currentPage = parseInt('@ViewBag.CurrentPage');
-    //     var totalPages = parseInt('@ViewBag.TotalPages');
-    //     var maxVisiblePages = 3;
-    //     var lastSortOption = $('#sortSelect').val();
-    //     var lastCategoryId = $('input[name="customRadio"]:checked').val();
-    //     var lastSubcategoryIds = [];
-
-    //     function displayPagination() {
-    //         var pagination = $('#pagination');
-    //         pagination.empty();
-    //         var startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    //         var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    //         startPage = Math.max(1, endPage - maxVisiblePages + 1);
-
-    //         if (currentPage > 1) {
-    //             var prevLi = $('<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage - 1) + '">Previous</a></li>');
-    //             pagination.append(prevLi);
-    //         }
-
-    //         for (var i = startPage; i <= endPage; i++) {
-    //             var activeClass = i === currentPage ? ' selected-page' : '';
-    //             var li = $('<li class="page-item' + activeClass + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-    //             pagination.append(li);
-    //         }
-
-    //         if (currentPage < totalPages) {
-    //             var nextLi = $('<li class="page-item"><a class="page-link" href="#" data-page="' + (currentPage + 1) + '">Next</a></li>');
-    //             pagination.append(nextLi);
-    //         }
-    //     }
-
-    //     var pageSize = 6;
-
-    //     function loadProducts(page, pageSize, sortOption, categoryId, subcategoryIds) {
-    //         if (!Array.isArray(subcategoryIds)) {
-    //             subcategoryIds = [];
-    //         } else {
-    //             // console.log(subcategoryIds)
-    //         }
-    //         var minPrice = document.getElementById("minPrice").value;
-    //         var maxPrice = document.getElementById("currentMax").value;
-    //         $.get('/FilterProduct/Get/', {
-    //             page: page,
-    //             pageSize: pageSize,
-    //             sortOption: sortOption,
-    //             categoryId: categoryId,
-    //             subcategoryIds: subcategoryIds.toString(),
-    //             minPrice: minPrice,
-    //             maxPrice: maxPrice
-    //         }, function (data) {
-    //             $('#productContainer').html(data);
-    //             currentPage = page;
-    //             lastSortOption = sortOption;
-    //             displayPagination();
-    //         });
-
-    //         console.log(subcategoryIds);
-    //     }
-
-    //     loadProducts(currentPage, pageSize, lastSortOption, lastCategoryId, lastSubcategoryIds);
-
-    //     $('#pagination').on('click', 'a', function (e) {
-    //         e.preventDefault();
-    //         var page = $(this).data('page');
-    //         loadProducts(page, pageSize, lastSortOption, lastCategoryId, lastSubcategoryIds);
-    //     });
-
-    //     $('#sortSelect, input[name="customRadio"]').change(function () {
-    //         lastSortOption = $('#sortSelect').val();
-    //         lastCategoryId = $('input[name="customRadio"]:checked').val();
-    //         loadProducts(1, pageSize, lastSortOption, lastCategoryId, lastSubcategoryIds);
-    //     });
-
-    //     $('#subcategory').on('click', 'input[type="checkbox"]', function () {
-    //         lastSubcategoryIds = [];
-    //         $('#subcategory input[name="checkbox"]:checked').each(function () {
-    //             var checkboxId = $(this).attr('id').replace('checkbox_', '');
-    //             lastSubcategoryIds.push(parseInt(checkboxId));
-    //         });
-    //         console.log(lastSubcategoryIds)
-    //         loadProducts(1, pageSize, lastSortOption, lastCategoryId, lastSubcategoryIds);
-    //     });
-
-    //     function loadSubcategories(categoryId) {
-    //         $.get('@Url.Action("GetSubcategories")', { categoryId: categoryId }, function (data) {
-    //             $('#subcategory').html(data).show();
-    //         });
-    //     }
-
-    //     $('input[name="customRadio"]').change(function () {
-    //         var categoryId = $(this).val();
-    //         loadSubcategories(categoryId);
-    //     });
-
-    //     var initialCategoryId = $('input[name="customRadio"]:checked').val();
-    //     loadSubcategories(initialCategoryId);
-
-    //     var minPrice = document.getElementById("minPrice");
-    //     var currentMin = document.getElementById("currentMin");
-    //     minPrice.oninput = function () {
-    //         currentMin.textContent = minPrice.value;
-    //         var sortOption = $('#sortSelect').val();
-    //         var categoryId = $('input[name="customRadio"]:checked').val();
-    //         var subcategoryIds = getLastCheckedSubcategoryIds(); // Assuming this function exists
-    //         loadProducts(currentPage, pageSize, sortOption, categoryId, subcategoryIds);
-    //     };
-
-    //     function getLastCheckedSubcategoryIds() {
-    //         var subcategoryIds = [];
-    //         $('#subcategory input[name="checkbox"]:checked').each(function () {
-    //             var checkboxId = $(this).attr('id').replace('checkbox_', '');
-    //             subcategoryIds.push(parseInt(checkboxId));
-    //         });
-    //         return subcategoryIds;
-    //     }
-
-
-
-    // })();
     (function () {
         var currentPage = parseInt('@ViewBag.CurrentPage');
         var totalPages = parseInt('@ViewBag.TotalPages');
@@ -243,6 +121,8 @@
                 
                 lastSortOption = sortOption;
                 displayPagination();
+                var productCount = $('#productCount').val();
+                $('#ShowingProduct').text('Showing ' + productCount + ' result');
             });
         }
 

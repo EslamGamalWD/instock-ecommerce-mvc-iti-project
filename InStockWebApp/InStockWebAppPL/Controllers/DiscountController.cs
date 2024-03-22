@@ -8,6 +8,7 @@ using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppDAL.Entities;
 using InStockWebAppBLL.Models.ProductVM;
 using Microsoft.EntityFrameworkCore;
+using InStockWebAppBLL.Helpers.ImageUploader;
 
 namespace InStockWebAppPL.Controllers
 {
@@ -62,11 +63,20 @@ namespace InStockWebAppPL.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (createdDiscount.Image != null)
+                    {
+                        string discountImage = FilesUploader.UploadFile("DiscountImages", createdDiscount.Image);
+                        createdDiscount.ImagePath = discountImage;
+                    }
+                    else
+                    {
+                        createdDiscount.ImagePath = "noDiscountImage.jpg";
+                    }
                     var discount = _mapper.Map<Discount>(createdDiscount);
 
                     await _discountRepository.Add(discount);
                     
-                        _unitOfWork.Save();
+                    await _unitOfWork.Save();
 
                         TempData["Message"] = "Discount Added Successfully!";
 

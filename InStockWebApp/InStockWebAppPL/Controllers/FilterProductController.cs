@@ -73,6 +73,7 @@ namespace InStockWebAppPL.Controllers
             var result = products.Where(a => a.SubCategory.CategoryId ==id).ToList();
             return View(result);
         }
+        [ResponseCache(Duration = 0, NoStore = true, Location = ResponseCacheLocation.Client)]
 
 
         [HttpGet]

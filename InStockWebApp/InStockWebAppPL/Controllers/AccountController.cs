@@ -59,36 +59,43 @@ namespace InStockWebAppPL.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVM model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await registerRepo.Register(model);
-
-                if (user != null)
+                if (ModelState.IsValid)
                 {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = token }, protocol: HttpContext.Request.Scheme);
+                    var user = await registerRepo.Register(model);
 
-                    #region send Email
-                    var filePath = $"{webHostEnvironment.WebRootPath}/Account/Tempelet/Email.html";
-                    StreamReader str = new StreamReader(filePath);
-                    var body = str.ReadToEnd();
-                    str.Close();
-                    body = body.Replace("[Header]", "Welcom In Instock Shopping")
-                        .Replace("[Body]", "Welcome to InStock! Confirm Your Account")
-                        .Replace("[URL]", $"{callbackUrl}")
-                        .Replace("[AncorTitle]", "Confirm");
-                    //Use HangFire
-                    BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(model.Email, "Welcome Login", body));
+                    if (user != null)
+                    {
+                        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = token }, protocol: HttpContext.Request.Scheme);
 
-                    #endregion
+                        #region send Email
+                        var filePath = $"{webHostEnvironment.WebRootPath}/Account/Tempelet/Email.html";
+                        StreamReader str = new StreamReader(filePath);
+                        var body = str.ReadToEnd();
+                        str.Close();
+                        body = body.Replace("[Header]", "Welcom In Instock Shopping")
+                            .Replace("[Body]", "Welcome to InStock! Confirm Your Account")
+                            .Replace("[URL]", $"{callbackUrl}")
+                            .Replace("[AncorTitle]", "Confirm");
+                        //Use HangFire
+                        BackgroundJob.Enqueue(() => emailSender.SendEmailAsync(model.Email, "Welcome Login", body));
 
-                    return View("Confirmation");
+                        #endregion
+
+                        return View("Confirmation");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            "ERROR: Failed to Register! Please try again!");
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty,
-                        "ERROR: Failed to Register! Please try again!");
-                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"ERROR: {ex.Message}");
             }
 
             return View(model);

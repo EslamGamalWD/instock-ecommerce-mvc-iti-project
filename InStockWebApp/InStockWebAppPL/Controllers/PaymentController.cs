@@ -67,7 +67,6 @@ namespace InStockWebAppPL.Controllers
         {
             if (userId != null&&code !=null)
             {
-
                 //add Payment detailess
                 var cart = await _cartRepository.GetCart(userId);
                 var PaymentId = await paymentDetailesRepository.Add(new AddPaymentDetailesVM() { Amount=cart.Items.Count(), PaymentStatus=PaymentStatus.Completed, CreatedAt=DateTime.Now, Provider="Stripe" });
@@ -98,9 +97,10 @@ namespace InStockWebAppPL.Controllers
             };
             //Decrease Unit Instock
             //incress units Sold
-            if (await orderRepository.Add(addOrderVM))
+            var data = await orderRepository.Add(addOrderVM);
+            if (data !=null)
             {
-              await  itemRepository.DecreaseUnitStock(cart.Id);
+              await  itemRepository.DecreaseUnitStock(cart.Id, data);
               await  itemRepository.IncreaseUnitSold(cart.Id);
             }
             //Reset Cart
