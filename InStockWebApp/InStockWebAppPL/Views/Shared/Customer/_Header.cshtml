@@ -17,9 +17,6 @@
             <a class="navbar-brand">
                 <span class="fw-bold text-uppercase text-dark">IN-STOCK</span>
             </a>
-            @* <button class="navbar-toggler navbar-toggler-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> *@
-            @*     <span class="navbar-toggler-icon"></span> *@
-            @* </button> *@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto d-flex flex-row align-items-center">
                     <li class="nav-item">
@@ -29,17 +26,7 @@
                         <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">@SharedLocalizer["Shop"]</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@SharedLocalizer["Sections"]</a>
-                        <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                            <a href="#categories" class="dropdown-item border-0 transition-link">@SharedLocalizer["Categories"]</a>
-                            <a href="#discounts" class="dropdown-item border-0 transition-link">
-                                @SharedLocalizer["Discounts"]</a>
-                            <a href="#bestsellers" class="dropdown-item border-0 transition-link">
-                                @SharedLocalizer["Best-Sellers"]</a>
-                            <a href="#trending" class="dropdown-item border-0 transition-link">
-                                @SharedLocalizer["Trending"]</a>
-                            <a asp-action="Admin" asp-controller="Contact" class="dropdown-item border-0 transition-link">@SharedLocalizer["Contact"]</a>
-                        </div>
+                        <a asp-action="Admin" asp-controller="Contact" class="nav-link">Contact</a>
                     </li>
                     @{
                         var count = HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession");
