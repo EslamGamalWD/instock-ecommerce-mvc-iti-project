@@ -6,9 +6,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
-
     var Culture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-
 }
 <style>
     active{
@@ -39,7 +37,6 @@
                     @if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is not null && count > 0)
                     {
                         <li class="nav-item">
-
                             <a active-when="Cart" asp-controller="Cart" asp-action="Index" class="nav-link "> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(@count)</small></a>
                         </li>
                     }
@@ -59,17 +56,21 @@
                     <li class="nav-item">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <a class="btn btn-dark" href="/Account/Logout"><i class="icon-nav fas fa-sign-out-alt me-1"></i>@SharedLocalizer["Log Out"] </a>
+                            <a class="btn btn-dark" href="/Account/Logout">
+                                <i class="icon-nav fas fa-sign-out-alt me-1"></i>@SharedLocalizer["Log Out"]
+                            </a>
                         }
                         else
                         {
-                            <a class="btn btn-dark" href="/Account/Login"><i class="icon-nav fas fa-sign-in-alt me-1"></i> @SharedLocalizer["Log In"]</a>
+                            <a class="btn btn-dark" href="/Account/Login">
+                                <i class="icon-nav fas fa-sign-in-alt me-1"></i> @SharedLocalizer["Log In"]
+                            </a>
                         }
                     </li>
 
                 </ul>
-                    <partial name="~/Views/Shared/Customer/_SetLanguage.cshtml" />
-              
+                <partial name="~/Views/Shared/Customer/_SetLanguage.cshtml"/>
+
             </div>
         </nav>
     </div>

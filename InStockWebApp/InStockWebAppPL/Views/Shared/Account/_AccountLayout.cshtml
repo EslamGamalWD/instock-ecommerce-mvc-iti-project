@@ -2,54 +2,77 @@
 
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="~/Account/img/apple-icon.png">
     <link rel="icon" type="image/png" href="~/Account/img/favicon.png">
     <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
-    <link href="~/Account/css/nucleo-icons.css" rel="stylesheet"/>
-    <link href="~/Account/css/nucleo-svg.css" rel="stylesheet"/>
+    <link href="~/Account/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="~/Account/css/nucleo-svg.css" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <!-- CSS Files -->
-    <link id="pagestyle" href="~/Account/css/soft-ui-dashboard.css" rel="stylesheet"/>
+    <link id="pagestyle" href="~/Account/css/soft-ui-dashboard.css" rel="stylesheet" />
     @await RenderSectionAsync("HeadSection", false)
-    
+
     <style>
-        
+
     </style>
-    
+
     <title>@ViewBag.Title</title>
 </head>
 <body>
 
-<div class="spinner-wrapper">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+    <div class="spinner-wrapper">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
-</div>
 
-@RenderBody()
+    @RenderBody()
 
-<script>
-    $(window).on("load", function() {
-      $("body").removeClass("preload");
-      $(".loader-wrapper").fadeOut("slow");
-    });
-</script>
+    <script>
+        $(window).on("load", function () {
+            $("body").removeClass("preload");
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
 
-@await RenderSectionAsync("scripts", false)
+    @await RenderSectionAsync("scripts", false)
 
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script>
-    const spinnerWrapperEl = document.querySelector(".spinner-wrapper");
-                
-    window.addEventListener("load", () => {
-        spinnerWrapperEl.classList.add('fade-out-animation');
-    });
-</script>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        const spinnerWrapperEl = document.querySelector(".spinner-wrapper");
+
+        window.addEventListener("load", () => {
+            spinnerWrapperEl.classList.add('fade-out-animation');
+        });
+    </script>
+    <script>
+        const toggleEl = document.querySelector('#togglepassword');
+        const passwordEl = document.querySelector('#password');
+        
+        toggleEl.addEventListener('click', function(e) {
+            const type = passwordEl.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordEl.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+        });
+        
+        passwordEl.addEventListener('input', function(e) {
+            toggleEl.classList.remove('password-icon-hidden');
+        });
+        
+        passwordEl.addEventListener('keyup', function(e) {
+            if (!passwordEl.value)
+                toggleEl.classList.add('password-icon-hidden');
+        });
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

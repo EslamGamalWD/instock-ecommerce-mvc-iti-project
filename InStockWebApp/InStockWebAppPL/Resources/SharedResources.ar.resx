@@ -186,4 +186,7 @@
   <data name="Trending" xml:space="preserve">
     <value>الافضل تداولا</value>
   </data>
+  <data name="Profile" xml:space="preserve">
+    <value>البيانات الشخصيه</value>
+  </data>
 </root>
