@@ -159,41 +159,36 @@
             $('body').delegate('.js-toggle-status', 'click', function () {
                 var btn = $(this);
 
-                bootbox.confirm({
-                    message: "Are you sure that you need to toggle this item status?",
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-danger'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-secondary'
-                        }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            $.post({
-                                url: '/Category/ToggleStatus/' + btn.data('id'),
-                                success: function (lastUpdatedOn) {
-                                    var row = btn.parents('tr');
-                                    var status = row.find('.js-status');
-                                    var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
-                                    status.text(newStatus).toggleClass(' badge-success badge-danger');
-                                    row.find('.js-updated-on').html(lastUpdatedOn);
-                                    row.addClass('animate__animated animate__flash');
-                                    var Icon = row.find('.ic');
-                                    var IconBackGround = row.find('.js-toggle-status');
-                                    Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
-                                    IconBackGround.toggleClass('bg-warning  bg-danger')
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: `You will toggle the state of Category#${btn.data("id")}!`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#32BDEA",
+                    cancelButtonColor: "#FF9770",
+                    confirmButtonText: "Yes, proceed!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post({
+                            url: '/Category/ToggleStatus/' + btn.data('id'),
+                            success: function (lastUpdatedOn) {
+                                var row = btn.parents('tr');
+                                var status = row.find('.js-status');
+                                var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
+                                status.text(newStatus).toggleClass(' badge-success badge-danger');
+                                row.find('.js-updated-on').html(lastUpdatedOn);
+                                row.addClass('animate__animated animate__flash');
+                                var Icon = row.find('.ic');
+                                var IconBackGround = row.find('.js-toggle-status');
+                                Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
+                                IconBackGround.toggleClass('bg-warning  bg-danger')
 
-                                    showSuccessMessage();
-                                },
-                                error: function () {
-                                    showErrorMessage();
-                                }
-                            });
-                        }
+                                showSuccessMessage();
+                            },
+                            error: function () {
+                                showErrorMessage();
+                            }
+                        });
                     }
                 });
             });

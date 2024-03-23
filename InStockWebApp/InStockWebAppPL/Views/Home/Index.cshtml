@@ -127,32 +127,7 @@
           bottom: -10px;
         }
 
-        /* Styles for mobile and tablets */
-        /*media only screen and (max-width: 1023px) {
-          .slider-wrapper .slide-button {
-            display: none !important;
-          }
-
-          .slider-wrapper .image-list {
-            gap: 10px;
-            margin-bottom: 15px;
-            scroll-snap-type: x mandatory;
-          }
-
-          .slider-wrapper .image-list .image-item {
-            width: 280px;
-            height: 380px;
-          }
-
-          .slider-scrollbar .scrollbar-thumb {
-            width: 20%;
-          }  
-        }*/
-
-
-
-
-   
+     
 
         .slider-wrapper-d {
             position: relative;
@@ -808,7 +783,7 @@
                                     <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
-                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="far fa-heart"></i></a></li>
+                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="far fa-eye"></i></a></li>
                                             @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
                                             <li class="list-inline-item m-0 p-0">
                                                 <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>

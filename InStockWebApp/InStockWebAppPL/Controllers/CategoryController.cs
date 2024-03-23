@@ -2,13 +2,17 @@
 using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories;
+using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppBLL.Models.CategoryVM;
 using InStockWebAppBLL.Models.SubCategoryVM;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize(Roles = @$"{AppRoles.Admin}")]
+
     public class CategoryController : Controller
     {
         private readonly IMapper _mapper;

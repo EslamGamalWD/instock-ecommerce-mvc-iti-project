@@ -2,12 +2,16 @@
 using Hangfire;
 using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Helpers.ImageUploader;
+using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppDAL.Entities.Enumerators;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize(Roles = @$"{AppRoles.Admin}")]
+
     public class UserController : Controller
     {
 

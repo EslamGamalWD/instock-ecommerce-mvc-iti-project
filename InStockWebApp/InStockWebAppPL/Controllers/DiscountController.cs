@@ -9,9 +9,13 @@ using InStockWebAppDAL.Entities;
 using InStockWebAppBLL.Models.ProductVM;
 using Microsoft.EntityFrameworkCore;
 using InStockWebAppBLL.Helpers.ImageUploader;
+using InStockWebAppBLL.Helpers.Role;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize(Roles = @$"{AppRoles.Admin}")]
+
     public class DiscountController : Controller
     {
         private readonly IMapper _mapper;

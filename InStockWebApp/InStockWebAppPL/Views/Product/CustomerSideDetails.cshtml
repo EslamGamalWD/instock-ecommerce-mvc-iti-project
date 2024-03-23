@@ -5,6 +5,7 @@
 @using InStockWebAppDAL.Entities
 @using Microsoft.Extensions.Localization
 @inject SignInManager<User> signInManager
+@inject IOrderRepository orderRepo;
 @inject UserManager<User> userManager;
 @{
     ViewData["Title"] = "CustomerSideDetails";
@@ -17,6 +18,8 @@
     }
 
     bool IsComment = false;
+    bool UserHasProduct = false;
+
     // Calculate the number of stars based on AvgRating rounded up
     int numberOfStars = (int)Math.Ceiling(Model?.AvgRating ?? 0);
     int i = 0;
@@ -223,6 +226,9 @@
                             </div>
                                     @if (signInManager.IsSignedIn(User))
                                     {
+                                       
+                                        
+                                                   
                                         @if (item.UserId == user.Id)
                                         {
                                             IsComment = true;
@@ -233,7 +239,22 @@
                     </div>
                      @if (signInManager.IsSignedIn(User))
                       {
-                            @if (!IsComment)
+                                var orders = await orderRepo?.GetAllOrders(user.Id);
+                                if (orders != null)
+                                {
+                                    foreach (var order in orders)
+                                    {
+                                        @foreach (var items in order?.Items)
+                                        {
+                                            if (items?.Product?.Id ==Model.Id)
+                                            {
+                                                UserHasProduct=true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                           @if (!IsComment&&UserHasProduct)
                             {
                                 <form id="reviewComment">
 
@@ -335,12 +356,16 @@
                                             <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div style="width: 305px;height: 330px;"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                             <div class="product-overlay">
                                                 <ul class="mb-0 list-inline">
-                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
+                                                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="far fa-eye"></i></a></li>
                                                     @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
                                                     <li class="list-inline-item m-0 p-0">
                                                         <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
                                                     </li>
-                                                    <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@product.Id"><i class="fas fa-expand"></i></a></li>
+                                                    <li class="list-inline-item me-0">
+                                                        <a class="btn btn-sm btn-outline-dark  js-render-modal" href="javascript:" data-url="/Product/ProductDetailes/@product.Id">
+                                                            <i class="fas fa-expand"></i>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

@@ -69,12 +69,12 @@
                             <tr id="#row-@items[i].Id">
                                 <td class="ps-0 py-3 border-light" scope="row">
                                     <div class="d-flex align-items-center">
-                                        <a class="reset-anchor d-block animsition-link" href="detail.html">
-                                            <img src="" alt="..." width="70"/>
+                                            <a class="reset-anchor d-block animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@items[i]?.Product?.Id">
+                                                <img src="~/Files/ProductImages/@items[i]?.Product?.Images?.FirstOrDefault()?.ImagePath" alt="..." width="70" />
                                         </a>
                                         <div class="ms-3">
                                             <strong class="h6">
-                                                <a class="reset-anchor animsition-link" href="">@items[i].Product.Name</a>
+                                                    <a class="reset-anchor animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@items[i]?.Product?.Id">@items[i].Product.Name</a>
                                             </strong>
                                         </div>
                                     </div>

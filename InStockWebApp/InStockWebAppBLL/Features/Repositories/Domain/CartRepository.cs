@@ -41,7 +41,7 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
         var cart = await _applicationDbContext.Carts
             .Where(c => string.Equals(c.UserId, userId) && !c.IsDeleted).Include(a => a.User)
             .Include(c => c.Items.Where(i => !i.IsDeleted))
-            .ThenInclude(i => i.Product)
+            .ThenInclude(i => i.Product).ThenInclude(a=>a.Images)
             .FirstOrDefaultAsync();
         return cart;
     }

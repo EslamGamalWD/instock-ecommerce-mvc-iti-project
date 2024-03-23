@@ -56,18 +56,18 @@
                                     <tr>
                                         <td class="ps-0 py-3 border-light" scope="row">
                                             <div class="d-flex align-items-center">
-                                                <a class="reset-anchor d-block animsition-link" href="detail.html">
-                                                    <img src="@item.Product.Images.FirstOrDefault()" alt="..." width="70" />
+                                                <a class="reset-anchor d-block animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@item?.Product?.Id">
+                                                    <img src="~/Files/ProductImages/@item?.Product?.Images?.FirstOrDefault()?.ImagePath" alt="..." width="70" />
                                                 </a>
                                                 <div class="ms-3">
                                                     <strong class="h6">
-                                                        <a class="reset-anchor animsition-link" href="">@item.Product.Name</a>
+                                                        <a class="reset-anchor animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@item?.Product?.Id">@item.Product.Name</a>
                                                     </strong>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="p-3 align-middle border-light">
-                                            <p class="mb-0 small">$@item.TotalPrice</p>
+                                            <p  class="mb-0 small">$@item.TotalPrice</p>
                                         </td>
                                        
                                         <td class="p-3 align-middle border-light">

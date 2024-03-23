@@ -162,6 +162,9 @@
   <data name="Product" xml:space="preserve">
     <value>منتج</value>
   </data>
+  <data name="Profile" xml:space="preserve">
+    <value>ملف شخصي</value>
+  </data>
   <data name="Quantity" xml:space="preserve">
     <value>كمية</value>
   </data>

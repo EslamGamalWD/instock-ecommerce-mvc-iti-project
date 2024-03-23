@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace ExaminationBLL.Helper
+namespace Instock.Helper
 {
     [HtmlTargetElement("li", Attributes = "active-when")]
     public class ActiveTage : TagHelper

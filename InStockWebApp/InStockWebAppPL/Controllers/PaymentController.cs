@@ -70,7 +70,10 @@ namespace InStockWebAppPL.Controllers
                 //add Payment detailess
                 var cart = await _cartRepository.GetCart(userId);
                 var PaymentId = await paymentDetailesRepository.Add(new AddPaymentDetailesVM() { Amount=cart.Items.Count(), PaymentStatus=PaymentStatus.Completed, CreatedAt=DateTime.Now, Provider="Stripe" });
-               if (PaymentId !=null)
+                TempData["OrderList"]=cart;
+
+
+                if (PaymentId !=null)
                 {
                     TempData["PaymentId"] = PaymentId;
                 return View();

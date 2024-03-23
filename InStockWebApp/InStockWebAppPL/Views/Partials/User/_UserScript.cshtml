@@ -33,19 +33,16 @@
         $('body').delegate('.js-toggle-status', 'click', function () {
             var btn = $(this);
 
-            bootbox.confirm({
-                message: "Are you sure that you need to toggle this item status?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-danger'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-secondary'
-                    }
-                },
-                callback: function (result) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: `You will toggle the state of User#${btn.data("id")}!`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#32BDEA",
+                cancelButtonColor: "#FF9770",
+                confirmButtonText: "Yes, proceed!"
+            }).then((result) => {
+                if (result.isConfirmed) {
                     if (result) {
                         $.post({
                             url: '/User/ToggleStatus/' + btn.data('id'),

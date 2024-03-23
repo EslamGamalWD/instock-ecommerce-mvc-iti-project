@@ -4,6 +4,8 @@ using InStockWebAppBLL.Features.Interfaces.Domain;
 using InStockWebAppBLL.Features.Repositories.Domain;
 using InStockWebAppBLL.Helpers.Account;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using InStockWebAppBLL.Features.Interfaces;
+using InStockWebAppBLL.Features.Repositories;
 
 namespace InStockWebAppBLL
 {
@@ -12,6 +14,18 @@ namespace InStockWebAppBLL
         public static IServiceCollection AddBusinessLogicLayerDependencies(
             this IServiceCollection services)
         {
+
+            services.AddScoped<IpaymentService, PaymentService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
+            services.AddScoped<ISubCategoryRepository, SubcategoryRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<IProductImageRepository, ProductImageRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 

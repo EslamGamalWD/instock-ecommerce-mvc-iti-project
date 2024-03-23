@@ -3,7 +3,8 @@
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
    
 }
-<p>hekko</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
 <div class="col-lg-12">
     <div class="table-responsive">
         <table id="datatable" data-toggle="validator" class="table data-tables table-striped data-table mb-0 tbl-server-info text-center">
@@ -51,6 +52,7 @@
         </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -73,7 +75,11 @@
                 },
                 success: function (response) {
 
-                    alert('Product has been ' + (isChecked ? 'added to' : 'removed from') + ' the discount list.');
+                    var isChecked = true; // Change this based on your condition
+                    var message = 'Product has been ' + (isChecked ? 'added to' : 'removed from') + ' the discount list.';
+
+                    // Show a Toastr notification with custom message
+                    toastr.success('Success', message);
                 },
                 error: function (xhr, status, error) {
 

@@ -1,10 +1,14 @@
 ﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize]
+
     public class OrderController : Controller
     {
         private readonly IOrderRepository orderRepository;

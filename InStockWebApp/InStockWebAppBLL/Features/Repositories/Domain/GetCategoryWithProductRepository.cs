@@ -1,6 +1,8 @@
 ﻿using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppBLL.Models.HomeVM;
 using InStockWebAppDAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace InStockWebAppBLL.Features.Repositories.Domain
 {
+
     public class GetCategoryWithProductRepository:IGetCategoryWithProductRepository
     {
         private readonly ISubCategoryRepository subCategoryRepository;

@@ -6,9 +6,13 @@ using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using InStockWebAppBLL.Models.UserVM;
 using InStockWebAppBLL.Helpers.ImageUploader;
+using InStockWebAppBLL.Helpers.Role;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize]
+
     public class CustomerController : Controller
     {
         private readonly IMapper _mapper;

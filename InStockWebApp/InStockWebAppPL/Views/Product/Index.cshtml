@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<InStockWebAppBLL.Models.ProductVM.GetProductsVM>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
@@ -60,8 +61,16 @@
                                            </i></a>
                                     <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"
                                            asp-action="Edit" asp-route-id="@item.Id"><i class="ri-pencil-line mr-0"></i></a>
-                                        <a class="badge @(item.IsDeleted ? "bg-warning" : "bg-danger") mr-2 js-toggle-status" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                           href="javascript:;" data-id="@item.Id"><i class="@(item.IsDeleted ? "ri-lock-fill" : "ri-delete-bin-line")  ic mr-0"></i></a>
+                                        <a class="badge bg-warning mr-2 js-toggle-status" href="javascript:;" data-id="@item.Id">
+                                            @if (item.IsDeleted)
+                                            {
+                                                <i class="ri-toggle-line js-toggle-icon"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="ri-delete-bin-line mr-0 js-toggle-icon"></i>
+                                            }
+                                        </a>
                                 </div>
                             </td>
                         </tr>
@@ -76,57 +85,68 @@
         <partial name="~/Views/Partials/Product/_ProductScript.cshtml" />
 
     } *@
-    <script src="~/lib/bootbox.js/bootbox.js"></script>
-    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+
+    <input type="hidden" name="__RequestVerificationToken" value="@antiforgery.GetTokens(Context).RequestToken" />
+
+    
+
+</div>
+<script src="~/lib/bootbox.js/bootbox.js"></script>
+<script src="~/lib/bootbox.js/bootbox.min.js"></script>
+@section JS
+    {
     <script>
         $(document).ready(function () {
-            $('body').delegate('.js-toggle-status', 'click', function () {
-                var btn = $(this);
-                var currentStatus = btn.closest('tr').find('.js-status').text().trim();
-                var message = currentStatus === 'Deleted' ?
-                    "Are you sure that you need to untoggle this item status?" :
-                    "Are you sure that you need to toggle this item status?";
-                bootbox.confirm({
-                    message: message,
-                    buttons: {
-                        confirm: {
-                            label: 'Yes',
-                            className: 'btn-danger'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-secondary'
-                        }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            $.post({
-                                url: '/Product/ToggleStatus/' + btn.data('id'),
-                                data: {
-                                    '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-                                },
-                                success: function (lastUpdatedOn) {
-                                    var row = btn.parents('tr');
-                                    var status = row.find('.js-status');
-                                    var newStatus = status.text().trim() === 'Deleted' ? 'Available' : 'Deleted';
-                                    status.text(newStatus).toggleClass(' badge-success badge-danger');
-                                    row.find('.js-updated-on').html(lastUpdatedOn);
-                                    row.addClass('animate__animated animate__flash');
-                                    var Icon = row.find('.ic');
-                                    var IconBackGround = row.find('.js-toggle-status');
-                                    Icon.toggleClass('ri-delete-bin-line ri-lock-fill')
-                                    IconBackGround.toggleClass('bg-warning  bg-danger')
+            $('body').on('click', '.js-toggle-status', function () {
+                let btn = $(this);
 
-                                    showSuccessMessage();
-                                },
-                                error: function () {
-                                    showErrorMessage();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: `You will toggle the state of Product#${btn.data("id")}!`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#32BDEA",
+                    cancelButtonColor: "#FF9770",
+                    confirmButtonText: "Yes, proceed!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post({
+                            url: `/Product/ToggleStatus/${btn.data("id")}`,
+                            data: {
+                                "__RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (modifiedAt) {
+                                let row = btn.parents("tr");
+                                let status = row.find(".js-status");
+                                let newStatus = status.text().trim() === "Deleted" ? "Active" : "Deleted";
+                                if (newStatus === "Deleted") {
+                                    row.find(".js-toggle-icon").removeClass("ri-delete-bin-line");
+                                    row.find(".js-toggle-icon").addClass("ri-toggle-line");
+                                } else {
+                                    row.find(".js-toggle-icon").removeClass("ri-toggle-line");
+                                    row.find(".js-toggle-icon").addClass("ri-delete-bin-line");
                                 }
-                            });
-                        }
+
+                                status.text(newStatus).toggleClass("badge-success badge-warning");
+                                row.find(".js-modified-at").html(modifiedAt);
+
+                                row.addClass("animate__animated animate__flash");
+                                setTimeout(() => {
+                                    $(row).removeClass("animate__animated animate__flash")
+                                }, 1000);
+                                let message = newStatus === "Active"
+                                    ? `Subcategory#${btn.data("id")} has been activated successfully`
+                                    : `Subcategory#${btn.data("id")} has been deleted successfully`;
+                                showSuccessAlert(message);
+                            },
+                            error: function () {
+                                showErrorAlert();
+                            }
+                        });
                     }
                 });
             });
         });
+
     </script>
-</div>
+}

@@ -2,28 +2,87 @@
 @{
     ViewData["Title"] = "ConfirmPayment";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
+    var cart = (Cart?)TempData["OrderList"];
 }
 <link href="~/lib/leaflet/leaflet.css" rel="stylesheet" />
 <link href="~/lib/leaflet/leaflet.min.css" rel="stylesheet" />
+<div style="margin-bottom:100px;margin-top:100px">
+    <div class="row ">
+        <div class="col-1"></div>
+        <div class="col-6 ">
 
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="addressForm" asp-action="Location" asp-controller="Payment" method="post">
-           
+            <table class="table text-nowrap  text-center">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="border-0 p-3" scope="col">
+                            <strong class="text-sm text-uppercase">Product</strong>
+                        </th>
+                        <th class="border-0 p-3" scope="col">
+                            <strong class="text-sm text-uppercase">Price</strong>
+                        </th>
+                        <th class="border-0 p-3" scope="col">
+                            <strong class="text-sm text-uppercase">Quantity</strong>
+                        </th>
 
 
-            <input type="hidden" id="lat" name="Lat" readonly>
-            <input type="hidden" id="long" name="Long" readonly>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                    </tr>
+                </thead>
+                <tbody class="border-0">
+                    @foreach (var item in cart.Items)
+                    {
+
+
+                        <tr>
+                            <td class="ps-0 py-3 border-light" scope="row">
+                                <div class="d-flex align-items-center">
+                                    <a class="reset-anchor d-block animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@item?.Product?.Id">
+                                        <img src="~/Files/ProductImages/@item?.Product?.Images?.FirstOrDefault()?.ImagePath" alt="..." width="70" />
+                                    </a>
+                                    <div class="ms-3">
+                                        <strong class="h6">
+                                            <a class="reset-anchor animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@item?.Product?.Id">@item.Product.Name</a>
+                                        </strong>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3 align-middle border-light">
+                                <p class="mb-0 small">$@item.TotalPrice</p>
+                            </td>
+
+                            <td class="p-3 align-middle border-light">
+                                <p class="mb-0 small totalPrice">@item.Quantity</p>
+                            </td>
+
+                        </tr>
+                        @* @items[i].Product.Images[0].ImagePath *@
+
+                    }
+                </tbody>
+            </table>
+            <div class="bg-light px-4 py-3">
+                <div class="row align-items-center text-center">
+                    <div class="col-md-6 ">
+                        </div>
+                    <div class="col-md-6 text-md-end">
+                        <form id="addressForm" asp-action="Location" asp-controller="Payment" method="post">
+                            <input type="hidden" id="lat" name="Lat" readonly>
+                            <input type="hidden" id="long" name="Long" readonly>
+                          
+                                <button type="submit" value="" class="btn btn-dark p-2 btn-sm">confirms</button>
+                            
+                        </form>
+                    </div>
+                    </div>
             </div>
-        </form>
-    </div>
-    <div class="col-md-8">
-        <div id="map" style="height: 400px;"></div>
+
+        </div>
+        <div class="col-4">
+            <div id="map" style="height: 400px;"></div>
+        </div>
     </div>
 </div>
+
 <script src="~/lib/leaflet/leaflet.js"></script>
 <script src="~/lib/leaflet/leaflet.min.js"></script>
 
@@ -57,7 +116,6 @@
         // Move the marker to the clicked location
         marker.setLatLng(event.latlng);
 
-        // Open your app with the clicked location
         openAppWithLocation(lat, lng);
     });
 

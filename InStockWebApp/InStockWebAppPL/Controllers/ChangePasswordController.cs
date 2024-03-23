@@ -4,9 +4,13 @@ using Hangfire;
 using InStockWebAppDAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using InStockWebAppBLL.Models.ChangePasswordVM;
+using InStockWebAppBLL.Helpers.Role;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize]
+
     public class ChangePasswordController : Controller
     {
         private readonly IEmailSender emailSender;

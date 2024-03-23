@@ -1,10 +1,14 @@
 ﻿using InStockWebAppBLL.Features.Interfaces;
 using InStockWebAppBLL.Features.Interfaces.Domain;
+using InStockWebAppBLL.Helpers.Role;
 using InStockWebAppBLL.Models.RoleVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize(Roles = @$"{AppRoles.Admin}")]
+
     public class RoleController : Controller
     {
         #region Prop

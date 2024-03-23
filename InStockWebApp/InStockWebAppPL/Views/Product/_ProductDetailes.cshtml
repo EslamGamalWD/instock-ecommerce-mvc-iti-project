@@ -1,6 +1,9 @@
 ﻿@model InStockWebAppBLL.Models.ProductVM.GetProductsVM
+@{
+    int numberOfStars = (int)Math.Ceiling(Model?.AvgRating ?? 0);
 
-<div class="modal-content overflow-hidden border-0">
+}
+<div class="modal-content p-10 overflow-hidden border-0">
     <button class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
     <div class="modal-body p-0">
         <div class="row align-items-stretch">
@@ -11,11 +14,15 @@
             <div class="col-lg-6">
                 <div class="p-4 my-md-4">
                     <ul class="list-inline mb-2">
-                        <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0 1"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0 2"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0 3"><i class="fas fa-star small text-warning"></i></li>
-                        <li class="list-inline-item m-0 4"><i class="fas fa-star small text-warning"></i></li>
+                        @for (int i = 0; i < numberOfStars; i++)
+                        {
+                            <li class="list-inline-item m-0"><i class="fas fa-star small text-warning"></i></li>
+                        }
+                        @for (int i = numberOfStars; i < 5; i++)
+                        {
+                            <li class="list-inline-item m-0"><i class="far fa-star small text-warning"></i></li>
+                        }
+                        <li class="list-inline-item m-0">@Model?.AvgRating</li>
                     </ul>
                     <h2 class="h4">@Model.Name</h2>
                     <p class="text-muted">@Model.Price</p>

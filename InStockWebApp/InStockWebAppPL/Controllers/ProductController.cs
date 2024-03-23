@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using InStockWebAppBLL.Helpers.Role;
 
 namespace InStockWebAppPL.Controllers
 {
+    [Authorize(Roles = @$"{AppRoles.Admin}")]
 
     public class ProductController : Controller
     {
@@ -30,16 +33,17 @@ namespace InStockWebAppPL.Controllers
             _productRepository = productRepository;
             _subCategoryRepository = subCategoryRepository;
             _imageRepository=imageRepository;
-
             _discountRepository = discountRepository;
 
         }
-        
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
+
         // GET: ProductController
         public async Task<IActionResult> Index()
         {
             return View(await _productRepository.GetAll());
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
 
         // GET: ProductController/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -47,6 +51,8 @@ namespace InStockWebAppPL.Controllers
             return View(await _productRepository.Details(id));
         }
 
+
+        [AllowAnonymous]
 
         public async Task<IActionResult> ProductDetailes(int? id)
         {
@@ -56,7 +62,7 @@ namespace InStockWebAppPL.Controllers
         }
 
 
-
+        [AllowAnonymous]
         // GET: ProductController/Details/5
         public async Task<IActionResult> CustomerSideDetails(int id)
         {
@@ -108,6 +114,7 @@ namespace InStockWebAppPL.Controllers
 
             return View(details);
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
 
         [HttpGet]
         // GET: ProductController/Create
@@ -121,6 +128,7 @@ namespace InStockWebAppPL.Controllers
             ViewData["DiscountId"] = finalList;
             return View();
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
 
         // POST: ProductController/Create
         [HttpPost]
@@ -152,6 +160,7 @@ namespace InStockWebAppPL.Controllers
                 return View();
             }
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
 
         // GET: ProductController/Edit/5
         public async Task<IActionResult> Edit(int id)
@@ -166,6 +175,7 @@ namespace InStockWebAppPL.Controllers
             ViewData["DiscountId"] = finalList;
             return View(product);
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
 
         // POST: ProductController/Edit/5
         [HttpPost]
@@ -195,9 +205,11 @@ namespace InStockWebAppPL.Controllers
                 return View();
             }
         }
+        [Authorize(Roles = @$"{AppRoles.Admin}")]
+
         //Post: ProductController/ToggleStatus/5
         [HttpPost]
-        public async Task<IActionResult> ToggleStatus(int? id)
+        public async Task<IActionResult> ToggleStatus(int id)
         {
             var toggleDateTime = await _productRepository.ToggleStatus(id);
             if (toggleDateTime !=null)
