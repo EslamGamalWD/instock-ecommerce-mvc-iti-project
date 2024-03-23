@@ -6,9 +6,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> SharedLocalizer
 @{
-
     var Culture = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-
 }
 
 <header class="header bg-white">
@@ -26,7 +24,7 @@
                         <a class="nav-link" asp-action="Index" asp-controller="FilterProduct">@SharedLocalizer["Shop"]</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a asp-action="Admin" asp-controller="Contact" class="nav-link">Contact</a>
+                        <a asp-action="Admin" asp-controller="Contact" class="nav-link">@SharedLocalizer["Contact"]</a>
                     </li>
                     @{
                         var count = HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession");
@@ -36,36 +34,46 @@
                     {
                         <li class="nav-item">
 
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(@count)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link">
+                                <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(@count)</small>
+                            </a>
                         </li>
                     }
                     else if (HttpContextAccessor.HttpContext.Session.GetInt32("shoppingCartSession") is null || count == 0)
                     {
                         <li class="nav-item">
-                            <a asp-controller="Cart" asp-action="Index" class="nav-link"> <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(0)</small></a>
+                            <a asp-controller="Cart" asp-action="Index" class="nav-link">
+                                <i class="icon-nav fas fa-dolly-flatbed me-1"></i>@SharedLocalizer["cart"]<small id="cartCount" class="text-dark fw-normal">(0)</small>
+                            </a>
                         </li>
                     }
 
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="/Customer/Details"> <i class="icon-nav fas fa-user me-1 fw-normal"></i> Profile</a>
+                            <a class="nav-link" href="/Customer/Details">
+                                <i class="icon-nav fas fa-user me-1 fw-normal"></i> @SharedLocalizer["Profile"]
+                            </a>
                         </li>
                     }
                     <li class="nav-item">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <a class="btn btn-dark" href="/Account/Logout"><i class="icon-nav fas fa-sign-out-alt me-1"></i>@SharedLocalizer["Log Out"] </a>
+                            <a class="btn btn-dark" href="/Account/Logout">
+                                <i class="icon-nav fas fa-sign-out-alt me-1"></i>@SharedLocalizer["Log Out"]
+                            </a>
                         }
                         else
                         {
-                            <a class="btn btn-dark" href="/Account/Login"><i class="icon-nav fas fa-sign-in-alt me-1"></i> @SharedLocalizer["Log In"]</a>
+                            <a class="btn btn-dark" href="/Account/Login">
+                                <i class="icon-nav fas fa-sign-in-alt me-1"></i> @SharedLocalizer["Log In"]
+                            </a>
                         }
                     </li>
 
                 </ul>
-                    <partial name="~/Views/Shared/Customer/_SetLanguage.cshtml" />
-              
+                <partial name="~/Views/Shared/Customer/_SetLanguage.cshtml"/>
+
             </div>
         </nav>
     </div>

@@ -20937,7 +20937,7 @@ fieldset:disabled .btn {
 }
 
 .card .card-footer {
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
     background-color: transparent;
 }
 
@@ -21458,10 +21458,6 @@ fieldset:disabled .btn {
     width: 60%;
     right: -10rem;
     border-bottom-left-radius: 0.75rem;
-}
-
-.oblique .oblique-image {
-    transform: skewX(10deg);
 }
 
 .fixed-plugin .fixed-plugin-button {
@@ -26731,6 +26727,25 @@ pre[class*="language-"] {
     padding: 4px 12px;
     letter-spacing: 0.1em;
     /*border-radius: 8px;*/
+}
+
+.icon-login {
+    color: #000;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-icon {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    cursor: pointer;
+}
+
+.password-icon-hidden {
+    visibility: hidden;
 }
 
 /*# sourceMappingURL=dashboard-free.css.map */
