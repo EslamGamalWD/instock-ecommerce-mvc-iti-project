@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 namespace InStockWebAppPL.Controllers
 {
-    [Authorize(Roles = @$"{AppRoles.Admin}")]
+    // [Authorize(Roles = @$"{AppRoles.Admin}")]
 
     public class UserController : Controller
     {

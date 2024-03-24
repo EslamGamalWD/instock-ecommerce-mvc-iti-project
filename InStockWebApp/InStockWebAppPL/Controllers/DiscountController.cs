@@ -15,24 +15,24 @@ using Microsoft.AspNetCore.Authorization;
 namespace InStockWebAppPL.Controllers
 {
     [Authorize(Roles = @$"{AppRoles.Admin}")]
-
     public class DiscountController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDiscountRepository _discountRepository;
 
-        public DiscountController(IMapper mapper, IUnitOfWork unitOfWork, IDiscountRepository discountRepository)
+        public DiscountController(IMapper mapper, IUnitOfWork unitOfWork,
+            IDiscountRepository discountRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _discountRepository = discountRepository;
         }
-     
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var discounts = await _discountRepository.GetAllDiscounts();  
+            var discounts = await _discountRepository.GetAllDiscounts();
             if (discounts is not null)
             {
                 return View(discounts);
@@ -42,13 +42,12 @@ namespace InStockWebAppPL.Controllers
                 ViewBag.Message = "No discounts available at this time.";
                 return View(new List<GetAllDiscountsVM>());
             }
-           
         }
 
-     
+
         public async Task<IActionResult> Details(int id)
         {
-            var selectedDiscount =await _discountRepository.GetDiscountById(id);
+            var selectedDiscount = await _discountRepository.GetDiscountById(id);
             return View(selectedDiscount);
         }
 
@@ -58,7 +57,7 @@ namespace InStockWebAppPL.Controllers
             return PartialView("_Create");
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateDiscountVM createdDiscount)
@@ -69,23 +68,24 @@ namespace InStockWebAppPL.Controllers
                 {
                     if (createdDiscount.Image != null)
                     {
-                        string discountImage = FilesUploader.UploadFile("DiscountImages", createdDiscount.Image);
+                        string discountImage =
+                            FilesUploader.UploadFile("DiscountImages", createdDiscount.Image);
                         createdDiscount.ImagePath = discountImage;
                     }
                     else
                     {
                         createdDiscount.ImagePath = "noDiscountImage.jpg";
                     }
+
                     var discount = _mapper.Map<Discount>(createdDiscount);
 
                     await _discountRepository.Add(discount);
-                    
+
                     await _unitOfWork.Save();
 
-                        TempData["Message"] = "Discount Added Successfully!";
+                    TempData["Message"] = "Discount Added Successfully!";
 
-                        return RedirectToAction("Index");
-                   
+                    return RedirectToAction("Index");
                 }
             }
             catch (Exception)
@@ -101,7 +101,6 @@ namespace InStockWebAppPL.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-           
             var discountEntity = await _discountRepository.GetById(id);
             if (discountEntity == null)
             {
@@ -109,40 +108,37 @@ namespace InStockWebAppPL.Controllers
                 return RedirectToAction("Index");
             }
 
-           
+
             var selectedDiscount = _mapper.Map<UpdateDiscountVM>(discountEntity);
 
-           
+
             return View("Edit", selectedDiscount);
         }
 
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  IActionResult Edit( UpdateDiscountVM updatedDiscount)
+        public IActionResult Edit(UpdateDiscountVM updatedDiscount)
         {
-
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var discount =  _mapper.Map<Discount>(updatedDiscount);
-                   _discountRepository.Update(discount);
+                    var discount = _mapper.Map<Discount>(updatedDiscount);
+                    _discountRepository.Update(discount);
                     _unitOfWork.Save();
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     TempData["IsValid"] = "true";
-                    return View("Edit" , updatedDiscount);
+                    return View("Edit", updatedDiscount);
                 }
-
-                
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["Message"] = "Error: Failed to update discount";
-                return PartialView("_Edit" , updatedDiscount);
+                return PartialView("_Edit", updatedDiscount);
             }
         }
 
@@ -159,17 +155,18 @@ namespace InStockWebAppPL.Controllers
 
         public async Task<IActionResult> AssignedProducts(int id)
         {
-           var products = await _discountRepository.GetAllProducts();     
+            var products = await _discountRepository.GetAllProducts();
             ViewBag.discountId = id;
             return View("AssignedProducts", products);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDiscountList(int productId, int? discountId, bool isInDiscount)
+        public async Task<IActionResult> UpdateDiscountList(int productId, int? discountId,
+            bool isInDiscount)
         {
-            
             int? updatedDiscountId = isInDiscount ? discountId : null;
-            bool updateSuccess = await _discountRepository.ToggleDiscountAssociation(productId, updatedDiscountId);
+            bool updateSuccess =
+                await _discountRepository.ToggleDiscountAssociation(productId, updatedDiscountId);
 
             if (updateSuccess)
             {
@@ -180,8 +177,5 @@ namespace InStockWebAppPL.Controllers
                 return Json(new { message = "Update failed." });
             }
         }
-
-
-
     }
 }

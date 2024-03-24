@@ -153,7 +153,7 @@ namespace InStockWebAppBLL.Features.Repositories.Domain
         {
             try
             {
-                var product = _applicationDbContext.Products.Find(id);
+                var product = await _applicationDbContext.Products.FindAsync(id);
                 if (product != null)
                 {
                     _applicationDbContext.Products.Remove(product);
