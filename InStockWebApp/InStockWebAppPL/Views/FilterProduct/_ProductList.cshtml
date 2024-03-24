@@ -8,7 +8,10 @@
             <div class="mb-3 position-relative">
                 <div class="badge text-white bg-primary">New</div>
                 <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">
-                    <img class="img-fluid w-100" src="~/Files/ProductImages/@(product?.Images?.FirstOrDefault()?.ImagePath ?? "profile-bg.jpg")" alt="@product.Name">
+                    <div style="height:400px;width:100%;">
+                        <img style="width:100%;height:100%" src="~/Files/ProductImages/@(product?.Images?.FirstOrDefault()?.ImagePath ?? "profile-bg.jpg")" alt="@product.Name">
+               
+                    </div>
                 </a>
                 <div class="product-overlay">
                     <ul class="mb-0 list-inline">
@@ -32,7 +35,7 @@
                                 <i class="fas fa-expand"></i>
                             </a>
                         </li>
-                    </ul>
+                    </ul> 
                 </div>
             </div>
             <div>

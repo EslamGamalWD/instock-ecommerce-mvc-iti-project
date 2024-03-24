@@ -46,6 +46,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <form action="Edit">
+                            <input type="hidden" asp-for="Id"/>
                             <div class="row gy-3">
                                 <div class="col-lg-6">
                                     <label class="form-label text-sm text-uppercase" asp-for="FirstName">First name </label>
@@ -70,10 +71,8 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="input-group mb-4">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelectCountry">Country</label>
-                                            </div>
-                                            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="custom-select" id="inputGroupSelectCountry">
+                                            
+                                            <select asp-items="@(new SelectList(await countryrepo.GetAll(), "Id", "Name"))" class="form-control form-control-lg" id="inputGroupSelectCountry">
                                                 <option selected disabled>Choose...</option>
                                             </select>
                                         </div>
@@ -81,20 +80,16 @@
                                     </div>
                                     <div class="col-4">
                                         <div class="input-group mb-4">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelectState">State</label>
-                                            </div>
-                                            <select class="custom-select" id="inputGroupSelectState">
+                                            
+                                            <select class="form-control form-control-lg" id="inputGroupSelectState">
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="col-4">
                                         <div class="input-group mb-4">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="inputGroupSelectCity">City</label>
-                                            </div>
-                                            <select asp-for="CityId" class="custom-select" id="inputGroupSelectCity">
+                                            
+                                            <select asp-for="CityId" class="form-control form-control-lg" id="inputGroupSelectCity">
                                             </select>
                                             <span asp-for="CityId" class="text-danger"></span>
 
@@ -114,21 +109,7 @@
                             </div>
                         </form>
                     </div>
-                    <!-- ORDER SUMMARY-->
-                    <div class="col-lg-4">
-                        <div class="card border-0 rounded-0 p-lg-4 bg-light">
-                            <div class="card-body">
-                                <h5 class="text-uppercase mb-4">Your order</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold">Red digital smartwatch</strong><span class="text-muted small">$250</span></li>
-                                    <li class="border-bottom my-2"></li>
-                                    <li class="d-flex align-items-center justify-content-between"><strong class="small fw-bold">Gray Nike running shoes</strong><span class="text-muted small">$351</span></li>
-                                    <li class="border-bottom my-2"></li>
-                                    <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small fw-bold">Total</strong><span>$601</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+     
                 </div>
             </section>
         </div>

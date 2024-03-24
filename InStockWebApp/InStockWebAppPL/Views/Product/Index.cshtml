@@ -118,7 +118,7 @@
                             success: function (modifiedAt) {
                                 let row = btn.parents("tr");
                                 let status = row.find(".js-status");
-                                let newStatus = status.text().trim() === "Deleted" ? "Active" : "Deleted";
+                                let newStatus = status.text().trim() === "Deleted" ? "Available" : "Deleted";
                                 if (newStatus === "Deleted") {
                                     row.find(".js-toggle-icon").removeClass("ri-delete-bin-line");
                                     row.find(".js-toggle-icon").addClass("ri-toggle-line");
@@ -134,7 +134,7 @@
                                 setTimeout(() => {
                                     $(row).removeClass("animate__animated animate__flash")
                                 }, 1000);
-                                let message = newStatus === "Active"
+                                let message = newStatus === "Available"
                                     ? `Subcategory#${btn.data("id")} has been activated successfully`
                                     : `Subcategory#${btn.data("id")} has been deleted successfully`;
                                 showSuccessAlert(message);
