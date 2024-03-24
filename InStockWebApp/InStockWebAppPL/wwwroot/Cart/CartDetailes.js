@@ -14,11 +14,11 @@
             success: function (response) {
                 console.log(response);
                 if (response.success) {
-                    $('.totalcard').text('$' + response.cardPrice);
+                    $('.totalcard').text(response.cardPrice + 'EGP');
                     // console.log(response.cardPrice);
                     $row.find('.quantityInput').val(response.quantity);
                     $('#cartCount').text('(' + response.total + ')');
-                    $row.find('.totalPrice').text('$' + response.totalPrice);
+                    $row.find('.totalPrice').text(response.totalPrice + 'EGP');
                     // console.log(response)
                     if (response.quantity < response.instock) {
                         $row.find('.increaseButton').prop('disabled', false);
@@ -28,6 +28,10 @@
                     }
                     if (response.isDeleted) {
                         $row.remove();
+                    }
+
+                    if (response.total == 0) {
+                        $('.checkout').hide();
                     }
                 } else {
                     console.error('Error decreasing item count:', response.error);
@@ -44,7 +48,7 @@
         var itemId = $(this).data('item-id');
         var Index = parseInt($(this).data('index'));
         console.log(Index);
-
+        $('.checkout').show();
         $.ajax({
             url: '/Cart/IncreaseItemCount',
             type: 'POST',
@@ -53,10 +57,10 @@
             data: { itemId: itemId },
             success: function (response) {
                 if (response.success) {
-                    $row.find('.totalPrice').text('$' + response.totalPrice);
+                    $row.find('.totalPrice').text(response.totalPrice + 'EGP');
                     $row.find('.quantityInput').val(response.quantity);
                     $('#cartCount').text('(' + response.total + ')');
-                    $('.totalcard').text('$' + response.cardPrice);
+                    $('.totalcard').text(response.cardPrice + 'EGP');
 
                     console.log(response)
                     if (response.quantity === response.instock) {
@@ -99,8 +103,11 @@
 
                 $row.remove();
                 $('#cartCount').text('(' + result.total + ')');
-                $('.totalcard').text('$' + result.cardPrice);
+                $('.totalcard').text(result.cardPrice + 'EGP');
                 console.log($("#row-" + itemId));
+                if (result.cardPrice == 0) {
+                    $('.checkout').hide();
+                }
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

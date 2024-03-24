@@ -11,6 +11,7 @@ namespace InStockWebAppBLL.Helpers.Role
     {
         public const string Admin = nameof(UserType.Admin);
         public const string Customer = nameof(UserType.Customer);
+        
         public static string EnumToString(Enum value)
         {
             var customrole = value.ToString();

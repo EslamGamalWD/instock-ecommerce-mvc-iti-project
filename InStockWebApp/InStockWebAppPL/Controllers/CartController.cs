@@ -42,7 +42,7 @@ public class CartController : Controller
         }
 
         var cart = await _unitOfWork.CartRepository.GetCart(userId);
-
+        ViewBag.Cart  = await _unitOfWork.CartRepository.GetCartItemsCount(userId);
         var cartViewModel = _mapper.Map<CartVM?>(cart);
         return View(cartViewModel);
     }

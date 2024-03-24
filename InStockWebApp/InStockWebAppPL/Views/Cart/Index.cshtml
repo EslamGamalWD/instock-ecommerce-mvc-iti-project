@@ -1,5 +1,4 @@
 @model CartVM
-
 @{
     ViewBag.Title = "InStock | Shopping Cart";
     Layout = "~/Views/Shared/Customer/_Layout.cshtml";
@@ -68,12 +67,12 @@
                             @* @items[i].Product.Images[0].ImagePath *@
                             <tr id="#row-@items[i].Id">
                                 <td class="ps-0 py-3 border-light" scope="row">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center ">
                                             <a class="reset-anchor d-block animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@items[i]?.Product?.Id">
                                                 <img src="~/Files/ProductImages/@items[i]?.Product?.Images?.FirstOrDefault()?.ImagePath" alt="..." width="70" />
                                         </a>
                                         <div class="ms-3">
-                                            <strong class="h6">
+                                            <strong style="width:30px" class="h6">
                                                     <a class="reset-anchor animsition-link" asp-action="CustomerSideDetails" asp-controller="Product" asp-route-id="@items[i]?.Product?.Id">@items[i].Product.Name</a>
                                             </strong>
                                         </div>
@@ -106,7 +105,7 @@
                                     </div>
                                 </td>
                                 <td class="p-3 align-middle border-light">
-                                    <p class="mb-0 small totalPrice">$@items[i].TotalPrice</p>
+                                    <p class="mb-0 small totalPrice">@items[i].TotalPrice EGP</p>
                                 </td>
                                 <td class="p-3 align-middle border-light">
                                     <button type="button" data-item-id="@items[i].Id" class="reset-anchor deleteCartItem" style="border: none; background-color: #fff;">
@@ -130,7 +129,11 @@
 
                             @if (Model != null)
                             {
-                                <a asp-action="Checkout" asp-controller="Home" class="btn btn-outline-dark btn-sm">Proceed to checkout</a>
+                                if (ViewBag.Cart !=0)
+                                {
+                                    <a asp-action="Checkout" asp-controller="Home" class="btn btn-outline-dark btn-sm checkout">Proceed to checkout</a>
+                                     
+                                }
                            
                             }
 
@@ -146,11 +149,11 @@
                         <h5 class="text-uppercase mb-4">Cart total</h5>
                         <ul class="list-unstyled mb-0">
                             <li class="d-flex align-items-center justify-content-between">
-                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small totalcard">$@Model?.TotalPrice</span>
+                                <strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small totalcard">@Model?.TotalPrice  EGP</span>
                             </li>
                             <li class="border-bottom my-2"></li>
                             <li class="d-flex align-items-center justify-content-between mb-4">
-                                <strong class="text-uppercase small font-weight-bold">Total</strong><span class="totalcard">$@Model?.TotalPrice</span>
+                                <strong class="text-uppercase small font-weight-bold">Total</strong><span class="totalcard">@Model?.TotalPrice EGP</span>
                             </li>
                             <li>
                                 <form action="#">

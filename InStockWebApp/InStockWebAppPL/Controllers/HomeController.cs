@@ -90,7 +90,7 @@ public class HomeController : Controller
             {
                 if (await checkOutRepository.CheckoutEdit(modelVM))
                 {
-                    return View("PaymentView");
+                    return RedirectToAction("CreatePaymentSession", "Payment", new { userId = modelVM.Id });
                 }
                 else
                 {
