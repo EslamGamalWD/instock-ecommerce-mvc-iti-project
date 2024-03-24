@@ -20,13 +20,15 @@ namespace InStockWebAppPL.Controllers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDiscountRepository _discountRepository;
+        private readonly IProductRepository _productRepository;
 
         public DiscountController(IMapper mapper, IUnitOfWork unitOfWork,
-            IDiscountRepository discountRepository)
+            IDiscountRepository discountRepository, IProductRepository productRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _discountRepository = discountRepository;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
@@ -155,9 +157,9 @@ namespace InStockWebAppPL.Controllers
 
         public async Task<IActionResult> AssignedProducts(int id)
         {
-            var products = await _discountRepository.GetAllProducts();
+            var products = await _productRepository.GetAll();
             ViewBag.discountId = id;
-            return View("AssignedProducts", products);
+            return View("AssignedProducts", products.ToList());
         }
 
         [HttpPost]
