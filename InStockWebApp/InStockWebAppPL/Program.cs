@@ -86,6 +86,7 @@ builder.Services.AddAuthentication().AddFacebook(options =>
 {
     options.AppId = "425624396646148";
     options.AppSecret = "ed20e058d11c948bdc0c90eb635f4570";
+    
 });
 
 

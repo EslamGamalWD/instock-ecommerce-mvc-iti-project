@@ -270,7 +270,8 @@ namespace InStockWebAppPL.Controllers
                 PhoneNumber = phoneNumber
             };
 
-            usuario.CityId = 2;
+            usuario.CityId = 1;
+            usuario.EmailConfirmed = true;
 
             var createUserResult = await _userManager.CreateAsync(usuario);
             if (!createUserResult.Succeeded)
