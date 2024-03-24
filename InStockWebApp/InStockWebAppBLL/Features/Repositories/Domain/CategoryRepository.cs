@@ -16,19 +16,6 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
         _applicationDbContext = applicationDbContext;
     }
 
-    //public override async Task Add(Category entity)
-    //{
-    //    var newCategory = new Category
-    //    {
-    //        Name = entity.Name,
-    //        Description = entity.Description,
-    //        CreatedAt = DateTime.Now,
-    //        IsDeleted = false
-    //    };
-
-    //    await _applicationDbContext.Set<Category>().AddAsync(newCategory);
-    //}
-
     public override async Task<bool> Add(Category entity)
     {
         bool categoryExists = await _applicationDbContext.Categories.AnyAsync(c => c.Name == entity.Name);

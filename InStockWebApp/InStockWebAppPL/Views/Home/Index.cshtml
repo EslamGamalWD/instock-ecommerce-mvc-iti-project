@@ -127,8 +127,6 @@
           bottom: -10px;
         }
 
-     
-
         .slider-wrapper-d {
             position: relative;
         }
@@ -169,7 +167,6 @@
             display: grid;
             grid-template-columns: repeat(@discountedProducts?.Count(), 1fr);
             gap: 18px;
-            /*font-size: 0;*/
             margin-bottom: 30px;
             overflow-x: auto;
             scrollbar-width: none;
@@ -236,12 +233,6 @@
             top: -10px;
             bottom: -10px;
         }
-
-
-
-
-
-
 
         .hero {
             width: 100%;
@@ -324,77 +315,6 @@
                 <p class="small text-muted small text-uppercase mb-1">Carefully Created Collections</p>
                 <h2 class="h5 text-uppercase mb-4">Browse Our Categories</h2>
             </header>
-            @* <div class="container">
-                <div class="slider-wrapper">
-                    <button id="prev-slide" class="slide-button material-symbols-rounded">
-                        chevron_left
-                    </button>
-                    <ul class="image-list">
-                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-1" />
-                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-2" />
-                        <img class="image-item" src="/customer/img/cat-img-3.jpg" alt="img-3" />
-                        <img class="image-item" src="/customer/img/cat-img-4.jpg" alt="img-4" />
-                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-5" />
-                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-6" />
-                        <img class="image-item" src="/customer/img/cat-img-3.jpg" alt="img-7" />
-                        <img class="image-item" src="/customer/img/cat-img-4.jpg" alt="img-8" />
-                        <img class="image-item" src="/customer/img/cat-img-1.jpg" alt="img-9" />
-                        <img class="image-item" src="/customer/img/cat-img-2.jpg" alt="img-10" />
-                    </ul>
-                    <button id="next-slide" class="slide-button material-symbols-rounded">
-                        chevron_right
-                    </button>
-                </div>
-                <div class="slider-scrollbar">
-                    <div class="scrollbar-track">
-                        <div class="scrollbar-thumb"></div>
-                    </div>
-                </div>
-            </div> *@
-
-
-            @* <div class="container">
-                <div class="slider-wrapper">
-                    <button id="prev-slide" class="slide-button material-symbols-rounded">
-                        chevron_left
-                    </button>
-                    <ul class="image-list">
-                        @{
-                            int count = 1;
-                            int imgCategoryCounter = 1;
-                            string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                        }
-                        @foreach (var category in Model)
-                        {
-                            <li>
-                                <div>
-                                    <a class="category-item" href="shop.html"><img class="image-item" src="@categorySource" alt="" /><strong class="category-item-title">@category.Name</strong></a>
-                                </div>
-                            </li>
-
-                            if (count == 4)
-                            {
-                                count = 0;
-                                imgCategoryCounter = 0;
-                            }
-
-                            count++;
-                            imgCategoryCounter++;
-                            categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                        }
-                    </ul>
-                    <button id="next-slide" class="slide-button material-symbols-rounded">
-                        chevron_right
-                    </button>
-                </div>
-                <div class="slider-scrollbar">
-                    <div class="scrollbar-track">
-                        <div class="scrollbar-thumb"></div>
-                    </div>
-                </div>
-            </div> *@
-
-
             <div class="container">
                 <div class="slider-wrapper">
                     <button id="prev-slide" class="slide-button material-symbols-rounded">
@@ -444,48 +364,6 @@
                     </div>
                 </div>
             </div>
-
-            @* <div class="row">
-                @{
-                    int count = 1;
-                    int imgCategoryCounter = 1;
-                    string categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                }
-                @for (int i = 0; i < Model.Count(); i++)
-                {
-                    if (count == 1)
-                    {
-                        <div class="col-md-4">
-                            <a class="category-item" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
-                        </div>
-                    }
-                    else if (count == 2 && (i + 1) <= Model.Count())
-                    {
-                        <div class="col-md-4">
-                            <a class="category-item mb-4" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i].Name</strong></a>
-
-                            @{
-                                count++;
-                                imgCategoryCounter++;
-                                categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                            }
-
-                            <a class="category-item" href="shop.html"><img class="img-fluid" src="@categorySource" alt="" /><strong class="category-item-title">@Model[i + 1].Name</strong></a>
-                        </div>
-                    }
-
-                    if (count == 3)
-                    {
-                        i++;
-                        count = 0;
-                        imgCategoryCounter = 0;
-                    }
-
-                    count++;
-                    imgCategoryCounter++;
-                    categorySource = $"/customer/img/cat-img-{imgCategoryCounter}.jpg";
-                }
-            </div> *@
         </section>
         <!-- DISCOUNTS SECTION-->
         @if (discountedProducts?.Count() >= 4)
@@ -548,8 +426,6 @@
                                                 <ul class="list-inline">
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="far fa-eye"></i></a></li>
                                                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a></li>
-@*                                                     <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
-                                            *@
                                                     <li class="list-inline-item">
                                                         <a class="btn btn-sm btn-outline-dark  js-render-modal" href="javascript:"  data-url="/Product/ProductDetailes/@product.Id">
                                                             <i class="fas fa-expand"></i>
@@ -783,8 +659,11 @@
                                     <a class="d-block" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><div class="image-item-product"><img src="@source" style="width:100%;height:100%;" alt="..."></div></a>
                                     <div class="product-overlay">
                                         <ul class="mb-0 list-inline">
-                                            <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id"><i class="far fa-eye"></i></a></li>
-                                            @* <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id">Add to cart</a></li> *@
+                                            <li class="list-inline-item m-0 p-0">
+                                                <a class="btn btn-sm btn-outline-dark" asp-controller="Product" asp-action="CustomerSideDetails" asp-route-id="@product.Id">
+                                                    <i class="far fa-eye"></i>
+                                                </a>
+                                            </li>
                                             <li class="list-inline-item m-0 p-0">
                                                 <a class="btn btn-sm btn-dark addToCartBtnProduct" data-item-id="@product.Id">Add to cart</a>
                                             </li>

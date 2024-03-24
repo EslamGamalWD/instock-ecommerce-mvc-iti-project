@@ -112,13 +112,4 @@ public class HomeController : Controller
 
         return View("CheckoutDetails", modelVM);
     }
-
-   
-
-    public async Task<IActionResult> Test()
-    {
-        var categories = await _categoryRepository.GetAll();
-        return View(await getCategoryWithProductRepository.CategoryWithProducts(categories));
-    }
-
 }

@@ -37,23 +37,6 @@ namespace InStockWebAppPL.Controllers
             return View(categoryViewModels);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    var category = await _categoryRepository.GetById(id);
-
-        //    if (category == null)
-        //    {
-        //        TempData["Message"] = "Error: Category Not Found!";
-
-        //        return RedirectToAction("Index", "Category");
-        //    }
-
-        //    TempData["Message"] = null;
-
-        //    return View(category);
-        //}
-
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
@@ -70,38 +53,13 @@ namespace InStockWebAppPL.Controllers
             return View(categoryDetails);
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {
             TempData["Message"] = null;
 
-            //return PartialView("_Create");
             return View();
         }
-
-        //public async Task<IActionResult> Create(SubcategoryVM subcategoryVm)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            TempData["message"] =
-        //                $"{subcategoryVm.Name} subcategory has been created successfully";
-        //            var subcategory = _mapper.Map<SubCategory>(subcategoryVm);
-        //            await _unitOfWork.SubcategoryRepository.Add(subcategory);
-        //            await _unitOfWork.Save();
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        // ignored
-        //    }
-
-        //    return View(subcategoryVm);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateCategoryVM model, IFormFile? imageFormFile)
@@ -138,17 +96,8 @@ namespace InStockWebAppPL.Controllers
                     {
                         await _unitOfWork.Save();
 
-                        //TempData["Message"] = "Category Added Successfully!";
-
                         return RedirectToAction("Index", "Category");
                     }
-                    //else
-                    //{
-                    //    TempData["Message"] = null;
-                    //    model.Message = "Error: Category Already Exists!";
-
-                    //    return PartialView("_Create", model);
-                    //}
                 }
             }
             catch (Exception)
@@ -156,13 +105,11 @@ namespace InStockWebAppPL.Controllers
                 TempData["Message"] = null;
                 model.Message = "Error: Enter Your Data Again!";
 
-                //return PartialView("_Create", model);
                 return View(model);
             }
 
             TempData["Message"] = null;
 
-            //return PartialView("_Create", model);
             return View(model);
         }
 
@@ -182,7 +129,6 @@ namespace InStockWebAppPL.Controllers
 
             TempData["Message"] = null;
 
-            //return PartialView("_Edit", categoryViewModel);
             return View(categoryViewModel);
         }
 
@@ -246,7 +192,6 @@ namespace InStockWebAppPL.Controllers
                 return View(model);
             }
 
-            //return PartialView("_Edit", model);
             return View(model);
         }
 
