@@ -14,19 +14,21 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace InStockWebAppPL.Controllers
 {
-    [Authorize(Roles = @$"{AppRoles.Admin}")]
+   // [Authorize(Roles = @$"{AppRoles.Admin}")]
     public class DiscountController : Controller
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDiscountRepository _discountRepository;
+        private readonly IProductRepository _productRepository;
 
         public DiscountController(IMapper mapper, IUnitOfWork unitOfWork,
-            IDiscountRepository discountRepository)
+            IDiscountRepository discountRepository , IProductRepository productRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _discountRepository = discountRepository;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
@@ -138,7 +140,7 @@ namespace InStockWebAppPL.Controllers
             catch (Exception ex)
             {
                 TempData["Message"] = "Error: Failed to update discount";
-                return PartialView("_Edit", updatedDiscount);
+                return RedirectToAction("Edit", updatedDiscount);
             }
         }
 
@@ -155,7 +157,7 @@ namespace InStockWebAppPL.Controllers
 
         public async Task<IActionResult> AssignedProducts(int id)
         {
-            var products = await _discountRepository.GetAllProducts();
+            var products =  _productRepository.GetAll().Result.ToList();
             ViewBag.discountId = id;
             return View("AssignedProducts", products);
         }
